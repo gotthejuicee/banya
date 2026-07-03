@@ -1,8 +1,13 @@
 # Деплой на Хостинг Україна (прод: idi-v-banyu.com.ua)
 
 Той самий флоу, що й для zmova.com.ua: git clone у `www`, Composer без dev,
-SQLite, docroot на `www/public`. Збірки фронтенду немає — CSS/JS лежать у `public/`.
+docroot на `www/public`. Збірки фронтенду немає — CSS/JS лежать у `public/`.
 Старий тест-субдомен idi-v-banyu.zmova.com.ua віддає 301 на новий домен.
+
+**БД = MySQL** (з 2026-07-03): база `tr461119_banya` @ `tr461119.mysql.tools`
+(utf8mb4_unicode_ci), створена в панелі adm.tools → MySQL. Креденшели в `.env`.
+Бекап старої SQLite лежить у `database/backup-before-mysql.sqlite` на сервері.
+Локальна розробка й далі на SQLite (`.env.example`).
 
 ## Перший деплой (веб-термінал adm.tools)
 
