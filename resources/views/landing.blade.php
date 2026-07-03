@@ -7,24 +7,46 @@
     {{-- Позначаємо, що JS доступний: анімації появи вмикаються лише тоді --}}
     <script>document.documentElement.classList.add('js')</script>
 
-    <title>IDI_V_BANYU__ — банні набори в дерев’яній скриньці</title>
-    <meta name="description" content="Готові банні набори для чоловіків і жінок у дерев’яній скриньці з гравіюванням. Не знаєш що подарувати? Вуаля! Турбота. Увага. Повага.">
+    <title>Банні набори IDI_V_BANYU__ — подарунковий набір для лазні в дерев’яній скриньці</title>
+    <meta name="description" content="Готові подарункові банні набори для чоловіків і жінок: шапка, кілт, віник, аромаолії в дерев’яній скриньці з гравіюванням. Доставка по Україні 1–3 дні. Не знаєш що подарувати? Вуаля!">
+    <meta name="keywords" content="банний набір, набір для лазні, набір для сауни, подарунковий банний набір, подарунок чоловіку, подарунок жінці, банний набір купити, іди в баню">
 
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="IDI_V_BANYU__">
     <meta property="og:title" content="IDI_V_BANYU__ — банні набори в дерев’яній скриньці">
-    <meta property="og:description" content="Не знаєш що подарувати? Вуаля! Банні набори з гравіюванням — турбота, увага, повага.">
-    <meta property="og:image" content="{{ asset('images/banner-gift.png') }}">
+    <meta property="og:description" content="Не знаєш що подарувати? Вуаля! Готовий банний набір з гравіюванням — турбота, увага, повага. Доставка по Україні 1–3 дні.">
+    <meta property="og:image" content="{{ asset('images/og.jpg') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:alt" content="Не знаєш що подарувати? Вуаля! Банний набір IDI_V_BANYU__">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:locale" content="uk_UA">
 
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="IDI_V_BANYU__ — банні набори в дерев’яній скриньці">
+    <meta name="twitter:description" content="Не знаєш що подарувати? Вуаля! Готовий банний набір з гравіюванням.">
+    <meta name="twitter:image" content="{{ asset('images/og.jpg') }}">
+
+    @if (config('services.google.site_verification'))
+        <meta name="google-site-verification" content="{{ config('services.google.site_verification') }}">
+    @endif
+
     <meta name="theme-color" content="#060608">
     <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon-48.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192.png') }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="canonical" href="{{ url('/') }}">
 
     <link rel="preload" href="{{ asset('fonts/benzin-bold.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
 
+    <script type="application/ld+json">{!! $siteJsonLd !!}</script>
+    <script type="application/ld+json">{!! $productsJsonLd !!}</script>
     <script type="application/ld+json">{!! $faqJsonLd !!}</script>
 </head>
 <body>
@@ -54,6 +76,9 @@
 </header>
 
 <main>
+    {{-- Єдиний h1 сторінки: логотип у шапці — картинка, тому h1 прихований візуально --}}
+    <h1 class="visually-hidden">Подарункові банні набори IDI_V_BANYU__ — дерев’яна скринька з гравіюванням для чоловіків і жінок</h1>
+
     {{-- Банери --}}
     <section class="banners" aria-label="Акційні банери">
         <div class="container">

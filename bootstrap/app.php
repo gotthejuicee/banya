@@ -15,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         // Шаред-хостинг ховає сайт за реверс-проксі: без цього throttle
         // та IP у заявках бачили б адресу проксі, а не відвідувача.
         $middleware->trustProxies(at: '*');
+
+        // Приватна аналітика відвідувачів (без кук і сторонніх сервісів)
+        $middleware->web(append: [
+            \App\Http\Middleware\TrackVisits::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         // JSON-відповіді про помилки й для AJAX-заявок з лендингу (fetch шле Accept: application/json)

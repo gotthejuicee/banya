@@ -44,4 +44,9 @@ return [
         'phone' => env('SUPPORT_PHONE', '380974772919'),
     ],
 
+    'google' => [
+        // Код підтвердження Google Search Console (метод «HTML-тег»)
+        'site_verification' => env('GOOGLE_SITE_VERIFICATION'),
+    ],
+
 ];

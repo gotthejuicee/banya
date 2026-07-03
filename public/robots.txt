@@ -1,2 +1,5 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /livewire
+
+Sitemap: https://idi-v-banyu.com.ua/sitemap.xml
