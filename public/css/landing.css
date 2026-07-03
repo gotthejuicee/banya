@@ -301,6 +301,27 @@ button {
     gap: 24px;
 }
 
+/* Широкі екрани: без обмеження фото-картки роздуваються на пів екрана,
+   тому фіксуємо комфортну ширину і центруємо пару */
+@media (min-width: 1025px) {
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 460px));
+        justify-content: center;
+    }
+
+    .pcard-body {
+        padding: 22px 24px 20px;
+    }
+
+    .pcard-name {
+        font-size: 29px;
+    }
+
+    .pcard-cta {
+        padding: 18px 22px;
+    }
+}
+
 .product-card {
     position: relative;
     display: flex;
