@@ -19,13 +19,15 @@ class DatabaseSeeder extends Seeder
     {
         // Адмін панелі. УВАГА: на сервері запускати seed ДО optimize,
         // інакше config-кеш зробить env() порожнім.
-        User::updateOrCreate(
-            ['email' => env('ADMIN_EMAIL', 'admin@idi-v-banyu.zmova.com.ua')],
-            [
+        // Якщо адміни вже є — не чіпаємо (email/пароль міняють в адмінці,
+        // і сидер не повинен «повертати» старі креденшели чи плодити юзерів)
+        if (User::query()->count() === 0) {
+            User::create([
+                'email' => env('ADMIN_EMAIL', 'admin@idi-v-banyu.com.ua'),
                 'name' => env('ADMIN_NAME', 'Адміністратор'),
                 'password' => env('ADMIN_PASSWORD', 'password'), // cast 'hashed' сам захешує
-            ],
-        );
+            ]);
+        }
 
         $this->call([
             ProductSeeder::class,

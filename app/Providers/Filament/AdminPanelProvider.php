@@ -27,6 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile() // свій логін/пароль кожен адмін міняє сам (меню справа зверху)
             ->brandName('IDI_V_BANYU__')
             ->colors([
                 'primary' => Color::Lime,
