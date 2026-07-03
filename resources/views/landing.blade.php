@@ -59,20 +59,32 @@
         <div class="container">
             <div class="banners-grid">
                 <figure class="banner-card reveal">
-                    <picture>
-                        <source srcset="{{ asset('images/banner-gift.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/banner-gift.png') }}"
+                    @if ($banners[0])
+                        <img src="{{ asset('storage/'.$banners[0]) }}"
                              alt="Не знаєш що подарувати? Вуаля! Банний набір у дерев’яній скриньці"
                              width="820" height="380" fetchpriority="high" decoding="async">
-                    </picture>
+                    @else
+                        <picture>
+                            <source srcset="{{ asset('images/banner-gift.webp') }}" type="image/webp">
+                            <img src="{{ asset('images/banner-gift.png') }}"
+                                 alt="Не знаєш що подарувати? Вуаля! Банний набір у дерев’яній скриньці"
+                                 width="820" height="380" fetchpriority="high" decoding="async">
+                        </picture>
+                    @endif
                 </figure>
                 <figure class="banner-card reveal" style="--reveal-delay:.08s">
-                    <picture>
-                        <source srcset="{{ asset('images/banner-boxes.webp') }}" type="image/webp">
-                        <img src="{{ asset('images/banner-boxes.png') }}"
+                    @if ($banners[1])
+                        <img src="{{ asset('storage/'.$banners[1]) }}"
                              alt="Турбота, увага, повага — банні набори з гравіюванням"
                              width="820" height="380" decoding="async">
-                    </picture>
+                    @else
+                        <picture>
+                            <source srcset="{{ asset('images/banner-boxes.webp') }}" type="image/webp">
+                            <img src="{{ asset('images/banner-boxes.png') }}"
+                                 alt="Турбота, увага, повага — банні набори з гравіюванням"
+                                 width="820" height="380" decoding="async">
+                        </picture>
+                    @endif
                 </figure>
             </div>
         </div>

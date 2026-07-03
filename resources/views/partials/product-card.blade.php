@@ -1,11 +1,17 @@
 <article class="product-card reveal">
     <div class="pcard-media">
-        <picture>
-            <source srcset="{{ asset($product->image.'.webp') }}" type="image/webp">
-            <img src="{{ asset($product->image.'.jpg') }}"
+        @if ($product->photo)
+            <img src="{{ asset('storage/'.$product->photo) }}"
                  alt="{{ $product->name }} — банний набір у дерев’яній скриньці"
                  width="773" height="678" loading="lazy" decoding="async">
-        </picture>
+        @else
+            <picture>
+                <source srcset="{{ asset($product->image.'.webp') }}" type="image/webp">
+                <img src="{{ asset($product->image.'.jpg') }}"
+                     alt="{{ $product->name }} — банний набір у дерев’яній скриньці"
+                     width="773" height="678" loading="lazy" decoding="async">
+            </picture>
+        @endif
 
         @if ($product->badge)
             <span class="pcard-badge">{{ $product->badge }}</span>

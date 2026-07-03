@@ -18,6 +18,7 @@ class Product extends Model
         'old_price',
         'badge',
         'image',
+        'photo',
         'sort',
         'is_active',
     ];

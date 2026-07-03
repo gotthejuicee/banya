@@ -55,6 +55,9 @@ class SendOrderToTelegram implements ShouldQueue
                     'parse_mode' => 'HTML',
                 ])
                 ->throw();
+
+            // Позначка «доставлено» — в адмінці біля заявки буде літачок
+            $this->order->forceFill(['notified_at' => now()])->save();
         } catch (Throwable $e) {
             // Токен бота є частиною URL — у лог він потрапити не повинен
             Log::warning('Не вдалося надіслати заявку в Telegram: '.str_replace($token, '[REDACTED]', $e->getMessage()), [

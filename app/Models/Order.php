@@ -22,6 +22,7 @@ class Order extends Model
     {
         return [
             'status' => OrderStatus::class,
+            'notified_at' => 'datetime',
         ];
     }
 

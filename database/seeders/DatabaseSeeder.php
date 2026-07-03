@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\FaqItem;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,8 +17,44 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Адмін панелі. УВАГА: на сервері запускати seed ДО optimize,
+        // інакше config-кеш зробить env() порожнім.
+        User::updateOrCreate(
+            ['email' => env('ADMIN_EMAIL', 'admin@idi-v-banyu.zmova.com.ua')],
+            [
+                'name' => env('ADMIN_NAME', 'Адміністратор'),
+                'password' => env('ADMIN_PASSWORD', 'password'), // cast 'hashed' сам захешує
+            ],
+        );
+
         $this->call([
             ProductSeeder::class,
         ]);
+
+        // FAQ: дефолти з config/landing.php, тільки якщо таблиця порожня
+        if (FaqItem::query()->count() === 0) {
+            foreach (config('landing.faq', []) as $i => $item) {
+                FaqItem::create([
+                    'question' => $item['q'],
+                    'answer' => implode("\n\n", $item['a']),
+                    'sort' => $i + 1,
+                ]);
+            }
+        }
+
+        // Налаштування сайту: створюємо ключі, якщо їх ще немає
+        $socials = collect(config('landing.socials', []))->keyBy('icon');
+        $defaults = [
+            'support_phone' => config('services.support.phone'),
+            'instagram_url' => $socials->get('instagram')['url'] ?? '',
+            'tiktok_url' => $socials->get('tiktok')['url'] ?? '',
+            'telegram_url' => $socials->get('telegram')['url'] ?? '',
+            'banner_1_image' => '',
+            'banner_2_image' => '',
+        ];
+
+        foreach ($defaults as $key => $value) {
+            Setting::query()->firstOrCreate(['key' => $key], ['value' => $value]);
+        }
     }
 }

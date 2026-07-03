@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\FaqItem;
 use App\Models\Product;
+use App\Models\Setting;
 use Illuminate\Contracts\View\View;
 
 class LandingController extends Controller
@@ -16,17 +18,41 @@ class LandingController extends Controller
             ->get()
             ->groupBy('category');
 
-        $faq = config('landing.faq');
+        $faq = FaqItem::query()
+            ->published()
+            ->get()
+            ->map(fn (FaqItem $item) => ['q' => $item->question, 'a' => $item->paragraphs])
+            ->all();
 
         return view('landing', [
             'maleProducts' => $products->get('male', collect()),
             'femaleProducts' => $products->get('female', collect()),
-            'supportPhone' => config('services.support.phone'),
+            'supportPhone' => Setting::get('support_phone', config('services.support.phone')),
             'cardFeatures' => config('landing.card_features'),
             'faq' => $faq,
-            'socials' => config('landing.socials'),
+            'socials' => $this->socials(),
+            'banners' => [
+                Setting::get('banner_1_image'),
+                Setting::get('banner_2_image'),
+            ],
             'faqJsonLd' => $this->faqJsonLd($faq),
         ]);
+    }
+
+    /**
+     * Соцмережі з налаштувань; порожні лінки не показуємо.
+     *
+     * @return list<array{name: string, icon: string, url: string}>
+     */
+    private function socials(): array
+    {
+        $links = [
+            ['name' => 'Instagram', 'icon' => 'instagram', 'url' => Setting::get('instagram_url')],
+            ['name' => 'TikTok', 'icon' => 'tiktok', 'url' => Setting::get('tiktok_url')],
+            ['name' => 'Telegram', 'icon' => 'telegram', 'url' => Setting::get('telegram_url')],
+        ];
+
+        return array_values(array_filter($links, fn (array $link) => filled($link['url'])));
     }
 
     /**
