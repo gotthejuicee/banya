@@ -5,6 +5,10 @@
 
     RewriteEngine On
 
+    # www -> апекс: одна канонічна адреса для пошуковиків
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
+
     # HTTP -> HTTPS (хостинг за проксі, тому перевіряємо і X-Forwarded-Proto)
     RewriteCond %{HTTPS} off
     RewriteCond %{HTTP:X-Forwarded-Proto} !https

@@ -1,12 +1,13 @@
-# Деплой на Хостинг Україна (тест: idi-v-banyu.zmova.com.ua)
+# Деплой на Хостинг Україна (прод: idi-v-banyu.com.ua)
 
 Той самий флоу, що й для zmova.com.ua: git clone у `www`, Composer без dev,
 SQLite, docroot на `www/public`. Збірки фронтенду немає — CSS/JS лежать у `public/`.
+Старий тест-субдомен idi-v-banyu.zmova.com.ua віддає 301 на новий домен.
 
 ## Перший деплой (веб-термінал adm.tools)
 
 ```bash
-cd ~/idi-v-banyu.zmova.com.ua/www
+cd ~/idi-v-banyu.com.ua/www
 # тека має бути порожня (rm -f index.html, якщо хостинг поклав заглушку)
 git clone https://github.com/gotthejuicee/banya.git .
 
@@ -34,9 +35,10 @@ php artisan optimize
 ## Оновлення
 
 ```bash
-cd ~/idi-v-banyu.zmova.com.ua/www
+cd ~/idi-v-banyu.com.ua/www
 git pull && php artisan optimize:clear && php artisan optimize
 # + php artisan migrate --force — якщо в коміті нові міграції
+# + php artisan db:seed --force ДО optimize — якщо новий сидер (env-кеш!)
 ```
 
 > GitHub: пароль-авторизація мертва — на сервері використовуй Personal Access
