@@ -107,6 +107,7 @@
 
     let lastFocused = null;
     let selectedColor = null;
+    let successTimer = null;
 
     const clearErrors = () => {
         modal.querySelectorAll('.field-error').forEach((el) => {
@@ -157,6 +158,8 @@
     };
 
     const closeModal = () => {
+        clearTimeout(successTimer);
+        successTimer = null;
         modal.hidden = true;
         unlockScroll();
         form.reset();
@@ -255,6 +258,10 @@
             formView.hidden = true;
             successView.hidden = false;
             successView.querySelector('button')?.focus();
+
+            // Підтвердження закривається саме — кнопка лише для нетерплячих
+            clearTimeout(successTimer);
+            successTimer = setTimeout(closeModal, 4000);
         } catch (err) {
             showError('global', 'Щось пішло не так. Спробуйте ще раз або зателефонуйте нам.');
         } finally {

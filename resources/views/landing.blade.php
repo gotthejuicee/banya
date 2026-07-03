@@ -297,6 +297,8 @@
             <button type="button" class="btn btn--lime btn--block" data-close>
                 <span class="t-display">Супер</span>
             </button>
+            {{-- Смужка-таймер: вікно закриється саме через кілька секунд --}}
+            <div class="success-progress" aria-hidden="true"></div>
         </div>
     </div>
 </div>

@@ -1094,6 +1094,27 @@ button {
     margin: 10px 0 24px;
 }
 
+/* Таймер авто-закриття: смужка тане 4с — стільки ж живе setTimeout у JS */
+.success-progress {
+    height: 3px;
+    margin-top: 18px;
+    border-radius: 999px;
+    background: var(--lime);
+    transform-origin: left center;
+    animation: success-countdown 4s linear forwards;
+}
+
+@keyframes success-countdown {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .success-progress {
+        display: none;
+    }
+}
+
 /* ---------- Поява при скролі ----------
    Ховаємо елементи тільки коли JS точно є (html.js) —
    без JS сторінка лишається повністю видимою. */
