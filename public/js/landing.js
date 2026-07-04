@@ -57,6 +57,12 @@
             s.classList.toggle('is-active', active);
             s.setAttribute('aria-pressed', active ? 'true' : 'false');
         });
+
+        // Гортаємо видиме фото під обраний колір боксу
+        const variant = swatch.dataset.variant;
+        card.querySelectorAll('.pcard-photo').forEach((photo) => {
+            photo.classList.toggle('is-active', photo.dataset.variant === variant);
+        });
     };
 
     document.querySelectorAll('.pcard-swatch').forEach((swatch) => {

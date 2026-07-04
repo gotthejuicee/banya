@@ -30,6 +30,8 @@ class ProductSeeder extends Seeder
                 'old_price' => 2890,
                 'badge' => 'ХІТ ПРОДАЖІВ',
                 'image' => 'images/product-box',
+                'image_dark' => 'images/products/nezaimanyi-dark',
+                'image_light' => 'images/products/nezaimanyi-light',
                 'sort' => 1,
             ],
             [
@@ -50,6 +52,8 @@ class ProductSeeder extends Seeder
                 'old_price' => 3490,
                 'badge' => 'ПОВНИЙ ФАРШ',
                 'image' => 'images/product-box',
+                'image_dark' => 'images/products/batko-dark',
+                'image_light' => 'images/products/batko-light',
                 'sort' => 2,
             ],
 
@@ -71,6 +75,8 @@ class ProductSeeder extends Seeder
                 'old_price' => 2890,
                 'badge' => 'ХІТ ПРОДАЖІВ',
                 'image' => 'images/product-box',
+                'image_dark' => 'images/products/nezaimana-dark',
+                'image_light' => 'images/products/nezaimana-light',
                 'sort' => 1,
             ],
             [
@@ -91,6 +97,8 @@ class ProductSeeder extends Seeder
                 'old_price' => 3490,
                 'badge' => 'ПРЕМІУМ',
                 'image' => 'images/product-box',
+                'image_dark' => 'images/products/tsarytsia-dark',
+                'image_light' => 'images/products/tsarytsia-light',
                 'sort' => 2,
             ],
         ];

@@ -18,10 +18,9 @@ class ProductsTable
         return $table
             ->defaultSort('category')
             ->columns([
-                ImageColumn::make('photo')
+                ImageColumn::make('photo_dark')
                     ->label('Фото')
-                    ->disk('public')
-                    ->defaultImageUrl(asset('images/product-box.jpg')),
+                    ->getStateUsing(fn ($record) => $record->photoSources('dark')['jpg']),
                 TextColumn::make('name')
                     ->label('Назва')
                     ->weight('bold')

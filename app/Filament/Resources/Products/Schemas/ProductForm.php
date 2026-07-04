@@ -80,14 +80,22 @@ class ProductForm
                     ]),
 
                 Section::make('Фото картки')
+                    ->columns(2)
                     ->schema([
-                        FileUpload::make('photo')
-                            ->label('Фото')
+                        FileUpload::make('photo_dark')
+                            ->label('Темний бокс')
                             ->image()
                             ->disk('public')
                             ->directory('products')
                             ->maxSize(4096)
-                            ->helperText('Рекомендовано 773×678. Якщо не завантажено — стандартне фото скриньки.'),
+                            ->helperText('Квадратне фото на білому тлі. Порожньо — стандартне.'),
+                        FileUpload::make('photo_light')
+                            ->label('Світлий бокс')
+                            ->image()
+                            ->disk('public')
+                            ->directory('products')
+                            ->maxSize(4096)
+                            ->helperText('Квадратне фото на білому тлі. Порожньо — стандартне.'),
                     ]),
             ]);
     }

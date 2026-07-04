@@ -354,24 +354,50 @@ button {
     box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(214, 255, 65, 0.08);
 }
 
-/* --- Фото. Оверлеї спозиційовані у % так, щоб перекривати елементи,
-       запечені у мокапі фотографії, і водночас бути живими контролами --- */
+/* --- Фото товару у світлому «студійному вікні». Оверлеї (бейдж, серце,
+       стрілки, свотчі) — живі контроли поверх фото. --- */
 
 .pcard-media {
     position: relative;
-    aspect-ratio: 773 / 678;
-    background: #0c0f0c;
+    aspect-ratio: 1 / 1;
+    background: #ffffff; /* тон = тло фото → без шва по краях */
+    overflow: hidden;
 }
 
-.pcard-media picture,
-.pcard-media img {
+/* Два фото (темний/світлий бокс) складені стосом; активне проявлене */
+.pcard-photo {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+}
+
+.pcard-photo.is-active {
+    opacity: 1;
+}
+
+.pcard-photo img {
     display: block;
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 
-.pcard-media img {
-    object-fit: cover;
+/* М'яка віньєтка: біле вікно плавно тоне в темну рамку картки */
+.pcard-media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(120% 120% at 50% 45%, transparent 62%, rgba(6, 6, 8, 0.14) 100%);
+}
+
+/* Контроли поверх фото і віньєтки */
+.pcard-badge,
+.pcard-fav,
+.pcard-arrow,
+.pcard-swatches {
+    z-index: 2;
 }
 
 .pcard-badge {

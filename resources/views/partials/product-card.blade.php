@@ -1,17 +1,17 @@
 <article class="product-card reveal">
     <div class="pcard-media">
-        @if ($product->photo)
-            <img src="{{ asset('storage/'.$product->photo) }}"
-                 alt="{{ $product->name }} — банний набір у дерев’яній скриньці"
-                 width="773" height="678" loading="lazy" decoding="async">
-        @else
-            <picture>
-                <source srcset="{{ asset($product->image.'.webp') }}" type="image/webp">
-                <img src="{{ asset($product->image.'.jpg') }}"
-                     alt="{{ $product->name }} — банний набір у дерев’яній скриньці"
-                     width="773" height="678" loading="lazy" decoding="async">
+        {{-- Два фото боксу — темне і світле; перемикач кольору гортає видиме --}}
+        @foreach (['dark' => 'темному', 'light' => 'світлому'] as $variant => $colorLabel)
+            @php($src = $product->photoSources($variant))
+            <picture class="pcard-photo @if ($variant === 'dark') is-active @endif" data-variant="{{ $variant }}">
+                @if ($src['webp'])
+                    <source srcset="{{ $src['webp'] }}" type="image/webp">
+                @endif
+                <img src="{{ $src['jpg'] }}"
+                     alt="{{ $product->name }} — банний набір у {{ $colorLabel }} дерев’яному боксі"
+                     width="1200" height="1200" loading="lazy" decoding="async">
             </picture>
-        @endif
+        @endforeach
 
         @if ($product->badge)
             <span class="pcard-badge">{{ $product->badge }}</span>
@@ -37,9 +37,9 @@
 
         <div class="pcard-swatches" role="group" aria-label="Колір боксу">
             <button type="button" class="pcard-swatch pcard-swatch--dark is-active"
-                    data-color="темний" aria-label="Темний бокс" aria-pressed="true"></button>
+                    data-color="темний" data-variant="dark" aria-label="Темний бокс" aria-pressed="true"></button>
             <button type="button" class="pcard-swatch pcard-swatch--light"
-                    data-color="світлий" aria-label="Світлий бокс" aria-pressed="false"></button>
+                    data-color="світлий" data-variant="light" aria-label="Світлий бокс" aria-pressed="false"></button>
         </div>
     </div>
 
