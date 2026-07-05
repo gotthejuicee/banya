@@ -27,59 +27,6 @@
         revealEls.forEach((el) => el.classList.add('is-in'));
     }
 
-    /* ---------- Картки: обране + колір боксу ---------- */
-    const FAV_KEY = 'banya-favs';
-    let storedFavs = [];
-    try {
-        storedFavs = JSON.parse(localStorage.getItem(FAV_KEY) ?? '[]');
-    } catch (e) { /* приватний режим — обране просто не збережеться */ }
-    const favs = new Set(storedFavs);
-
-    document.querySelectorAll('.pcard-fav').forEach((btn) => {
-        const id = btn.dataset.fav;
-        const sync = () => {
-            btn.classList.toggle('is-fav', favs.has(id));
-            btn.setAttribute('aria-pressed', favs.has(id) ? 'true' : 'false');
-        };
-        sync();
-        btn.addEventListener('click', () => {
-            favs.has(id) ? favs.delete(id) : favs.add(id);
-            try {
-                localStorage.setItem(FAV_KEY, JSON.stringify([...favs]));
-            } catch (e) { /* ignore */ }
-            sync();
-        });
-    });
-
-    const setSwatch = (card, swatch) => {
-        card.querySelectorAll('.pcard-swatch').forEach((s) => {
-            const active = s === swatch;
-            s.classList.toggle('is-active', active);
-            s.setAttribute('aria-pressed', active ? 'true' : 'false');
-        });
-
-        // Гортаємо видиме фото під обраний колір боксу
-        const variant = swatch.dataset.variant;
-        card.querySelectorAll('.pcard-photo').forEach((photo) => {
-            photo.classList.toggle('is-active', photo.dataset.variant === variant);
-        });
-    };
-
-    document.querySelectorAll('.pcard-swatch').forEach((swatch) => {
-        swatch.addEventListener('click', () => setSwatch(swatch.closest('.product-card'), swatch));
-    });
-
-    // Стрілки на фото гортають варіанти кольору боксу
-    document.querySelectorAll('.pcard-arrow').forEach((arrow) => {
-        arrow.addEventListener('click', () => {
-            const card = arrow.closest('.product-card');
-            const swatches = [...card.querySelectorAll('.pcard-swatch')];
-            const current = swatches.findIndex((s) => s.classList.contains('is-active'));
-            const step = arrow.classList.contains('pcard-arrow--next') ? 1 : -1;
-            setSwatch(card, swatches[(current + step + swatches.length) % swatches.length]);
-        });
-    });
-
     /* ---------- FAQ-акордеон ---------- */
     document.querySelectorAll('.faq-question').forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -112,7 +59,6 @@
     const defaultSubmitText = submitLabel.textContent;
 
     let lastFocused = null;
-    let selectedColor = null;
     let successTimer = null;
 
     const clearErrors = () => {
@@ -150,11 +96,10 @@
         window.scrollTo(0, lockedScrollY);
     };
 
-    const openModal = (productId, productName, color = null) => {
+    const openModal = (productId, productName) => {
         lastFocused = document.activeElement;
-        selectedColor = color;
         productIdField.value = productId;
-        productNameEl.textContent = color ? `${productName} · ${color} бокс` : productName;
+        productNameEl.textContent = productName;
         formView.hidden = false;
         successView.hidden = true;
         clearErrors();
@@ -194,12 +139,7 @@
     });
 
     document.querySelectorAll('.btn-order[data-product-id]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const color = btn.closest('.product-card')
-                ?.querySelector('.pcard-swatch.is-active')
-                ?.dataset.color ?? null;
-            openModal(btn.dataset.productId, btn.dataset.productName, color);
-        });
+        btn.addEventListener('click', () => openModal(btn.dataset.productId, btn.dataset.productName));
     });
 
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
@@ -228,11 +168,7 @@
                     product_id: productIdField.value || null,
                     name: form.elements.name.value.trim(),
                     phone: form.elements.phone.value.trim(),
-                    // Обраний колір боксу дописуємо в коментар менеджеру
-                    comment: [
-                        selectedColor ? `Колір боксу: ${selectedColor}.` : '',
-                        form.elements.comment.value.trim(),
-                    ].filter(Boolean).join(' ') || null,
+                    comment: form.elements.comment.value.trim() || null,
                     website: form.elements.website.value, // honeypot
                 }),
             });

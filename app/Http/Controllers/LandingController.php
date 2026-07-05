@@ -31,7 +31,6 @@ class LandingController extends Controller
             'maleProducts' => $products->get('male', collect()),
             'femaleProducts' => $products->get('female', collect()),
             'supportPhone' => Setting::get('support_phone', config('services.support.phone')),
-            'cardFeatures' => config('landing.card_features'),
             'faq' => $faq,
             'socials' => $socials,
             'banners' => [
@@ -90,11 +89,9 @@ class LandingController extends Controller
                 'position' => $i + 1,
                 'item' => [
                     '@type' => 'Product',
-                    'name' => 'Банний набір «'.$p->name.'»',
+                    'name' => $p->name,
                     'description' => trim(($p->tagline ? $p->tagline.'. ' : '').(string) $p->description),
-                    'image' => $p->photo
-                        ? asset('storage/'.$p->photo)
-                        : asset($p->image.'.jpg'),
+                    'image' => $p->cardPhoto()['fallback'],
                     'brand' => ['@type' => 'Brand', 'name' => 'IDI_V_BANYU__'],
                     'offers' => [
                         '@type' => 'Offer',

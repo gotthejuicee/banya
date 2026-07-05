@@ -306,7 +306,7 @@ button {
     filter: drop-shadow(0 0 14px var(--lime-glow));
 }
 
-/* ---------- Картки товарів ---------- */
+/* ---------- Картки товарів (мінімальні, за оновленим макетом) ---------- */
 
 .products-grid {
     display: grid;
@@ -314,375 +314,87 @@ button {
     gap: 24px;
 }
 
-/* Широкі екрани: без обмеження фото-картки роздуваються на пів екрана,
-   тому фіксуємо комфортну ширину і центруємо пару */
+/* Широкі екрани: обмежуємо ширину колонок і центруємо пару */
 @media (min-width: 1025px) {
     .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 460px));
+        grid-template-columns: repeat(2, minmax(0, 440px));
         justify-content: center;
-    }
-
-    .pcard-body {
-        padding: 22px 24px 20px;
-    }
-
-    .pcard-name {
-        font-size: 29px;
-    }
-
-    .pcard-cta {
-        padding: 18px 22px;
+        gap: 32px;
     }
 }
 
 .product-card {
-    position: relative;
     display: flex;
     flex-direction: column;
-    background: #141a16; /* зелений підтон, як у макеті картки */
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    overflow: hidden;
-    isolation: isolate;
-    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.35s ease;
 }
 
-/* Три класи в селекторі — щоб hover перемагав .reveal.is-in { transform: none } */
+/* Три класи — щоб hover перемагав .reveal.is-in { transform: none } */
 .products-grid .product-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(214, 255, 65, 0.35);
-    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(214, 255, 65, 0.08);
+    transform: translateY(-4px);
 }
-
-/* --- Фото товару у світлому «студійному вікні». Оверлеї (бейдж, серце,
-       стрілки, свотчі) — живі контроли поверх фото. --- */
 
 .pcard-media {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    background: #ffffff; /* тон = тло фото → без шва по краях */
-    overflow: hidden;
-}
-
-/* Два фото (темний/світлий бокс) складені стосом; активне проявлене */
-.pcard-photo {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity 0.45s ease;
-}
-
-.pcard-photo.is-active {
-    opacity: 1;
-}
-
-.pcard-photo img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* М'яка віньєтка: біле вікно плавно тоне в темну рамку картки */
-.pcard-media::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(120% 120% at 50% 45%, transparent 62%, rgba(6, 6, 8, 0.14) 100%);
-}
-
-/* Контроли поверх фото і віньєтки */
-.pcard-badge,
-.pcard-fav,
-.pcard-arrow,
-.pcard-swatches {
-    z-index: 2;
-}
-
-.pcard-badge {
-    position: absolute;
-    left: 3.4%;
-    top: 4.9%;
-    min-width: 23%;
-    text-align: center;
-    background: var(--lime);
-    color: var(--lime-ink);
-    font-weight: 700;
-    font-size: 12.5px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 10px 18px;
-    border-radius: 999px;
-}
-
-.pcard-fav {
-    position: absolute;
-    right: 2.5%;
-    top: 3.7%;
-    width: 10%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: #17181a;
-    color: #f2f0f7;
-    transition: transform 0.25s ease, color 0.25s ease;
-}
-
-.pcard-fav svg {
-    width: 44%;
-    height: 44%;
-}
-
-.pcard-fav:hover {
-    transform: scale(1.08);
-}
-
-.pcard-fav.is-fav {
-    color: var(--lime);
-}
-
-.pcard-fav.is-fav .fav-heart {
-    fill: currentColor;
-}
-
-.pcard-arrow {
-    position: absolute;
-    top: 51.6%;
-    transform: translateY(-50%);
-    width: 10%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    display: grid;
-    place-items: center;
-    background: rgba(23, 24, 26, 0.92);
-    color: #f2f0f7;
-    transition: background 0.25s ease, color 0.25s ease;
-}
-
-.pcard-arrow--prev {
-    left: 2.5%;
-}
-
-.pcard-arrow--next {
-    right: 2.5%;
-}
-
-.pcard-arrow:hover {
-    background: var(--lime);
-    color: var(--lime-ink);
-}
-
-.pcard-arrow svg {
-    width: 42%;
-    height: 42%;
-}
-
-.pcard-swatches {
-    position: absolute;
-    right: 3.1%;
-    bottom: 2.6%;
-    width: 15%;
-    display: flex;
-    gap: 6%;
-}
-
-.pcard-swatch {
-    flex: 1;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    transition: transform 0.2s ease;
-}
-
-.pcard-swatch:hover {
-    transform: scale(1.08);
-}
-
-.pcard-swatch--dark {
-    background: #14201a;
-    border: 2px solid rgba(244, 242, 250, 0.28);
-}
-
-.pcard-swatch--light {
-    background: #d5cdba;
-    border: 2px solid rgba(0, 0, 0, 0.15);
-}
-
-.pcard-swatch.is-active {
-    outline: 2px solid var(--lime);
-    outline-offset: 3px;
-}
-
-/* --- Контент картки --- */
-
-.pcard-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 24px 26px 22px;
-}
-
-.pcard-name {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-style: normal; /* у макеті назва прямим накресленням */
-    text-transform: uppercase;
-    color: var(--lime);
-    font-size: clamp(25px, 2.7vw, 33px);
-    line-height: 1.08;
-    letter-spacing: 0.02em;
-    overflow-wrap: break-word;
-}
-
-.pcard-subtitle {
-    margin-top: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-size: 12.5px;
-    color: #c7cec4;
-}
-
-.pcard-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid rgba(244, 242, 250, 0.1);
-}
-
-.pcard-price {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.pcard-price-now {
-    color: var(--lime);
-    font-size: clamp(24px, 2.4vw, 30px);
-    font-weight: 800;
-    letter-spacing: 0.01em;
-    white-space: nowrap;
-}
-
-.pcard-price-now small {
-    font-size: 0.62em;
-    font-weight: 700;
-}
-
-.pcard-price-old {
-    color: var(--muted);
-    font-size: 15px;
-    white-space: nowrap;
-}
-
-.pcard-box-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #dfe4db;
-    font-size: 13px;
-    line-height: 1.35;
-    flex: none;
-}
-
-.pcard-box-info svg {
-    width: 30px;
-    height: 30px;
-    flex: none;
-    color: #eef1ea;
-}
-
-.pcard-features {
-    list-style: none;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    margin-top: 18px;
-}
-
-.pcard-features li {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 12px;
-    line-height: 1.3;
-    color: #d6dbd2;
-}
-
-.pcard-features svg {
-    width: 21px;
-    height: 21px;
-    flex: none;
-    color: var(--lime);
-}
-
-.pcard-features li.is-lime span {
-    color: var(--lime);
-}
-
-.pcard-cta {
-    margin-top: 20px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 14px;
+}
+
+.pcard-media img {
+    display: block;
+    width: 100%;
+    max-width: 330px;
+    height: auto;
+}
+
+.pcard-subtitle {
+    margin-top: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: #d6d9e0;
+}
+
+.pcard-price {
+    margin-top: 9px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: clamp(22px, 2.4vw, 30px);
+    letter-spacing: 0.02em;
+    color: var(--text);
+    line-height: 1.1;
+}
+
+/* Компактна жовта пігулка, текст звичайним регістром — як у макеті */
+.pcard-cta {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     background: var(--lime);
     color: var(--lime-ink);
-    border-radius: 14px;
-    padding: 20px 24px;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.02em;
+    padding: 11px 30px 12px;
+    border-radius: 999px;
     transition: transform 0.22s ease, box-shadow 0.22s ease;
-}
-
-.pcard-cta .t-display {
-    font-size: 15px;
-    font-style: normal; /* кнопка в макеті — прямим накресленням */
-    letter-spacing: 0.08em;
-    transform: translateY(1px);
-}
-
-.pcard-cta svg {
-    width: 22px;
-    height: 22px;
-    transition: transform 0.25s ease;
 }
 
 .pcard-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 34px var(--lime-glow);
-}
-
-.pcard-cta:hover svg {
-    transform: translateX(4px);
+    box-shadow: 0 10px 28px var(--lime-glow);
 }
 
 .pcard-cta:active {
     transform: translateY(0);
-}
-
-.pcard-note {
-    margin-top: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    color: var(--muted);
-    font-size: 13px;
-}
-
-.pcard-note svg {
-    width: 15px;
-    height: 15px;
-    flex: none;
-}
-
-.pcard-note-sep {
-    opacity: 0.45;
 }
 
 /* ---------- Кнопки ---------- */
@@ -730,11 +442,8 @@ button {
 
 /* ---------- Запитання та відповіді ---------- */
 
+/* За оновленим макетом рядки питань лежать прямо на чорному, без панелі */
 .faq-panel {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    padding: 16px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -829,21 +538,26 @@ button {
     padding: 72px 0 88px;
 }
 
+/* Смуга соцмереж: лейбл згори, іконки під ним, усе зліва — як у макеті */
 .socials-panel {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
-    padding: 28px 30px;
+    padding: 24px 28px;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
 }
 
 .socials-label {
-    font-size: 15px;
-    letter-spacing: 0.04em;
+    font-family: var(--font-body);
+    font-style: normal;
+    text-transform: none;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+    color: #d6d9e0;
 }
 
 .socials-row {
@@ -1170,9 +884,7 @@ button {
 
     .banner-card img,
     .brand-mark,
-    .pcard-cta svg,
-    .pcard-fav,
-    .pcard-swatch,
+    .pcard-cta,
     .faq-answer,
     .faq-chevron {
         transition: none;
@@ -1189,14 +901,6 @@ button {
     .products-grid {
         gap: 18px;
     }
-
-    .pcard-body {
-        padding: 20px 20px 18px;
-    }
-
-    .pcard-features {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 @media (max-width: 760px) {
@@ -1205,16 +909,41 @@ button {
     }
 
     .banners {
-        padding-top: 16px;
+        padding-top: 14px;
     }
 
+    /* У макеті банери лишаються поруч навіть на мобільному */
     .banners-grid {
-        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    /* У макеті картки 2-в-ряд навіть на мобільному — вони компактні */
+    .products-grid {
         gap: 14px;
     }
 
-    .products-grid {
-        grid-template-columns: 1fr;
+    .pcard-subtitle {
+        font-size: 9px;
+        letter-spacing: 0.08em;
+        margin-top: 13px;
+    }
+
+    .section-title .t-display {
+        font-size: 18.5px;
+    }
+
+    .section-tri {
+        width: 24px;
+        height: 24px;
+    }
+
+    .pcard-price {
+        font-size: 21px;
+    }
+
+    .pcard-cta {
+        font-size: 12.5px;
+        padding: 9px 22px 10px;
     }
 
     .catalog {
@@ -1226,13 +955,10 @@ button {
     }
 
     .socials-panel {
-        flex-direction: column;
-        text-align: center;
-        padding: 24px 20px;
+        padding: 20px 18px;
     }
 
     .faq-panel {
-        padding: 10px;
         gap: 8px;
     }
 
@@ -1284,10 +1010,6 @@ button {
         gap: 14px;
     }
 
-    .pcard-meta {
-        flex-wrap: wrap;
-    }
-
     .modal-panel {
         padding: 28px 20px 24px;
     }
@@ -1302,14 +1024,6 @@ button {
         padding: 6px 12px;
     }
 
-    .pcard-badge {
-        font-size: 10.5px;
-        padding: 8px 14px;
-    }
-
-    .pcard-cta {
-        padding: 17px 20px;
-    }
 }
 
 /* Найвужчі екрани (320–360px): шапка не повинна ламатись */

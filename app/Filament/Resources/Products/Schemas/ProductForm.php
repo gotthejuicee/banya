@@ -80,22 +80,14 @@ class ProductForm
                     ]),
 
                 Section::make('Фото картки')
-                    ->columns(2)
                     ->schema([
-                        FileUpload::make('photo_dark')
-                            ->label('Темний бокс')
+                        FileUpload::make('photo')
+                            ->label('Фото')
                             ->image()
                             ->disk('public')
                             ->directory('products')
                             ->maxSize(4096)
-                            ->helperText('Квадратне фото на білому тлі. Порожньо — стандартне.'),
-                        FileUpload::make('photo_light')
-                            ->label('Світлий бокс')
-                            ->image()
-                            ->disk('public')
-                            ->directory('products')
-                            ->maxSize(4096)
-                            ->helperText('Квадратне фото на білому тлі. Порожньо — стандартне.'),
+                            ->helperText('Бажано PNG з прозорим тлом. Порожньо — стандартне фото боксу.'),
                     ]),
             ]);
     }

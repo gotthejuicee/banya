@@ -18,9 +18,9 @@ class ProductsTable
         return $table
             ->defaultSort('category')
             ->columns([
-                ImageColumn::make('photo_dark')
+                ImageColumn::make('photo')
                     ->label('Фото')
-                    ->getStateUsing(fn ($record) => $record->photoSources('dark')['jpg']),
+                    ->getStateUsing(fn ($record) => $record->cardPhoto()['fallback']),
                 TextColumn::make('name')
                     ->label('Назва')
                     ->weight('bold')

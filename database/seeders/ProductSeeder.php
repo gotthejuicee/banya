@@ -9,102 +9,76 @@ class ProductSeeder extends Seeder
 {
     public function run(): void
     {
-        // 'image' — базовий шлях БЕЗ розширення: картка сама підставить .webp/.jpg
+        // За оновленим дизайном кожен колір боксу — окрема картка зі своєю ціною.
+        // 'image' — базовий шлях БЕЗ розширення (пара .webp/.png)
+        $maleContents = [
+            'Повстяна шапка «з характером»',
+            'Повстяна рукавиця',
+            'Дубовий віник ручного в’язання',
+            'Аромаолія «Карпатська хвоя»',
+            'Мило ручної роботи',
+            'Дерев’яний бокс із гравіюванням',
+        ];
+
+        $femaleContents = [
+            'Повстяний капелюшок',
+            'Рушник-кілт на ґудзиках',
+            'Скраб «Мед і кава»',
+            'Аромаолія «Лаванда»',
+            'Дерев’яний бокс із гравіюванням',
+        ];
+
         $products = [
-            // --- Чоловічі набори ---
             [
                 'slug' => 'dlia-nezaimanoho',
                 'category' => 'male',
-                'name' => 'НЕЗАЙМАНИЙ',
-                'tagline' => 'Подарунковий банний набір',
-                'description' => 'Стартовий набір для того, хто в лазні ще ні разу. Все, щоб зайти новачком, а вийти — людиною з легкою душею.',
-                'contents' => [
-                    'Повстяна шапка «з характером»',
-                    'Повстяна рукавиця',
-                    'Дубовий віник ручного в’язання',
-                    'Аромаолія «Карпатська хвоя»',
-                    'Мило ручної роботи',
-                    'Дерев’яна скринька з гравіюванням',
-                ],
-                'price' => 2490,
-                'old_price' => 2890,
-                'badge' => 'ХІТ ПРОДАЖІВ',
-                'image' => 'images/product-box',
-                'image_dark' => 'images/products/nezaimanyi-dark',
-                'image_light' => 'images/products/nezaimanyi-light',
+                'name' => 'Чоловічий набір — світлий бокс',
+                'contents' => $maleContents,
+                'price' => 2290,
+                'image' => 'images/products/box-male-light',
                 'sort' => 1,
             ],
             [
                 'slug' => 'dlia-batka-lazni',
                 'category' => 'male',
-                'name' => 'БАТЬКО ЛАЗНІ',
-                'tagline' => 'Подарунковий банний набір',
-                'description' => 'Для того, хто знає різницю між «попаритись» і «зробити пар». Повний фарш у скриньці з особистим гравіюванням.',
-                'contents' => [
-                    'Шапка + лляний кілт',
-                    'Віник дубовий + березовий',
-                    'Термометр для парної',
-                    'Аромаолії «Евкаліпт» і «М’ята»',
-                    'Повстяна рукавиця',
-                    'Скринька з персональним гравіюванням',
-                ],
-                'price' => 2990,
-                'old_price' => 3490,
-                'badge' => 'ПОВНИЙ ФАРШ',
-                'image' => 'images/product-box',
-                'image_dark' => 'images/products/batko-dark',
-                'image_light' => 'images/products/batko-light',
+                'name' => 'Чоловічий набір — темний бокс',
+                'contents' => $maleContents,
+                'price' => 2490,
+                'image' => 'images/products/box-male-dark',
                 'sort' => 2,
             ],
-
-            // --- Жіночі набори ---
             [
                 'slug' => 'dlia-nezaimanoi',
                 'category' => 'female',
-                'name' => 'НЕЗАЙМАНА',
-                'tagline' => 'Подарунковий банний набір',
-                'description' => 'Перший раз у лазні має бути ідеальним. М’яко, ароматно і з турботою — все вже в скриньці.',
-                'contents' => [
-                    'Повстяний капелюшок',
-                    'Рушник-кілт на ґудзиках',
-                    'Скраб «Мед і кава»',
-                    'Аромаолія «Лаванда»',
-                    'Дерев’яна скринька з гравіюванням',
-                ],
-                'price' => 2490,
-                'old_price' => 2890,
-                'badge' => 'ХІТ ПРОДАЖІВ',
-                'image' => 'images/product-box',
-                'image_dark' => 'images/products/nezaimana-dark',
-                'image_light' => 'images/products/nezaimana-light',
+                'name' => 'Жіночий набір — світлий бокс',
+                'contents' => $femaleContents,
+                'price' => 2290,
+                'image' => 'images/products/box-female-light',
                 'sort' => 1,
             ],
             [
                 'slug' => 'dlia-tsarytsi-paru',
                 'category' => 'female',
-                'name' => 'ЦАРИЦЯ ПАРУ',
-                'tagline' => 'Подарунковий банний набір',
-                'description' => 'Повний ритуал догляду: від скрабу до аромаолій. Подарунок, після якого вас питатимуть «де брали?».',
-                'contents' => [
-                    'Капелюшок + кілт преміум',
-                    'Мочалка з натуральної люфи',
-                    'Скраб + сіль Мертвого моря',
-                    'Аромаолії «Іланг-іланг» і «Апельсин»',
-                    'Дзеркальце в дерев’яній оправі',
-                    'Скринька-люкс з гравіюванням',
-                ],
-                'price' => 2990,
-                'old_price' => 3490,
-                'badge' => 'ПРЕМІУМ',
-                'image' => 'images/product-box',
-                'image_dark' => 'images/products/tsarytsia-dark',
-                'image_light' => 'images/products/tsarytsia-light',
+                'name' => 'Жіночий набір — темний бокс',
+                'contents' => $femaleContents,
+                'price' => 2490,
+                'image' => 'images/products/box-female-dark',
                 'sort' => 2,
             ],
         ];
 
         foreach ($products as $product) {
-            Product::updateOrCreate(['slug' => $product['slug']], $product);
+            Product::updateOrCreate(['slug' => $product['slug']], $product + [
+                'tagline' => 'Подарунковий банний набір',
+                'description' => 'Готовий подарунок у дерев’яному боксі з гравіюванням.',
+                'old_price' => null,
+                'badge' => null,
+                'photo' => null,
+                'photo_dark' => null,
+                'photo_light' => null,
+                'image_dark' => null,
+                'image_light' => null,
+            ]);
         }
     }
 }

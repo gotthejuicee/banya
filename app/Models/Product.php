@@ -44,27 +44,24 @@ class Product extends Model
     }
 
     /**
-     * Джерела фото для боксу заданого кольору.
-     * Пріоритет: завантажене в адмінці (storage) → стандартне (public webp+jpg).
+     * Фото картки. Пріоритет: завантажене в адмінці (storage) →
+     * стандартне з public (пара webp + png/jpg) → резервна скринька.
      *
-     * @param  'dark'|'light'  $variant
-     * @return array{webp: ?string, jpg: string}
+     * @return array{webp: ?string, fallback: string}
      */
-    public function photoSources(string $variant): array
+    public function cardPhoto(): array
     {
-        // 1) фото, завантажене адміністратором (одразу готовий URL, без webp)
-        $upload = $this->{'photo_'.$variant} ?? $this->photo;
-        if (filled($upload)) {
-            return ['webp' => null, 'jpg' => asset('storage/'.$upload)];
+        if (filled($this->photo)) {
+            return ['webp' => null, 'fallback' => asset('storage/'.$this->photo)];
         }
 
-        // 2) стандартне фото з public/images (є пара .webp + .jpg)
-        $base = $this->{'image_'.$variant} ?? $this->image;
-        if (filled($base)) {
-            return ['webp' => asset($base.'.webp'), 'jpg' => asset($base.'.jpg')];
+        if (filled($this->image)) {
+            // нові фото коробок — пара .webp/.png; стара скринька — .webp/.jpg
+            $ext = str_contains($this->image, 'products/box-') ? 'png' : 'jpg';
+
+            return ['webp' => asset($this->image.'.webp'), 'fallback' => asset($this->image.'.'.$ext)];
         }
 
-        // 3) резерв — стандартна скринька
-        return ['webp' => asset('images/product-box.webp'), 'jpg' => asset('images/product-box.jpg')];
+        return ['webp' => asset('images/product-box.webp'), 'fallback' => asset('images/product-box.jpg')];
     }
 }
