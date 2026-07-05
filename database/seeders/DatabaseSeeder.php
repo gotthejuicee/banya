@@ -53,6 +53,7 @@ class DatabaseSeeder extends Seeder
             'telegram_url' => $socials->get('telegram')['url'] ?? '',
             'banner_1_image' => '',
             'banner_2_image' => '',
+            'about_text' => config('landing.about'),
         ];
 
         foreach ($defaults as $key => $value) {

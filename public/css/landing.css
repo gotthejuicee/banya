@@ -452,7 +452,7 @@ button {
 .faq-item {
     background: var(--surface-2);
     border: 1px solid transparent;
-    border-radius: 12px;
+    border-radius: 18px;
     overflow: hidden;
     transition: border-color 0.3s ease;
 }
@@ -530,6 +530,29 @@ button {
 
 .faq-answer-content p:first-child {
     color: #cfcdd9;
+}
+
+/* ---------- «Не знаєш, що подарувати?» — текстовий блок ---------- */
+
+.about-text {
+    max-width: 680px;
+    margin-inline: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+}
+
+.about-text p {
+    color: #b9bdc7;
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.about-text p:first-child {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 16px;
 }
 
 /* ---------- Соціальні мережі ---------- */

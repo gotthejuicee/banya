@@ -24,6 +24,12 @@ class LandingController extends Controller
             ->map(fn (FaqItem $item) => ['q' => $item->question, 'a' => $item->paragraphs])
             ->all();
 
+        $aboutText = Setting::get('about_text', config('landing.about'));
+        $aboutParagraphs = array_values(array_filter(
+            preg_split('/\R{2,}/u', trim((string) $aboutText)) ?: [],
+            fn (string $p) => $p !== '',
+        ));
+
         $socials = $this->socials();
         $allProducts = $products->flatten();
 
@@ -32,6 +38,7 @@ class LandingController extends Controller
             'femaleProducts' => $products->get('female', collect()),
             'supportPhone' => Setting::get('support_phone', config('services.support.phone')),
             'faq' => $faq,
+            'aboutParagraphs' => $aboutParagraphs,
             'socials' => $socials,
             'banners' => [
                 Setting::get('banner_1_image'),

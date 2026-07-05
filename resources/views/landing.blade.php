@@ -189,6 +189,24 @@
         </div>
     </section>
 
+    {{-- Не знаєш, що подарувати? — великий текстовий блок --}}
+    <section class="catalog about" id="about">
+        <div class="container">
+            <h2 class="section-title reveal">
+                <svg class="section-tri" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+                    <circle cx="24" cy="24" r="17.5" stroke="currentColor" stroke-width="5"/>
+                </svg>
+                <span class="t-display">Не знаєш, що подарувати?</span>
+            </h2>
+
+            <div class="about-text reveal">
+                @foreach ($aboutParagraphs as $paragraph)
+                    <p>{{ $paragraph }}</p>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
     {{-- Соціальні мережі --}}
     <section class="socials" aria-label="Ми в соціальних мережах">
         <div class="container">

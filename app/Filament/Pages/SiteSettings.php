@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\Setting;
 use BackedEnum;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
@@ -36,6 +37,7 @@ class SiteSettings extends Page
             'telegram_url' => Setting::get('telegram_url'),
             'banner_1_image' => Setting::get('banner_1_image'),
             'banner_2_image' => Setting::get('banner_2_image'),
+            'about_text' => Setting::get('about_text', config('landing.about')),
         ]);
     }
 
@@ -69,6 +71,15 @@ class SiteSettings extends Page
                             ->placeholder('https://t.me/…'),
                     ])
                     ->description('Порожнє поле — іконка не показується на сайті'),
+
+                Section::make('Текст «Не знаєш, що подарувати?»')
+                    ->schema([
+                        Textarea::make('about_text')
+                            ->label('Текст блоку')
+                            ->rows(18)
+                            ->helperText('Порожній рядок між абзацами = новий абзац на сайті. Перший абзац виділяється.'),
+                    ])
+                    ->collapsed(),
 
                 Section::make('Банери')
                     ->columns(2)
@@ -105,6 +116,7 @@ class SiteSettings extends Page
         Setting::set('telegram_url', $state['telegram_url'] ?? null);
         Setting::set('banner_1_image', $file($state['banner_1_image'] ?? null));
         Setting::set('banner_2_image', $file($state['banner_2_image'] ?? null));
+        Setting::set('about_text', $state['about_text'] ?? null);
 
         Notification::make()
             ->title('Налаштування збережено')
