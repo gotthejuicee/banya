@@ -55,6 +55,15 @@
     font-display: swap;
 }
 
+/* Типографіка карток за макетом: Inter Black Italic */
+@font-face {
+    font-family: 'Inter';
+    src: url('../fonts/inter-900italic.woff2') format('woff2');
+    font-weight: 900;
+    font-style: italic;
+    font-display: swap;
+}
+
 /* ---------- Токени ---------- */
 
 :root {
@@ -350,24 +359,29 @@ button {
     height: auto;
 }
 
+/* Типографіка з макета: Inter 900 Italic; сабтайтл #7A7D96 (24px у макеті),
+   ціна #F5F2F9 (48px у макеті, рівно 2× сабтайтла), без трекінгу */
 .pcard-subtitle {
     margin-top: 18px;
     text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-size: 11.5px;
-    font-weight: 500;
-    color: #d6d9e0;
+    font-family: 'Inter', var(--font-body);
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: 0;
+    font-size: clamp(9px, 1.9vw, 17px);
+    line-height: 1;
+    color: #7a7d96;
 }
 
 .pcard-price {
-    margin-top: 9px;
-    font-family: var(--font-display);
+    margin-top: 10px;
+    font-family: 'Inter', var(--font-body);
     font-style: italic;
-    font-weight: 700;
-    font-size: clamp(22px, 2.4vw, 30px);
-    letter-spacing: 0.02em;
-    color: var(--text);
-    line-height: 1.1;
+    font-weight: 900;
+    font-size: clamp(19px, 3.8vw, 34px);
+    letter-spacing: 0;
+    color: #f5f2f9;
+    line-height: 1;
 }
 
 /* Компактна жовта пігулка, текст звичайним регістром — як у макеті */
@@ -378,11 +392,11 @@ button {
     justify-content: center;
     background: var(--lime);
     color: var(--lime-ink);
-    font-family: var(--font-display);
+    font-family: 'Inter', var(--font-body);
     font-style: italic;
-    font-weight: 700;
-    font-size: 14px;
-    letter-spacing: 0.02em;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 0;
     padding: 11px 30px 12px;
     border-radius: 999px;
     transition: transform 0.22s ease, box-shadow 0.22s ease;
@@ -553,6 +567,24 @@ button {
     color: var(--text);
     font-weight: 600;
     font-size: 16px;
+}
+
+/* Читацький «прожектор»: абзаци поза центральною смугою екрана тьмяніють
+   при скролі в обидва боки (клас вішає JS через IntersectionObserver) */
+.js .about-text p {
+    opacity: 0.14;
+    transition: opacity 0.55s ease;
+}
+
+.js .about-text p.is-read {
+    opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .js .about-text p {
+        opacity: 1;
+        transition: none;
+    }
 }
 
 /* ---------- Соціальні мережі ---------- */
@@ -946,8 +978,6 @@ button {
     }
 
     .pcard-subtitle {
-        font-size: 9px;
-        letter-spacing: 0.08em;
         margin-top: 13px;
     }
 
@@ -960,12 +990,8 @@ button {
         height: 24px;
     }
 
-    .pcard-price {
-        font-size: 21px;
-    }
-
     .pcard-cta {
-        font-size: 12.5px;
+        font-size: 13px;
         padding: 9px 22px 10px;
     }
 

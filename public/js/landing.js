@@ -27,6 +27,21 @@
         revealEls.forEach((el) => el.classList.add('is-in'));
     }
 
+    /* ---------- «Прожектор» тексту: абзац видно, поки він у центральній
+       смузі екрана; вище/нижче — тьмяніє (працює в обидва боки скролу) ---------- */
+    const aboutParas = document.querySelectorAll('.about-text p');
+    if (aboutParas.length && 'IntersectionObserver' in window) {
+        const spotlight = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                entry.target.classList.toggle('is-read', entry.isIntersecting);
+            });
+        }, { rootMargin: '-12% 0px -18% 0px', threshold: 0 });
+
+        aboutParas.forEach((p) => spotlight.observe(p));
+    } else {
+        aboutParas.forEach((p) => p.classList.add('is-read'));
+    }
+
     /* ---------- FAQ-акордеон ---------- */
     document.querySelectorAll('.faq-question').forEach((btn) => {
         btn.addEventListener('click', () => {
