@@ -42,6 +42,23 @@
         aboutParas.forEach((p) => p.classList.add('is-read'));
     }
 
+    /* ---------- Cookie-повідомлення ---------- */
+    const cookieBar = document.getElementById('cookie-bar');
+    const cookieAccept = document.getElementById('cookie-accept');
+    if (cookieBar && cookieAccept) {
+        // localStorage може бути недоступний (приватний режим) — тоді
+        // показуємо панель щоразу, але сторінку не ламаємо
+        let cookieSeen = false;
+        try { cookieSeen = localStorage.getItem('cookie-ok') === '1'; } catch (e) { /* ignore */ }
+
+        if (!cookieSeen) cookieBar.hidden = false;
+
+        cookieAccept.addEventListener('click', () => {
+            cookieBar.hidden = true;
+            try { localStorage.setItem('cookie-ok', '1'); } catch (e) { /* ignore */ }
+        });
+    }
+
     /* ---------- FAQ-акордеон ---------- */
     document.querySelectorAll('.faq-question').forEach((btn) => {
         btn.addEventListener('click', () => {

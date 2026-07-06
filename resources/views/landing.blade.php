@@ -41,7 +41,8 @@
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="canonical" href="{{ url('/') }}">
 
-    <link rel="preload" href="{{ asset('fonts/benzin-bold.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/inter-900italic.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
 
@@ -169,7 +170,7 @@
                                 id="faq-q-{{ $i }}"
                                 aria-expanded="false"
                                 aria-controls="faq-a-{{ $i }}">
-                            <span class="t-display">{{ $item['q'] }}</span>
+                            <span class="faq-q-text">{{ $item['q'] }}</span>
                             <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                                 <path d="m6 9.5 6 6 6-6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
@@ -258,6 +259,14 @@
         <p class="copyright">© {{ date('Y') }} IDI_V_BANYU__ · Всі права захищені</p>
     </div>
 </footer>
+
+{{-- Cookie-повідомлення: ховається назавжди після «Зрозуміло» --}}
+<div class="cookie-bar" id="cookie-bar" role="region" aria-label="Повідомлення про використання cookie" hidden>
+    <div class="container cookie-inner">
+        <p class="cookie-text">Цей сайт використовує файли <span class="cookie-hl">cookie</span></p>
+        <button type="button" class="cookie-accept" id="cookie-accept">Зрозуміло</button>
+    </div>
+</div>
 
 {{-- Модалка замовлення --}}
 <div class="modal" id="order-modal" hidden>

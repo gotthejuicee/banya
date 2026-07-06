@@ -1,16 +1,28 @@
 /* ============================================================
    IDI_V_BANYU__ — лендинг банних наборів
-   Дизайн: чорний фон, лаймові акценти, важкий італік (Benzin)
+   Дизайн: чорний фон, лаймові акценти, важкий італік
+   Типографіка за Figma: Inter 900 Italic (заголовки, ціни),
+   Manrope 800 (питання FAQ, текстовий блок)
    ============================================================ */
 
 /* ---------- Шрифти ---------- */
 
 @font-face {
-    font-family: 'Benzin';
-    src: url('../fonts/benzin-bold.woff2') format('woff2');
-    font-weight: 700;
+    font-family: 'Manrope';
+    src: url('../fonts/manrope-800-cyrillic.woff2') format('woff2');
+    font-weight: 800;
     font-style: normal;
     font-display: swap;
+    unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+    font-family: 'Manrope';
+    src: url('../fonts/manrope-800-latin.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+2000-206F, U+20AC, U+2122;
 }
 
 @font-face {
@@ -71,8 +83,8 @@
     --surface: #131419;
     --surface-2: #1a1b22;
     --line: rgba(244, 242, 250, 0.08);
-    --text: #f4f2fa;
-    --muted: #9a9aa6;
+    --text: #f5f2f9;
+    --muted: #7a7d96;
     --lime: #d6ff41;
     --lime-ink: #0a0a0c;
     --lime-glow: rgba(214, 255, 65, 0.25);
@@ -85,7 +97,8 @@
     --container: 1240px;
 
     --font-body: 'Rubik', 'Segoe UI', system-ui, -apple-system, sans-serif;
-    --font-display: 'Benzin', 'Rubik Display', 'Rubik', 'Segoe UI', system-ui, sans-serif;
+    --font-display: 'Inter', 'Rubik Display', 'Rubik', 'Segoe UI', system-ui, sans-serif;
+    --font-accent: 'Manrope', 'Rubik', 'Segoe UI', system-ui, sans-serif;
 }
 
 /* ---------- База ---------- */
@@ -162,13 +175,13 @@ button {
     border: 0;
 }
 
-/* Дисплейна типографіка: важкий похилий каратель */
+/* Дисплейна типографіка за Figma: Inter 900 Italic, без трекінгу */
 .t-display {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 900;
     font-style: italic;
     text-transform: uppercase;
-    letter-spacing: 0.01em;
+    letter-spacing: 0;
 }
 
 /* ---------- Шапка ---------- */
@@ -302,9 +315,11 @@ button {
     margin-bottom: 30px;
 }
 
+/* Заголовки секцій за Figma: Inter 900 Italic 48px, line-height 100% */
 .section-title .t-display {
-    font-size: clamp(27px, 3.5vw, 44px);
-    line-height: 1.05;
+    font-size: clamp(26px, 4vw, 48px);
+    line-height: 1;
+    color: var(--text);
 }
 
 .section-tri {
@@ -362,24 +377,26 @@ button {
 /* Типографіка з макета: Inter 900 Italic; сабтайтл #7A7D96 (24px у макеті),
    ціна #F5F2F9 (48px у макеті, рівно 2× сабтайтла), без трекінгу */
 .pcard-subtitle {
-    margin-top: 18px;
+    margin-top: 20px;
     text-transform: uppercase;
     font-family: 'Inter', var(--font-body);
     font-style: italic;
     font-weight: 900;
     letter-spacing: 0;
-    font-size: clamp(9px, 1.9vw, 17px);
+    font-size: clamp(13px, 1.95vw, 24px);
     line-height: 1;
+    text-align: center;
     color: #7a7d96;
 }
 
 .pcard-price {
-    margin-top: 10px;
+    margin-top: 12px;
     font-family: 'Inter', var(--font-body);
     font-style: italic;
     font-weight: 900;
-    font-size: clamp(19px, 3.8vw, 34px);
+    font-size: clamp(26px, 3.9vw, 48px);
     letter-spacing: 0;
+    text-align: center;
     color: #f5f2f9;
     line-height: 1;
 }
@@ -475,33 +492,43 @@ button {
     border-color: rgba(214, 255, 65, 0.28);
 }
 
+/* Питання за Figma: Manrope 800, по центру пігулки; шеврон праворуч
+   абсолютом, щоб не зсував центрування тексту */
 .faq-question {
+    position: relative;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 18px;
-    padding: 17px 20px;
-    text-align: left;
+    justify-content: center;
+    padding: 20px 56px;
+    text-align: center;
     color: var(--text);
     transition: color 0.25s ease;
 }
 
-.faq-question .t-display {
-    font-size: 14px;
-    letter-spacing: 0.03em;
-    line-height: 1.4;
+.faq-q-text {
+    font-family: var(--font-accent);
+    font-weight: 800;
+    font-size: clamp(15px, 1.9vw, 26px);
+    letter-spacing: 0;
+    line-height: 1.25;
+    color: #f5f2f9;
+    transition: color 0.25s ease;
 }
 
-.faq-question:hover,
-.faq-item.is-open .faq-question {
+.faq-question:hover .faq-q-text,
+.faq-item.is-open .faq-q-text {
     color: var(--lime);
 }
 
+/* top: calc(...) замість translate: старі Safari/iOS не знають
+   окремої властивості translate, а transform зайнятий поворотом */
 .faq-chevron {
-    width: 20px;
-    height: 20px;
-    flex: none;
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 11px);
+    width: 22px;
+    height: 22px;
     color: var(--muted);
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease;
 }
@@ -536,10 +563,15 @@ button {
     border-top: 1px solid var(--line);
 }
 
+/* Світліший відтінок тієї ж гами: #7a7d96 на панелі не дотягує
+   до контрасту AA для дрібного тексту */
 .faq-answer-content p {
-    color: var(--muted);
-    font-size: 14.5px;
-    line-height: 1.65;
+    color: #9aa0b5;
+    font-family: var(--font-accent);
+    font-weight: 800;
+    font-size: clamp(14px, 1.4vw, 17px);
+    line-height: 1.6;
+    text-align: center;
 }
 
 .faq-answer-content p:first-child {
@@ -548,25 +580,22 @@ button {
 
 /* ---------- «Не знаєш, що подарувати?» — текстовий блок ---------- */
 
+/* Текст за Figma: Manrope 800 (26px на десктопі), #7A7D96, по центру */
 .about-text {
-    max-width: 680px;
+    max-width: 820px;
     margin-inline: auto;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 22px;
     text-align: center;
 }
 
 .about-text p {
-    color: #b9bdc7;
-    font-size: 15px;
-    line-height: 1.75;
-}
-
-.about-text p:first-child {
-    color: var(--text);
-    font-weight: 600;
-    font-size: 16px;
+    color: #7a7d96;
+    font-family: var(--font-accent);
+    font-weight: 800;
+    font-size: clamp(16px, 2vw, 26px);
+    line-height: 1.35;
 }
 
 /* Читацький «прожектор»: абзаци поза центральною смугою екрана тьмяніють
@@ -972,17 +1001,27 @@ button {
         gap: 10px;
     }
 
-    /* У макеті картки 2-в-ряд навіть на мобільному — вони компактні */
+    /* За мобільним макетом картки йдуть одна під одною */
     .products-grid {
-        gap: 14px;
+        grid-template-columns: 1fr;
+        gap: 38px;
+    }
+
+    .pcard-media img {
+        max-width: 320px;
     }
 
     .pcard-subtitle {
-        margin-top: 13px;
+        margin-top: 16px;
+        font-size: 16px;
+    }
+
+    .pcard-price {
+        font-size: 34px;
     }
 
     .section-title .t-display {
-        font-size: 18.5px;
+        font-size: 24px;
     }
 
     .section-tri {
@@ -1012,15 +1051,26 @@ button {
     }
 
     .faq-question {
-        padding: 15px 16px;
+        padding: 16px 42px;
     }
 
-    .faq-question .t-display {
-        font-size: 12.5px;
+    .faq-q-text {
+        font-size: 15px;
+    }
+
+    .faq-chevron {
+        right: 13px;
+        top: calc(50% - 9px);
+        width: 18px;
+        height: 18px;
     }
 
     .faq-answer-content {
         margin: 0 16px;
+    }
+
+    .about-text {
+        gap: 16px;
     }
 
     .section-title {
@@ -1073,6 +1123,73 @@ button {
         padding: 6px 12px;
     }
 
+}
+
+/* ---------- Cookie-повідомлення ---------- */
+
+.cookie-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    background: rgba(19, 20, 25, 0.97);
+    border-top: 1px solid var(--line);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    animation: cookie-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cookie-bar[hidden] {
+    display: none;
+}
+
+@keyframes cookie-in {
+    from { transform: translateY(100%); }
+}
+
+.cookie-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-block: 12px;
+}
+
+.cookie-text {
+    font-size: 14px;
+    color: var(--text);
+}
+
+.cookie-hl {
+    color: var(--lime);
+}
+
+.cookie-accept {
+    flex: none;
+    background: var(--violet);
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 999px;
+    padding: 9px 22px;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.cookie-accept:hover {
+    background: var(--violet-hover);
+    transform: translateY(-1px);
+}
+
+@media (max-width: 400px) {
+    .cookie-text {
+        font-size: 12.5px;
+    }
+
+    .cookie-accept {
+        font-size: 12.5px;
+        padding: 8px 16px;
+    }
 }
 
 /* Найвужчі екрани (320–360px): шапка не повинна ламатись */
