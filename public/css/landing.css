@@ -381,7 +381,7 @@ button {
 /* Широкі екрани: обмежуємо ширину колонок і центруємо пару */
 @media (min-width: 1025px) {
     .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 400px));
+        grid-template-columns: repeat(2, minmax(0, 440px));
         justify-content: center;
         column-gap: 140px;
         row-gap: 56px;
@@ -407,17 +407,16 @@ button {
     align-items: center;
     justify-content: center;
     width: 100%;
-    gap: clamp(16px, 2.4vw, 32px);
+    gap: clamp(12px, 1.6vw, 20px);
     margin-bottom: 20px;
     overflow: visible;
 }
 
 .pcard-box {
     position: relative;
-    flex: 0 1 330px;
-    width: 100%;
+    flex: 0 0 330px;
+    width: 330px;
     max-width: 330px;
-    min-width: 0;
     padding-bottom: 64px;
     overflow: visible;
 }
@@ -1364,7 +1363,8 @@ button {
     }
 
     .pcard-box {
-        flex-basis: 300px;
+        flex: 0 0 300px;
+        width: 300px;
         max-width: 300px;
         padding-bottom: 52px;
     }
