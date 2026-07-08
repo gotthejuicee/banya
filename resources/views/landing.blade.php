@@ -16,7 +16,8 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:alt" content="Не знаєш що подарувати? Вуаля! Банний набір IDI_V_BANYU__">
+    <meta property="og:image:alt" content="Готове рішення для неї та нього — подарункові банні набори IDI_V_BANYU__">
+    <meta property="og:image:secure_url" content="{{ secure_asset('images/og.jpg') }}">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:locale" content="uk_UA">
 

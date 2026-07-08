@@ -6,10 +6,9 @@ import { fileURLToPath } from 'node:url';
 
 const pub = fileURLToPath(new URL('../public/', import.meta.url));
 
-// 1) OG 1200×630 з банера (текст «НЕ ЗНАЄШ ЩО ПОДАРУВАТИ? ВУАЛЯ!» зліва,
-//    тому кропимо від лівого краю — обрізається лише правий бік)
-await sharp(pub + 'images/banner-gift.png')
-    .resize(1200, 630, { fit: 'cover', position: 'left' })
+// 1) OG 1200×630 для Telegram / соцмереж — банер «ГОТОВЕ РІШЕННЯ ДЛЯ НЕЇ ТА НЬОГО»
+await sharp(pub + 'images/banner-boxes.png')
+    .resize(1200, 630, { fit: 'cover', position: 'centre' })
     .jpeg({ quality: 85, mozjpeg: true })
     .toFile(pub + 'images/og.jpg');
 console.log('og.jpg: 1200x630');
