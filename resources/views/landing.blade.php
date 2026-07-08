@@ -5,26 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Банні набори IDI_V_BANYU__ — подарунковий набір для лазні в дерев’яній скриньці</title>
-    <meta name="description" content="Готові подарункові банні набори для чоловіків і жінок: шапка, кілт, віник, аромаолії в дерев’яній скриньці з гравіюванням. Доставка по Україні 1–3 дні. Не знаєш що подарувати? Вуаля!">
+    <meta name="description" content="{{ $og['description'] }}">
     <meta name="keywords" content="банний набір, набір для лазні, набір для сауни, подарунковий банний набір, подарунок чоловіку, подарунок жінці, банний набір купити, іди в баню">
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="IDI_V_BANYU__">
     <meta property="og:title" content="IDI_V_BANYU__ — банні набори в дерев’яній скриньці">
-    <meta property="og:description" content="Не знаєш що подарувати? Вуаля! Готовий банний набір з гравіюванням — турбота, увага, повага. Доставка по Україні 1–3 дні.">
-    <meta property="og:image" content="{{ asset('images/og.jpg') }}">
+    <meta property="og:description" content="{{ $og['description'] }}">
+    <meta property="og:image" content="{{ $og['url'] }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/jpeg">
-    <meta property="og:image:alt" content="Готове рішення для неї та нього — подарункові банні набори IDI_V_BANYU__">
-    <meta property="og:image:secure_url" content="{{ secure_asset('images/og.jpg') }}">
+    <meta property="og:image:type" content="{{ $og['type'] }}">
+    <meta property="og:image:alt" content="{{ $og['alt'] }}">
+    <meta property="og:image:secure_url" content="{{ $og['secure_url'] }}">
     <meta property="og:url" content="{{ url('/') }}">
     <meta property="og:locale" content="uk_UA">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="IDI_V_BANYU__ — банні набори в дерев’яній скриньці">
-    <meta name="twitter:description" content="Не знаєш що подарувати? Вуаля! Готовий банний набір з гравіюванням.">
-    <meta name="twitter:image" content="{{ asset('images/og.jpg') }}">
+    <meta name="twitter:description" content="{{ $og['description'] }}">
+    <meta name="twitter:image" content="{{ $og['url'] }}">
 
     @if (config('services.google.site_verification'))
         <meta name="google-site-verification" content="{{ config('services.google.site_verification') }}">

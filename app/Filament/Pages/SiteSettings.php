@@ -37,6 +37,8 @@ class SiteSettings extends Page
             'telegram_url' => Setting::get('telegram_url'),
             'banner_1_image' => Setting::get('banner_1_image'),
             'banner_2_image' => Setting::get('banner_2_image'),
+            'og_image' => Setting::get('og_image'),
+            'og_description' => Setting::get('og_description', config('landing.og_description')),
             'about_text' => Setting::get('about_text', config('landing.about')),
         ]);
     }
@@ -83,6 +85,22 @@ class SiteSettings extends Page
                     ])
                     ->collapsed(),
 
+                Section::make('Превʼю посилання (Telegram, Facebook, Viber)')
+                    ->schema([
+                        FileUpload::make('og_image')
+                            ->label('Картинка превʼю')
+                            ->image()
+                            ->disk('public')
+                            ->directory('seo')
+                            ->maxSize(5120)
+                            ->helperText('Рекомендовано 1200×630. Порожньо — стандартне зображення з репозиторію (images/og.jpg).'),
+                        Textarea::make('og_description')
+                            ->label('Опис під посиланням')
+                            ->rows(4)
+                            ->helperText('Текст у Telegram та інших месенджерах під заголовком. Порожньо — текст за замовчуванням.'),
+                    ])
+                    ->columns(1),
+
                 Section::make('Банери')
                     ->columns(2)
                     ->schema([
@@ -118,6 +136,8 @@ class SiteSettings extends Page
         Setting::set('telegram_url', $state['telegram_url'] ?? null);
         Setting::set('banner_1_image', $file($state['banner_1_image'] ?? null));
         Setting::set('banner_2_image', $file($state['banner_2_image'] ?? null));
+        Setting::set('og_image', $file($state['og_image'] ?? null));
+        Setting::set('og_description', $state['og_description'] ?? null);
         Setting::set('about_text', $state['about_text'] ?? null);
 
         Notification::make()

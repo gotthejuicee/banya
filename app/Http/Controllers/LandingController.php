@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FaqItem;
 use App\Models\Product;
 use App\Models\Setting;
+use App\Support\OpenGraph;
 use Illuminate\Contracts\View\View;
 
 class LandingController extends Controller
@@ -32,6 +33,7 @@ class LandingController extends Controller
 
         $socials = $this->socials();
         $allProducts = $products->flatten();
+        $og = OpenGraph::meta();
 
         return view('landing', [
             'maleProducts' => $products->get('male', collect()),
@@ -44,8 +46,9 @@ class LandingController extends Controller
                 Setting::get('banner_1_image'),
                 Setting::get('banner_2_image'),
             ],
+            'og' => $og,
             'faqJsonLd' => $this->faqJsonLd($faq),
-            'siteJsonLd' => $this->siteJsonLd($socials),
+            'siteJsonLd' => $this->siteJsonLd($socials, $og['url']),
             'productsJsonLd' => $this->productsJsonLd($allProducts),
         ]);
     }
@@ -55,7 +58,7 @@ class LandingController extends Controller
      *
      * @param  list<array{name: string, icon: string, url: string}>  $socials
      */
-    private function siteJsonLd(array $socials): string
+    private function siteJsonLd(array $socials, string $ogImageUrl): string
     {
         return json_encode([
             '@context' => 'https://schema.org',
@@ -66,7 +69,7 @@ class LandingController extends Controller
                     'name' => 'IDI_V_BANYU__',
                     'url' => url('/'),
                     'logo' => asset('favicon-512.png'),
-                    'image' => asset('images/og.jpg'),
+                    'image' => $ogImageUrl,
                     'telephone' => '+'.Setting::get('support_phone', config('services.support.phone')),
                     'sameAs' => array_column($socials, 'url'),
                 ],
