@@ -212,20 +212,14 @@ button {
 
 /* ---------- Шапка ---------- */
 
+/* Прозорий хедер (десктоп + мобілка): над контентом «плавають» лише
+   бренд і кнопка ПІДТРИМКА, сторінка проходить під ними. Без панелі/блюру. */
 .site-header {
     position: sticky;
     top: 0;
     z-index: 50;
     padding-top: var(--safe-top);
-    background: rgba(6, 6, 8, 0.85);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid #12141a;
-    transition: background 0.3s ease;
-}
-
-.site-header.is-scrolled {
-    background: rgba(6, 6, 8, 0.92);
+    background: transparent;
 }
 
 .header-inner {
@@ -248,6 +242,8 @@ button {
     height: 40px;
     flex: none;
     color: var(--text);
+    /* тінь, щоб білий бегунок читався над світлими ділянками контенту */
+    filter: drop-shadow(0 2px 7px rgba(0, 0, 0, 0.65));
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -259,6 +255,7 @@ button {
     font-size: clamp(17px, 2.1vw, 26px);
     white-space: nowrap;
     color: var(--text);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* Фіолетова пігулка підтримки — Figma: 218×48, radius 50, #593AA1 */
@@ -279,6 +276,8 @@ button {
     line-height: 1;
     text-align: center;
     flex: none;
+    /* відділяє пігулку від контенту, що проходить під прозорим хедером */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     transition: background 0.2s ease, transform 0.15s ease;
 }
 
@@ -422,7 +421,8 @@ button {
     width: 330px;
     max-width: 330px;
     padding-bottom: 64px;
-    overflow: visible;
+    overflow-x: clip;
+    overflow-y: visible;
 }
 
 .pcard-carousel {
@@ -1359,19 +1359,26 @@ button {
     }
 
     .pcard-media {
-        gap: 20px;
+        gap: 10px;
         margin-bottom: 16px;
     }
 
+    .pcard-arrow {
+        min-width: 40px;
+        min-height: 40px;
+        flex: 0 0 40px;
+    }
+
     .pcard-box {
-        flex: 0 0 300px;
-        width: 300px;
-        max-width: 300px;
+        flex: 1 1 auto;
+        width: auto;
+        max-width: min(300px, calc(100% - 100px));
+        min-width: 0;
         padding-bottom: 52px;
     }
 
     .pcard-ground {
-        width: min(523px, 170%);
+        width: min(523px, 120%);
         height: clamp(48px, 14vw, 63px);
         filter: blur(24px);
         -webkit-filter: blur(24px);
@@ -1460,11 +1467,6 @@ button {
         margin-bottom: 20px;
     }
 
-    .site-header {
-        position: static;
-        top: auto;
-    }
-
     .header-inner {
         padding-block: 11px;
     }
@@ -1529,18 +1531,18 @@ button {
     }
 
     .social-link {
-        width: 40px;
-        height: 40px;
-        min-width: 40px;
-        min-height: 40px;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
         background: #ececec;
         color: #101010;
         border: 1px solid rgba(122, 125, 150, 0.45);
     }
 
     .social-link svg {
-        width: 20px;
-        height: 20px;
+        width: 21px;
+        height: 21px;
     }
 
     .modal-panel {
@@ -1551,6 +1553,12 @@ button {
 @media (max-width: 400px) {
     .support-pill {
         padding: 8px 14px;
+    }
+
+    /* На найвужчих екранах тінь не ширша за бокс — жодного горизонт. скролу
+       навіть без підтримки overflow: clip (старий iOS) */
+    .pcard-ground {
+        width: min(523px, 100%);
     }
 }
 
