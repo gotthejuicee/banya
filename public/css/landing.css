@@ -342,6 +342,10 @@ button {
     padding-top: 72px;
 }
 
+.catalog.about {
+    padding-bottom: 64px;
+}
+
 .section-title {
     display: flex;
     align-items: center;
@@ -1403,6 +1407,10 @@ button {
 
     .catalog {
         padding-top: 46px;
+    }
+
+    .catalog.about {
+        padding-bottom: 48px;
     }
 
     .faq-panel {
