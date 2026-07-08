@@ -10,8 +10,8 @@ return [
 
     'socials' => [
         ['name' => 'Instagram', 'icon' => 'instagram', 'url' => 'https://instagram.com/idi_v_banyu_'],
-        ['name' => 'TikTok', 'icon' => 'tiktok', 'url' => 'https://www.tiktok.com/@idi_v_banyu_'],
-        ['name' => 'Telegram', 'icon' => 'telegram', 'url' => 'https://t.me/idi_v_banyu'],
+        ['name' => 'TikTok', 'icon' => 'tiktok', 'url' => ''],
+        ['name' => 'Telegram', 'icon' => 'telegram', 'url' => ''],
     ],
 
     /*

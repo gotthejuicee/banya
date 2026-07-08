@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- Позначаємо, що JS доступний: анімації появи вмикаються лише тоді --}}
     <script>document.documentElement.classList.add('js')</script>
@@ -190,7 +190,7 @@
         </div>
     </section>
 
-    {{-- Не знаєш, що подарувати? — великий текстовий блок --}}
+    {{-- Не знаєш, що подарувати? — текст у скрол-боксі (як на Beton) --}}
     <section class="catalog about" id="about">
         <div class="container">
             <h2 class="section-title reveal">
@@ -200,7 +200,7 @@
                 <span class="t-display">Не знаєш, що подарувати?</span>
             </h2>
 
-            <div class="about-text reveal">
+            <div class="about-scroll reveal" tabindex="0" role="region" aria-label="Про подарунковий банний набір">
                 @foreach ($aboutParagraphs as $paragraph)
                     <p>{{ $paragraph }}</p>
                 @endforeach
@@ -208,55 +208,45 @@
         </div>
     </section>
 
-    {{-- Соціальні мережі --}}
-    <section class="socials" aria-label="Ми в соціальних мережах">
-        <div class="container">
-            <div class="socials-panel reveal">
-                <p class="socials-label t-display">Ми в соціальних мережах:</p>
-                <div class="socials-row">
-                    @foreach ($socials as $social)
-                        <a class="social-link"
-                           href="{{ $social['url'] }}"
-                           target="_blank"
-                           rel="noopener"
-                           aria-label="{{ $social['name'] }}">
-                            @switch($social['icon'])
-                                @case('instagram')
-                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                        <rect x="3" y="3" width="18" height="18" rx="5.2" stroke="currentColor" stroke-width="1.9"/>
-                                        <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.9"/>
-                                        <circle cx="17.35" cy="6.65" r="1.35" fill="currentColor"/>
-                                    </svg>
-                                    @break
-                                @case('tiktok')
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.66 5.66 0 1 0 5.66 5.66V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.22-1.48Z" fill="currentColor"/>
-                                    </svg>
-                                    @break
-                                @case('telegram')
-                                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                                        <path d="m21.62 4.52-3.06 14.44c-.23 1.02-.83 1.27-1.69.79l-4.66-3.44-2.25 2.17c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.82c.38-.33-.08-.52-.58-.19L6.72 12.9l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.96-6.92c.83-.31 1.56.19 1.33 1.46Z" fill="currentColor"/>
-                                    </svg>
-                                    @break
-                            @endswitch
-                        </a>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
 </main>
 
+{{-- Підвал за макетом: соцмережі зліва, копірайт справа — одна смуга --}}
 <footer class="site-footer">
     <div class="container footer-inner">
-        <a class="brand brand--footer" href="{{ route('home') }}">
-            <svg class="brand-mark" aria-hidden="true"><use href="#i-runner"/></svg>
-            <span class="brand-name t-display">IDI_V_BANYU__</span>
-        </a>
+        <div class="footer-socials">
+            <p class="socials-label">Ми в соціальних мережах:</p>
+            <div class="socials-row">
+                @foreach ($socials as $social)
+                    <a class="social-link"
+                       href="{{ $social['url'] }}"
+                       target="_blank"
+                       rel="noopener"
+                       aria-label="{{ $social['name'] }}">
+                        @switch($social['icon'])
+                            @case('instagram')
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <rect x="3" y="3" width="18" height="18" rx="5.2" stroke="currentColor" stroke-width="1.9"/>
+                                    <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.9"/>
+                                    <circle cx="17.35" cy="6.65" r="1.35" fill="currentColor"/>
+                                </svg>
+                                @break
+                            @case('tiktok')
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.66 5.66 0 1 0 5.66 5.66V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.22-1.48Z" fill="currentColor"/>
+                                </svg>
+                                @break
+                            @case('telegram')
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="m21.62 4.52-3.06 14.44c-.23 1.02-.83 1.27-1.69.79l-4.66-3.44-2.25 2.17c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.82c.38-.33-.08-.52-.58-.19L6.72 12.9l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.96-6.92c.83-.31 1.56.19 1.33 1.46Z" fill="currentColor"/>
+                                </svg>
+                                @break
+                        @endswitch
+                    </a>
+                @endforeach
+            </div>
+        </div>
 
-        <a class="footer-phone" href="tel:+{{ $supportPhone }}">+{{ $supportPhone }}</a>
-
-        <p class="copyright">© {{ date('Y') }} IDI_V_BANYU__ · Всі права захищені</p>
+        <p class="copyright">{{ date('Y') }} IDI_V_BANYU__ · Всі права захищені</p>
     </div>
 </footer>
 
@@ -280,8 +270,11 @@
         </button>
 
         <div class="modal-view" id="modal-form-view">
-            <h3 class="modal-title t-display" id="modal-title">Замовити набір</h3>
-            <p class="modal-product">Набір: <b id="modal-product-name">—</b></p>
+            <svg class="modal-logo" aria-hidden="true"><use href="#i-runner"/></svg>
+
+            {{-- Заголовок і набір лишаються для скрін-рідерів, візуально їх немає (за макетом) --}}
+            <h3 class="modal-title t-display visually-hidden" id="modal-title">Замовити набір</h3>
+            <p class="visually-hidden">Набір: <b id="modal-product-name">—</b></p>
 
             <form id="order-form" action="{{ route('order.store') }}" method="post" novalidate>
                 <input type="hidden" name="product_id" id="field-product-id">
@@ -289,29 +282,22 @@
                 <input class="hp-field" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
                 <div class="form-group">
-                    <label for="field-name">Ваше ім’я</label>
-                    <input type="text" id="field-name" name="name" placeholder="Тарас" autocomplete="name" required>
+                    <label class="visually-hidden" for="field-name">Ваше ім’я</label>
+                    <input type="text" id="field-name" name="name" placeholder="Напишіть ваше ім’я" autocomplete="name" required>
                     <p class="field-error" data-error="name"></p>
                 </div>
 
                 <div class="form-group">
-                    <label for="field-phone">Телефон</label>
-                    <input type="tel" id="field-phone" name="phone" placeholder="097 477 29 19" inputmode="tel" autocomplete="tel" required>
+                    <label class="visually-hidden" for="field-phone">Телефон</label>
+                    <input type="tel" id="field-phone" name="phone" placeholder="Введіть номер телефону" inputmode="tel" autocomplete="tel" required>
                     <p class="field-error" data-error="phone"></p>
-                </div>
-
-                <div class="form-group">
-                    <label for="field-comment">Коментар <span class="label-hint">(необов’язково)</span></label>
-                    <textarea id="field-comment" name="comment" rows="3" placeholder="Наприклад: гравіювання «Для найкращого свата»"></textarea>
-                    <p class="field-error" data-error="comment"></p>
                 </div>
 
                 <p class="field-error field-error--global" data-error="global" role="alert" aria-live="assertive"></p>
 
-                <button type="submit" class="btn btn--lime btn--block" id="order-submit">
-                    <span class="t-display">Відправити заявку</span>
+                <button type="submit" class="btn btn--violet btn--block" id="order-submit">
+                    <span class="t-display">Відправити</span>
                 </button>
-                <p class="form-note">Передзвонимо протягом 15 хвилин у робочий час</p>
             </form>
         </div>
 

@@ -27,24 +27,15 @@
         revealEls.forEach((el) => el.classList.add('is-in'));
     }
 
-    /* ---------- «Прожектор» тексту: абзац видно, поки він у центральній
-       смузі екрана; вище/нижче — тьмяніє (працює в обидва боки скролу) ---------- */
-    const aboutParas = document.querySelectorAll('.about-text p');
-    if (aboutParas.length && 'IntersectionObserver' in window) {
-        const spotlight = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                entry.target.classList.toggle('is-read', entry.isIntersecting);
-            });
-        }, { rootMargin: '-12% 0px -18% 0px', threshold: 0 });
-
-        aboutParas.forEach((p) => spotlight.observe(p));
-    } else {
-        aboutParas.forEach((p) => p.classList.add('is-read'));
-    }
-
     /* ---------- Cookie-повідомлення ---------- */
     const cookieBar = document.getElementById('cookie-bar');
     const cookieAccept = document.getElementById('cookie-accept');
+
+    const updateCookieOffset = () => {
+        const offset = cookieBar && !cookieBar.hidden ? `${cookieBar.offsetHeight}px` : '0px';
+        document.documentElement.style.setProperty('--cookie-bar-offset', offset);
+    };
+
     if (cookieBar && cookieAccept) {
         // localStorage може бути недоступний (приватний режим) — тоді
         // показуємо панель щоразу, але сторінку не ламаємо
@@ -52,11 +43,15 @@
         try { cookieSeen = localStorage.getItem('cookie-ok') === '1'; } catch (e) { /* ignore */ }
 
         if (!cookieSeen) cookieBar.hidden = false;
+        updateCookieOffset();
 
         cookieAccept.addEventListener('click', () => {
             cookieBar.hidden = true;
+            updateCookieOffset();
             try { localStorage.setItem('cookie-ok', '1'); } catch (e) { /* ignore */ }
         });
+
+        window.addEventListener('resize', updateCookieOffset, { passive: true });
     }
 
     /* ---------- FAQ-акордеон ---------- */
@@ -80,6 +75,7 @@
 
     /* ---------- Модалка ---------- */
     const modal = document.getElementById('order-modal');
+    const modalPanel = modal?.querySelector('.modal-panel');
     const formView = document.getElementById('modal-form-view');
     const successView = document.getElementById('modal-success-view');
     const form = document.getElementById('order-form');
@@ -92,6 +88,7 @@
 
     let lastFocused = null;
     let successTimer = null;
+    let keyboardTimer = null;
 
     const clearErrors = () => {
         modal.querySelectorAll('.field-error').forEach((el) => {
@@ -128,6 +125,30 @@
         window.scrollTo(0, lockedScrollY);
     };
 
+    /* iOS: клавіатура зменшує visualViewport — піднімаємо панель і скролимо поле */
+    const resetModalKeyboard = () => {
+        clearTimeout(keyboardTimer);
+        if (modalPanel) modalPanel.style.marginBottom = '';
+    };
+
+    const adjustModalForKeyboard = () => {
+        if (modal.hidden || !modalPanel || !window.visualViewport) return;
+
+        const vv = window.visualViewport;
+        const obscured = window.innerHeight - vv.height - vv.offsetTop;
+        modalPanel.style.marginBottom = obscured > 0 ? `${Math.ceil(obscured)}px` : '';
+    };
+
+    const focusFieldInModal = (el) => {
+        if (!el || !modalPanel?.contains(el)) return;
+
+        clearTimeout(keyboardTimer);
+        keyboardTimer = setTimeout(() => {
+            el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            adjustModalForKeyboard();
+        }, 320);
+    };
+
     const openModal = (productId, productName) => {
         lastFocused = document.activeElement;
         productIdField.value = productId;
@@ -137,18 +158,30 @@
         clearErrors();
         modal.hidden = false;
         lockScroll();
-        setTimeout(() => document.getElementById('field-name').focus(), 60);
+        setTimeout(() => {
+            const nameField = document.getElementById('field-name');
+            nameField?.focus({ preventScroll: true });
+            focusFieldInModal(nameField);
+        }, 60);
     };
 
     const closeModal = () => {
         clearTimeout(successTimer);
         successTimer = null;
+        resetModalKeyboard();
         modal.hidden = true;
         unlockScroll();
         form.reset();
         clearErrors();
         lastFocused?.focus?.();
     };
+
+    modal.addEventListener('focusin', (e) => focusFieldInModal(e.target));
+
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', adjustModalForKeyboard);
+        window.visualViewport.addEventListener('scroll', adjustModalForKeyboard);
+    }
 
     /* Focus trap: Tab не випускає фокус за межі відкритої модалки */
     modal.addEventListener('keydown', (e) => {
@@ -200,7 +233,6 @@
                     product_id: productIdField.value || null,
                     name: form.elements.name.value.trim(),
                     phone: form.elements.phone.value.trim(),
-                    comment: form.elements.comment.value.trim() || null,
                     website: form.elements.website.value, // honeypot
                 }),
             });

@@ -64,13 +64,15 @@ class SiteSettings extends Page
                         TextInput::make('tiktok_url')
                             ->label('TikTok')
                             ->url()
-                            ->placeholder('https://www.tiktok.com/@…'),
+                            ->placeholder('https://www.tiktok.com/@…')
+                            ->helperText('Залиште порожнім — іконка прихована. Заповніть посилання, коли будете готові показати на сайті.'),
                         TextInput::make('telegram_url')
-                            ->label('Telegram')
+                            ->label('Telegram (канал або бот для клієнтів)')
                             ->url()
-                            ->placeholder('https://t.me/…'),
+                            ->placeholder('https://t.me/…')
+                            ->helperText('Залиште порожнім — іконка прихована. Це публічне посилання в підвалі, не плутати з ботом для заявок (TELEGRAM_* у .env).'),
                     ])
-                    ->description('Порожнє поле — іконка не показується на сайті'),
+                    ->description('На сайті показуються лише мережі з заповненим посиланням'),
 
                 Section::make('Текст «Не знаєш, що подарувати?»')
                     ->schema([

@@ -96,6 +96,13 @@
     --radius-lg: 20px;
     --container: 1240px;
 
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --touch-min: 48px; /* Material Design: мінімум 48dp */
+    --cookie-bar-offset: 0px;
+
     --font-body: 'Rubik', 'Segoe UI', system-ui, -apple-system, sans-serif;
     --font-display: 'Inter', 'Rubik Display', 'Rubik', 'Segoe UI', system-ui, sans-serif;
     --font-accent: 'Manrope', 'Rubik', 'Segoe UI', system-ui, sans-serif;
@@ -113,6 +120,7 @@
 
 html {
     scroll-behavior: smooth;
+    color-scheme: dark;
 }
 
 body {
@@ -123,7 +131,11 @@ body {
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
     min-height: 100vh;
+    min-height: 100dvh;
+    padding-bottom: var(--cookie-bar-offset);
 }
 
 img {
@@ -145,6 +157,18 @@ button {
     cursor: pointer;
 }
 
+/* Material/Android: миттєвий тап без затримки double-tap zoom */
+.brand,
+.support-pill,
+.social-link,
+.pcard-cta,
+.faq-question,
+.modal-close,
+.cookie-accept,
+.btn {
+    touch-action: manipulation;
+}
+
 ::selection {
     background: var(--lime);
     color: var(--lime-ink);
@@ -159,7 +183,8 @@ button {
 .container {
     max-width: var(--container);
     margin-inline: auto;
-    padding-inline: 24px;
+    padding-left: max(24px, var(--safe-left));
+    padding-right: max(24px, var(--safe-right));
 }
 
 /* Для скрінрідерів і пошуковиків, невидиме оку (h1 тощо) */
@@ -190,6 +215,7 @@ button {
     position: sticky;
     top: 0;
     z-index: 50;
+    padding-top: var(--safe-top);
     background: rgba(6, 6, 8, 0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -242,6 +268,8 @@ button {
     align-items: center;
     justify-content: center;
     gap: 1px;
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
     background: var(--violet);
     border-radius: 999px;
     padding: 8px 22px;
@@ -255,6 +283,12 @@ button {
     background: var(--violet-hover);
     transform: translateY(-1px);
     box-shadow: 0 8px 24px rgba(91, 87, 214, 0.35);
+}
+
+.support-pill:active {
+    transform: scale(0.96);
+    background: #4a46c4;
+    box-shadow: 0 2px 10px rgba(91, 87, 214, 0.3);
 }
 
 .support-label {
@@ -407,6 +441,8 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
     background: var(--lime);
     color: var(--lime-ink);
     font-family: 'Inter', var(--font-body);
@@ -414,9 +450,9 @@ button {
     font-weight: 900;
     font-size: 15px;
     letter-spacing: 0;
-    padding: 11px 30px 12px;
+    padding: 12px 30px;
     border-radius: 999px;
-    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .pcard-cta:hover {
@@ -425,7 +461,8 @@ button {
 }
 
 .pcard-cta:active {
-    transform: translateY(0);
+    transform: scale(0.96);
+    box-shadow: 0 4px 16px var(--lime-glow);
 }
 
 /* ---------- Кнопки ---------- */
@@ -434,10 +471,11 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    min-height: var(--touch-min);
     border-radius: 12px;
     padding: 15px 26px;
     line-height: 1;
-    transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
     will-change: transform;
 }
 
@@ -458,8 +496,29 @@ button {
 }
 
 .btn--lime:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 14px var(--lime-glow);
+    transform: scale(0.97);
+    box-shadow: 0 2px 10px var(--lime-glow);
+}
+
+/* Фіолетова кнопка — головна дія форми замовлення (за макетом) */
+.btn--violet {
+    background: var(--violet);
+    color: #fff;
+}
+
+/* За макетом підпис кнопки в звичайному регістрі: «Відправити», не CAPS */
+.btn--violet .t-display {
+    text-transform: none;
+}
+
+.btn--violet:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(91, 87, 214, 0.4);
+}
+
+.btn--violet:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 10px rgba(91, 87, 214, 0.35);
 }
 
 .btn--block {
@@ -500,10 +559,19 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: var(--touch-min);
     padding: 20px 56px;
     text-align: center;
     color: var(--text);
-    transition: color 0.25s ease;
+    transition: color 0.15s ease, background 0.15s ease;
+}
+
+.faq-question:active {
+    background: rgba(244, 242, 250, 0.05);
+}
+
+.faq-question:active .faq-q-text {
+    color: var(--lime);
 }
 
 .faq-q-text {
@@ -578,66 +646,85 @@ button {
     color: #cfcdd9;
 }
 
-/* ---------- «Не знаєш, що подарувати?» — текстовий блок ---------- */
-
-/* Текст за Figma: Manrope 800 (26px на десктопі), #7A7D96, по центру */
-.about-text {
+/* ---------- «Не знаєш, що подарувати?» — текст у скрол-боксі (як на Beton) ----------
+   Заголовок лишається зверху, а довгий текст гортається всередині боксу
+   фіксованої висоти зі своїм тонким скролбаром. Скрол сторінки не перехоплюється. */
+.about-scroll {
     max-width: 820px;
     margin-inline: auto;
+    max-height: clamp(300px, 46vh, 460px);
+    max-height: clamp(300px, 46dvh, 460px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
     display: flex;
     flex-direction: column;
     gap: 22px;
     text-align: center;
+    padding-right: 14px;
+    /* Кастомний скролбар — Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--lime) rgba(244, 242, 250, 0.08);
 }
 
-.about-text p {
+/* Кастомний скролбар — WebKit (Chrome/Safari/Edge) */
+.about-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.about-scroll::-webkit-scrollbar-track {
+    background: rgba(244, 242, 250, 0.06);
+    border-radius: 999px;
+}
+
+.about-scroll::-webkit-scrollbar-thumb {
+    background: var(--lime);
+    border-radius: 999px;
+}
+
+.about-scroll::-webkit-scrollbar-thumb:hover {
+    background: #e4ff6b;
+}
+
+.about-scroll:focus-visible {
+    outline: 2px solid var(--lime);
+    outline-offset: 6px;
+    border-radius: 6px;
+}
+
+.about-scroll p {
     color: #7a7d96;
     font-family: var(--font-accent);
     font-weight: 800;
     font-size: clamp(16px, 2vw, 26px);
-    line-height: 1.35;
+    line-height: 1.4;
 }
 
-/* Читацький «прожектор»: абзаци поза центральною смугою екрана тьмяніють
-   при скролі в обидва боки (клас вішає JS через IntersectionObserver) */
-.js .about-text p {
-    opacity: 0.14;
-    transition: opacity 0.55s ease;
+/* ---------- Підвал: соцмережі + копірайт (одна смуга за макетом) ---------- */
+
+.site-footer {
+    border-top: 1px solid var(--line);
+    padding-block: 30px;
+    background: #08080b;
 }
 
-.js .about-text p.is-read {
-    opacity: 1;
+.footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px 40px;
+    flex-wrap: wrap;
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .js .about-text p {
-        opacity: 1;
-        transition: none;
-    }
-}
-
-/* ---------- Соціальні мережі ---------- */
-
-.socials {
-    padding: 72px 0 88px;
-}
-
-/* Смуга соцмереж: лейбл згори, іконки під ним, усе зліва — як у макеті */
-.socials-panel {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: var(--radius-lg);
-    padding: 24px 28px;
+.footer-socials {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: 12px;
 }
 
 .socials-label {
     font-family: var(--font-body);
-    font-style: normal;
-    text-transform: none;
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 0.01em;
@@ -646,23 +733,23 @@ button {
 
 .socials-row {
     display: flex;
-    gap: 14px;
+    gap: 12px;
 }
 
 .social-link {
-    width: 54px;
-    height: 54px;
+    width: var(--touch-min);
+    height: var(--touch-min);
     border-radius: 50%;
     display: grid;
     place-items: center;
     background: var(--text);
     color: #0d0d10;
-    transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
 
 .social-link svg {
-    width: 24px;
-    height: 24px;
+    width: 21px;
+    height: 21px;
 }
 
 .social-link:hover {
@@ -671,44 +758,10 @@ button {
     box-shadow: 0 10px 28px var(--lime-glow);
 }
 
-/* ---------- Підвал ---------- */
-
-.site-footer {
-    border-top: 1px solid var(--line);
-    padding-block: 34px;
-    background: #08080b;
-}
-
-.footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.brand--footer .brand-mark {
-    width: 36px;
-    height: 31px;
-}
-
-.brand--footer .brand-name {
-    font-size: 16px;
-}
-
-.footer-phone {
-    font-weight: 600;
-    font-size: 16px;
-    letter-spacing: 0.03em;
-    color: var(--text);
-    border-bottom: 1px solid rgba(244, 242, 250, 0.25);
-    padding-bottom: 2px;
-    transition: color 0.25s ease, border-color 0.25s ease;
-}
-
-.footer-phone:hover {
-    color: var(--lime);
-    border-color: var(--lime);
+.social-link:active {
+    transform: scale(0.9);
+    background: var(--lime);
+    box-shadow: 0 4px 14px var(--lime-glow);
 }
 
 .copyright {
@@ -724,7 +777,11 @@ button {
     z-index: 100;
     display: grid;
     place-items: center;
-    padding: 20px;
+    padding:
+        max(20px, var(--safe-top))
+        max(20px, var(--safe-right))
+        max(20px, var(--safe-bottom))
+        max(20px, var(--safe-left));
 }
 
 .modal[hidden] {
@@ -743,9 +800,10 @@ button {
 .modal-panel {
     position: relative;
     width: min(460px, 100%);
-    max-height: calc(100vh - 40px);
-    max-height: calc(100dvh - 40px); /* iOS: 100vh не враховує тулбар Safari */
+    max-height: calc(100vh - 40px - var(--safe-top) - var(--safe-bottom));
+    max-height: calc(100dvh - 40px - var(--safe-top) - var(--safe-bottom));
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     background: #101116;
     border: 1px solid rgba(244, 242, 250, 0.1);
     border-radius: var(--radius-lg);
@@ -769,13 +827,13 @@ button {
     position: absolute;
     top: 14px;
     right: 14px;
-    width: 38px;
-    height: 38px;
+    width: var(--touch-min);
+    height: var(--touch-min);
     display: grid;
     place-items: center;
     border-radius: 10px;
     color: var(--muted);
-    transition: color 0.2s ease, background 0.2s ease;
+    transition: color 0.15s ease, background 0.15s ease, transform 0.15s ease;
 }
 
 .modal-close:hover {
@@ -783,9 +841,31 @@ button {
     background: rgba(244, 242, 250, 0.06);
 }
 
+.modal-close:active {
+    transform: scale(0.9);
+    color: var(--text);
+    background: rgba(244, 242, 250, 0.12);
+}
+
 .modal-close svg {
     width: 20px;
     height: 20px;
+}
+
+/* Логотип-бігунець у шапці форми (за макетом) */
+.modal-logo {
+    display: block;
+    width: 92px;
+    height: 78px;
+    margin: 4px auto 22px;
+    color: var(--text);
+}
+
+/* Кнопки всередині модалки — пігулки, як у макеті */
+.modal .btn {
+    border-radius: 999px;
+    min-height: var(--touch-min);
+    padding-block: 16px;
 }
 
 .modal-title {
@@ -973,6 +1053,17 @@ button {
     .faq-chevron {
         transition: none;
     }
+
+    .support-pill:active,
+    .pcard-cta:active,
+    .btn--lime:active,
+    .btn--violet:active,
+    .social-link:active,
+    .modal-close:active,
+    .cookie-accept:active,
+    .faq-question:active {
+        transform: none;
+    }
 }
 
 /* ---------- Адаптив ---------- */
@@ -989,16 +1080,18 @@ button {
 
 @media (max-width: 760px) {
     .container {
-        padding-inline: 16px;
+        padding-left: max(16px, var(--safe-left));
+        padding-right: max(16px, var(--safe-right));
     }
 
     .banners {
         padding-top: 14px;
     }
 
-    /* У макеті банери лишаються поруч навіть на мобільному */
+    /* За мобільним макетом банери йдуть один під одним, на всю ширину */
     .banners-grid {
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 
     /* За мобільним макетом картки йдуть одна під одною */
@@ -1030,20 +1123,12 @@ button {
     }
 
     .pcard-cta {
-        font-size: 13px;
-        padding: 9px 22px 10px;
+        font-size: 14px;
+        padding: 12px 26px;
     }
 
     .catalog {
         padding-top: 46px;
-    }
-
-    .socials {
-        padding: 46px 0 56px;
-    }
-
-    .socials-panel {
-        padding: 20px 18px;
     }
 
     .faq-panel {
@@ -1069,7 +1154,7 @@ button {
         margin: 0 16px;
     }
 
-    .about-text {
+    .about-scroll {
         gap: 16px;
     }
 
@@ -1092,7 +1177,7 @@ button {
     }
 
     .support-pill {
-        padding: 7px 16px;
+        padding: 8px 18px;
     }
 
     .support-label {
@@ -1106,7 +1191,11 @@ button {
     .footer-inner {
         flex-direction: column;
         text-align: center;
-        gap: 14px;
+        gap: 18px;
+    }
+
+    .footer-socials {
+        align-items: center;
     }
 
     .modal-panel {
@@ -1120,7 +1209,7 @@ button {
     }
 
     .support-pill {
-        padding: 6px 12px;
+        padding: 8px 14px;
     }
 
 }
@@ -1133,6 +1222,7 @@ button {
     right: 0;
     bottom: 0;
     z-index: 90;
+    padding-bottom: var(--safe-bottom);
     background: rgba(19, 20, 25, 0.97);
     border-top: 1px solid var(--line);
     backdrop-filter: blur(10px);
@@ -1153,7 +1243,8 @@ button {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding-block: 12px;
+    min-height: var(--touch-min);
+    padding-block: 10px;
 }
 
 .cookie-text {
@@ -1167,12 +1258,17 @@ button {
 
 .cookie-accept {
     flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: var(--touch-min);
+    min-width: var(--touch-min);
     background: var(--violet);
     color: #fff;
     font-weight: 600;
     font-size: 14px;
     border-radius: 999px;
-    padding: 9px 22px;
+    padding: 10px 22px;
     transition: background 0.25s ease, transform 0.25s ease;
 }
 
@@ -1181,14 +1277,19 @@ button {
     transform: translateY(-1px);
 }
 
+.cookie-accept:active {
+    transform: scale(0.96);
+    background: #4a46c4;
+}
+
 @media (max-width: 400px) {
     .cookie-text {
         font-size: 12.5px;
     }
 
     .cookie-accept {
-        font-size: 12.5px;
-        padding: 8px 16px;
+        font-size: 13px;
+        padding: 10px 18px;
     }
 }
 
@@ -1213,7 +1314,7 @@ button {
     }
 
     .support-pill {
-        padding: 5px 10px;
+        padding: 8px 12px;
     }
 
     .support-label {
@@ -1222,5 +1323,69 @@ button {
 
     .support-phone {
         font-size: 11.5px;
+    }
+}
+
+/* ---------- Touch-пристрої: без «залиплих» hover-ефектів ---------- */
+
+@media (hover: none) {
+    .brand:hover .brand-mark,
+    .support-pill:hover,
+    .banner-card:hover img,
+    .products-grid .product-card:hover,
+    .pcard-cta:hover,
+    .btn--lime:hover,
+    .btn--violet:hover,
+    .social-link:hover,
+    .modal-close:hover,
+    .cookie-accept:hover {
+        transform: none;
+        box-shadow: none;
+    }
+
+    .support-pill:hover {
+        background: var(--violet);
+    }
+
+    .pcard-cta:hover {
+        background: var(--lime);
+    }
+
+    .btn--violet:hover {
+        background: var(--violet);
+    }
+
+    .btn--lime:hover {
+        background: var(--lime);
+    }
+
+    .social-link:hover {
+        background: var(--text);
+    }
+
+    .modal-close:hover {
+        background: transparent;
+        color: var(--muted);
+    }
+
+    .cookie-accept:hover {
+        background: var(--violet);
+    }
+
+    /* :active лишаємо — тактильний відгук на touch-пристроях */
+    .support-pill:active,
+    .pcard-cta:active,
+    .btn--lime:active,
+    .btn--violet:active,
+    .social-link:active,
+    .modal-close:active,
+    .cookie-accept:active,
+    .faq-question:active {
+        transform: scale(0.96);
+    }
+
+    .social-link:active,
+    .modal-close:active {
+        transform: scale(0.9);
     }
 }
