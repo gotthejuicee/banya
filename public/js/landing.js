@@ -39,7 +39,8 @@
     const cookieAccept = document.getElementById('cookie-accept');
 
     const updateCookieOffset = () => {
-        const offset = cookieBar && !cookieBar.hidden ? `${cookieBar.offsetHeight}px` : '0px';
+        const isFixedCookie = !window.matchMedia('(max-width: 760px)').matches;
+        const offset = isFixedCookie && cookieBar && !cookieBar.hidden ? `${cookieBar.offsetHeight}px` : '0px';
         document.documentElement.style.setProperty('--cookie-bar-offset', offset);
     };
 

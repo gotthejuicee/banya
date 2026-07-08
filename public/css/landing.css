@@ -1594,6 +1594,18 @@ button {
 }
 
 @media (max-width: 760px) {
+    .cookie-bar {
+        position: static;
+        z-index: auto;
+        padding:
+            8px
+            max(16px, var(--safe-right))
+            max(24px, calc(16px + var(--safe-bottom)))
+            max(16px, var(--safe-left));
+        pointer-events: auto;
+        animation: none;
+    }
+
     .cookie-inner {
         flex-direction: column;
         gap: 14px;
