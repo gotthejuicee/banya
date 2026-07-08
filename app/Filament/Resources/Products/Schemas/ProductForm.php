@@ -88,6 +88,15 @@ class ProductForm
                             ->directory('products')
                             ->maxSize(4096)
                             ->helperText('Бажано PNG з прозорим тлом. Порожньо — стандартне фото боксу.'),
+                        FileUpload::make('gallery')
+                            ->label('Додаткові фото (карусель)')
+                            ->image()
+                            ->multiple()
+                            ->reorderable()
+                            ->disk('public')
+                            ->directory('products/gallery')
+                            ->maxSize(4096)
+                            ->helperText('Вміст боксу та інші ракурси. На сайті гортайте стрілками поруч із фото.'),
                     ]),
             ]);
     }

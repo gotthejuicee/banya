@@ -161,6 +161,7 @@ button {
 .brand,
 .support-pill,
 .social-link,
+.pcard-arrow,
 .pcard-cta,
 .faq-question,
 .modal-close,
@@ -219,12 +220,11 @@ button {
     background: rgba(6, 6, 8, 0.85);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.3s ease, background 0.3s ease;
+    border-bottom: 1px solid #12141a;
+    transition: background 0.3s ease;
 }
 
 .site-header.is-scrolled {
-    border-bottom-color: var(--line);
     background: rgba(6, 6, 8, 0.92);
 }
 
@@ -261,50 +261,55 @@ button {
     color: var(--text);
 }
 
-/* Фіолетова пігулка підтримки */
+/* Фіолетова пігулка підтримки — Figma: 218×48, radius 50, #593AA1 */
 .support-pill {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 1px;
-    min-height: var(--touch-min);
-    min-width: var(--touch-min);
-    background: var(--violet);
-    border-radius: 999px;
-    padding: 8px 22px;
-    line-height: 1.25;
+    gap: 2px;
+    width: 218px;
+    height: 48px;
+    min-width: 218px;
+    min-height: 48px;
+    padding: 0;
+    background: #593aa1;
+    border-radius: 50px;
+    color: #ffffff;
+    line-height: 1;
     text-align: center;
     flex: none;
-    transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .support-pill:hover {
-    background: var(--violet-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 24px rgba(91, 87, 214, 0.35);
+    background: #6849b0;
 }
 
 .support-pill:active {
     transform: scale(0.96);
-    background: #4a46c4;
-    box-shadow: 0 2px 10px rgba(91, 87, 214, 0.3);
+    background: #4f348f;
 }
 
 .support-label {
-    font-family: var(--font-display);
-    font-style: italic;
-    font-weight: 700;
-    font-size: 9px;
-    letter-spacing: 0.14em;
+    font-family: 'Inter', var(--font-body);
+    font-style: normal;
+    font-weight: 900;
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0;
     text-transform: uppercase;
-    opacity: 0.92;
+    color: #ffffff;
 }
 
 .support-phone {
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.02em;
+    font-family: 'Inter', var(--font-body);
+    font-style: normal;
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #ffffff;
 }
 
 /* ---------- Банери ---------- */
@@ -329,11 +334,6 @@ button {
 .banner-card img {
     width: 100%;
     height: auto;
-    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.banner-card:hover img {
-    transform: scale(1.025);
 }
 
 /* ---------- Секції каталогу ---------- */
@@ -349,19 +349,24 @@ button {
     margin-bottom: 30px;
 }
 
-/* Заголовки секцій за Figma: Inter 900 Italic 48px, line-height 100% */
+/* Заголовки секцій за Figma: Inter 900 Italic 48px, line-height 100%, #F5F2F9 */
 .section-title .t-display {
-    font-size: clamp(26px, 4vw, 48px);
+    font-family: 'Inter', var(--font-body);
+    font-weight: 900;
+    font-style: italic;
+    font-size: 48px;
     line-height: 1;
-    color: var(--text);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    color: #f5f2f9;
 }
 
+/* Маркери секцій за Figma: 65×65, обводка 3px, #E8F213 */
 .section-tri {
-    width: clamp(30px, 3.2vw, 42px);
-    height: clamp(30px, 3.2vw, 42px);
+    width: 65px;
+    height: 65px;
     flex: none;
-    color: var(--lime);
-    filter: drop-shadow(0 0 14px var(--lime-glow));
+    color: #e8f213;
 }
 
 /* ---------- Картки товарів (мінімальні, за оновленим макетом) ---------- */
@@ -385,84 +390,145 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     text-align: center;
     transition: transform 0.35s ease;
 }
 
-/* Три класи — щоб hover перемагав .reveal.is-in { transform: none } */
 .products-grid .product-card:hover {
     transform: translateY(-4px);
 }
 
 .pcard-media {
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    width: 100%;
+    gap: clamp(2px, 0.8vw, 10px);
+}
+
+.pcard-carousel {
+    position: relative;
+    flex: 0 1 330px;
+    width: 100%;
+    max-width: 330px;
+    min-width: 0;
+}
+
+.pcard-slide {
+    display: none;
+}
+
+.pcard-slide.is-active {
+    display: block;
+}
+
+.pcard-slide img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.pcard-arrow {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: #d9d9d9;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.15s ease;
+    touch-action: manipulation;
+    user-select: none;
+}
+
+.pcard-arrow svg {
+    display: block;
+    width: 12.5px;
+    height: 25px;
+    pointer-events: none;
+}
+
+.pcard-arrow:hover {
+    color: #f5f2f9;
+}
+
+.pcard-arrow:active {
+    transform: scale(0.92);
+    color: #ffffff;
 }
 
 .pcard-media img {
     display: block;
     width: 100%;
-    max-width: 330px;
     height: auto;
 }
 
-/* Типографіка з макета: Inter 900 Italic; сабтайтл #7A7D96 (24px у макеті),
-   ціна #F5F2F9 (48px у макеті, рівно 2× сабтайтла), без трекінгу */
+/* Сабтайтл картки за Figma: Inter 900 Italic 24px, #7A7D96 */
 .pcard-subtitle {
     margin-top: 20px;
-    text-transform: uppercase;
     font-family: 'Inter', var(--font-body);
-    font-style: italic;
     font-weight: 900;
-    letter-spacing: 0;
-    font-size: clamp(13px, 1.95vw, 24px);
+    font-style: italic;
+    font-size: 24px;
     line-height: 1;
+    letter-spacing: 0;
+    text-transform: uppercase;
     text-align: center;
     color: #7a7d96;
 }
 
+/* Ціна картки за Figma: Inter 900 Italic 48px, #F5F2F9 */
 .pcard-price {
     margin-top: 12px;
     font-family: 'Inter', var(--font-body);
-    font-style: italic;
     font-weight: 900;
-    font-size: clamp(26px, 3.9vw, 48px);
+    font-style: italic;
+    font-size: 48px;
+    line-height: 1;
     letter-spacing: 0;
     text-align: center;
     color: #f5f2f9;
-    line-height: 1;
 }
 
-/* Компактна жовта пігулка, текст звичайним регістром — як у макеті */
+/* Кнопка «Замовити» за Figma: 240×70, radius 50, #E8F213, текст 32px #070707 */
 .pcard-cta {
     margin-top: 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: var(--touch-min);
-    min-width: var(--touch-min);
-    background: var(--lime);
-    color: var(--lime-ink);
+    width: 240px;
+    height: 70px;
+    min-width: 240px;
+    min-height: 70px;
+    padding: 0;
+    border: 0;
+    background: #e8f213;
+    color: #070707;
     font-family: 'Inter', var(--font-body);
-    font-style: italic;
     font-weight: 900;
-    font-size: 15px;
+    font-style: italic;
+    font-size: 32px;
+    line-height: 1;
     letter-spacing: 0;
-    padding: 12px 30px;
-    border-radius: 999px;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    text-align: center;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
 }
 
 .pcard-cta:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 28px var(--lime-glow);
+    background: #f0f82a;
 }
 
 .pcard-cta:active {
     transform: scale(0.96);
-    box-shadow: 0 4px 16px var(--lime-glow);
+    background: #d4e010;
 }
 
 /* ---------- Кнопки ---------- */
@@ -551,17 +617,16 @@ button {
     border-color: rgba(214, 255, 65, 0.28);
 }
 
-/* Питання за Figma: Manrope 800, по центру пігулки; шеврон праворуч
-   абсолютом, щоб не зсував центрування тексту */
+/* Питання: Manrope 800, по лівому краю; шеврон праворуч абсолютом */
 .faq-question {
     position: relative;
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     min-height: var(--touch-min);
-    padding: 20px 56px;
-    text-align: center;
+    padding: 20px 56px 20px 20px;
+    text-align: left;
     color: var(--text);
     transition: color 0.15s ease, background 0.15s ease;
 }
@@ -581,6 +646,7 @@ button {
     letter-spacing: 0;
     line-height: 1.25;
     color: #f5f2f9;
+    text-align: left;
     transition: color 0.25s ease;
 }
 
@@ -646,25 +712,111 @@ button {
     color: #cfcdd9;
 }
 
-/* ---------- «Не знаєш, що подарувати?» — текст у скрол-боксі (як на Beton) ----------
-   Заголовок лишається зверху, а довгий текст гортається всередині боксу
-   фіксованої висоти зі своїм тонким скролбаром. Скрол сторінки не перехоплюється. */
-.about-scroll {
+/* ---------- «Не знаєш, що подарувати?» — прихований текст у панелі зі скролом ----------
+   Довгий текст не займає всю сторінку: видно початок, решта — за градієнтом.
+   На мобілці внутрішній скрол із overscroll-behavior: contain (без «залипання»). */
+.about-panel {
+    position: relative;
     max-width: 820px;
     margin-inline: auto;
-    max-height: clamp(300px, 46vh, 460px);
-    max-height: clamp(300px, 46dvh, 460px);
+}
+
+.about-scroll {
+    max-height: clamp(280px, 42vh, 420px);
+    max-height: clamp(280px, 42dvh, 420px);
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
+    touch-action: pan-y;
     display: flex;
     flex-direction: column;
     gap: 22px;
     text-align: center;
-    padding-right: 14px;
-    /* Кастомний скролбар — Firefox */
+    padding: 26px 22px 40px;
+    padding-right: 18px;
+    border: 1px solid rgba(244, 242, 250, 0.1);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, rgba(19, 20, 25, 0.72) 0%, rgba(12, 12, 15, 0.92) 100%);
     scrollbar-width: thin;
     scrollbar-color: var(--lime) rgba(244, 242, 250, 0.08);
+}
+
+.about-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.about-panel.is-overflowing .about-fade {
+    opacity: 1;
+}
+
+.about-fade--top {
+    top: 0;
+    height: 72px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+}
+
+.about-panel.is-at-top .about-fade--top {
+    opacity: 0;
+}
+
+.about-fade--bottom {
+    bottom: 0;
+    height: 140px;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: linear-gradient(to bottom, transparent 0%, rgba(6, 6, 8, 0.55) 35%, var(--bg) 92%);
+}
+
+.about-panel.is-at-end .about-fade--bottom {
+    opacity: 0;
+}
+
+.about-hint {
+    position: absolute;
+    left: 50%;
+    bottom: 14px;
+    transform: translateX(-50%);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: rgba(19, 20, 25, 0.92);
+    border: 1px solid rgba(244, 242, 250, 0.12);
+    color: var(--muted);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.about-hint svg {
+    width: 16px;
+    height: 16px;
+    color: var(--lime);
+    animation: about-hint-bob 1.8s ease-in-out infinite;
+}
+
+.about-panel.is-overflowing:not(.is-scrolled):not(.is-at-end) .about-hint {
+    opacity: 1;
+}
+
+.about-panel.is-scrolled .about-hint,
+.about-panel.is-at-end .about-hint {
+    opacity: 0;
+    transform: translateX(-50%) translateY(6px);
+}
+
+@keyframes about-hint-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(3px); }
 }
 
 /* Кастомний скролбар — WebKit (Chrome/Safari/Edge) */
@@ -692,43 +844,63 @@ button {
     border-radius: 6px;
 }
 
+/* Текст секції «Не знаєш…» за Figma: Manrope 800, 26px, #7A7D96, center */
 .about-scroll p {
     color: #7a7d96;
-    font-family: var(--font-accent);
+    font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: clamp(16px, 2vw, 26px);
-    line-height: 1.4;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
 }
 
-/* ---------- Підвал: соцмережі + копірайт (одна смуга за макетом) ---------- */
+/* ---------- Підвал: одна смуга + тонка лінія #12141A (як у Figma) ---------- */
 
 .site-footer {
-    border-top: 1px solid var(--line);
-    padding-block: 30px;
-    background: #08080b;
+    position: relative;
+    margin-bottom: 64px;
+    padding-block: 22px 28px;
+    background: transparent;
+    border-top: 1px solid #12141a;
+    border-bottom: 1px solid #12141a;
+}
+
+.site-footer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: #12141a;
+    transform: translateX(-50%);
+    pointer-events: none;
 }
 
 .footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px 40px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+    min-height: 88px;
 }
 
 .footer-socials {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    justify-content: center;
+    gap: 14px;
+    padding-right: 28px;
 }
 
 .socials-label {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 0.01em;
-    color: #d6d9e0;
+    font-family: 'Manrope', var(--font-accent);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #7a7d96;
 }
 
 .socials-row {
@@ -737,36 +909,45 @@ button {
 }
 
 .social-link {
-    width: var(--touch-min);
-    height: var(--touch-min);
+    width: 48px;
+    height: 48px;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: var(--text);
-    color: #0d0d10;
-    transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    background: #ececec;
+    color: #101010;
+    border: 1px solid rgba(122, 125, 150, 0.45);
+    transition: transform 0.15s ease;
 }
 
 .social-link svg {
-    width: 21px;
-    height: 21px;
+    width: 22px;
+    height: 22px;
 }
 
 .social-link:hover {
-    background: var(--lime);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 28px var(--lime-glow);
+    transform: scale(1.04);
 }
 
 .social-link:active {
-    transform: scale(0.9);
-    background: var(--lime);
-    box-shadow: 0 4px 14px var(--lime-glow);
+    transform: scale(0.94);
 }
 
 .copyright {
-    color: var(--muted);
-    font-size: 13.5px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0;
+    padding-left: 28px;
+    text-align: right;
+    font-family: 'Manrope', var(--font-accent);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #7a7d96;
 }
 
 /* ---------- Модалка замовлення ---------- */
@@ -861,8 +1042,8 @@ button {
     color: var(--text);
 }
 
-/* Кнопки всередині модалки — пігулки, як у макеті */
-.modal .btn {
+/* Кнопка успіху в модалці */
+.modal .modal-success .btn {
     border-radius: 999px;
     min-height: var(--touch-min);
     padding-block: 16px;
@@ -885,6 +1066,17 @@ button {
 }
 
 /* ---------- Форма ---------- */
+
+#order-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+#order-form .form-group {
+    width: min(310px, 100%);
+}
 
 .form-group {
     margin-bottom: 16px;
@@ -921,9 +1113,25 @@ button {
     resize: vertical;
 }
 
+/* Поля модалки за Figma: Manrope 800 16px, placeholder #7A7D96, center */
+#order-form .form-group input {
+    text-align: center;
+    font-family: 'Manrope', var(--font-accent);
+    font-weight: 800;
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: 0;
+    color: #f5f2f9;
+}
+
 .form-group input::placeholder,
 .form-group textarea::placeholder {
     color: rgba(154, 154, 166, 0.55);
+}
+
+#order-form .form-group input::placeholder {
+    color: #7a7d96;
+    opacity: 1;
 }
 
 .form-group input:focus,
@@ -951,6 +1159,44 @@ button {
 
 .field-error--global {
     margin: 0 0 14px;
+    width: min(310px, 100%);
+    text-align: center;
+}
+
+/* Кнопка «Відправити» за Figma: 310×52, radius 50, #593AA1, текст 24px #F5F2F9 */
+#order-submit {
+    width: min(310px, 100%);
+    height: 52px;
+    min-height: 52px;
+    margin-top: 4px;
+    padding: 0;
+    border: 0;
+    border-radius: 50px;
+    background: #593aa1;
+    color: #f5f2f9;
+}
+
+#order-submit:hover {
+    background: #6849b0;
+    box-shadow: none;
+    transform: none;
+}
+
+#order-submit:active {
+    background: #4f348f;
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
+#order-submit .t-display {
+    font-family: 'Manrope', var(--font-accent);
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #f5f2f9;
+    transform: none;
 }
 
 .form-note {
@@ -1019,35 +1265,13 @@ button {
     }
 }
 
-/* ---------- Поява при скролі ----------
-   Ховаємо елементи тільки коли JS точно є (html.js) —
-   без JS сторінка лишається повністю видимою. */
-
-.js .reveal {
-    opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: var(--reveal-delay, 0s);
-}
-
-.js .reveal.is-in {
-    opacity: 1;
-    transform: none;
-}
-
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
     }
 
-    .js .reveal {
-        opacity: 1;
-        transform: none;
-        transition: none;
-    }
-
-    .banner-card img,
     .brand-mark,
+    .pcard-arrow,
     .pcard-cta,
     .faq-answer,
     .faq-chevron {
@@ -1055,6 +1279,7 @@ button {
     }
 
     .support-pill:active,
+    .pcard-arrow:active,
     .pcard-cta:active,
     .btn--lime:active,
     .btn--violet:active,
@@ -1063,6 +1288,10 @@ button {
     .cookie-accept:active,
     .faq-question:active {
         transform: none;
+    }
+
+    .about-hint svg {
+        animation: none;
     }
 }
 
@@ -1100,31 +1329,37 @@ button {
         gap: 38px;
     }
 
-    .pcard-media img {
-        max-width: 320px;
+    .pcard-carousel {
+        flex-basis: 300px;
+        max-width: 300px;
     }
+
+
 
     .pcard-subtitle {
         margin-top: 16px;
-        font-size: 16px;
+        font-size: clamp(16px, 4.5vw, 20px);
     }
 
     .pcard-price {
-        font-size: 34px;
+        font-size: clamp(30px, 8vw, 40px);
     }
 
     .section-title .t-display {
-        font-size: 24px;
+        font-size: clamp(26px, 7vw, 36px);
     }
 
     .section-tri {
-        width: 24px;
-        height: 24px;
+        width: clamp(40px, 12vw, 52px);
+        height: clamp(40px, 12vw, 52px);
     }
 
     .pcard-cta {
-        font-size: 14px;
-        padding: 12px 26px;
+        width: min(240px, 100%);
+        min-width: 0;
+        height: 58px;
+        min-height: 58px;
+        font-size: clamp(22px, 6vw, 28px);
     }
 
     .catalog {
@@ -1136,7 +1371,7 @@ button {
     }
 
     .faq-question {
-        padding: 16px 42px;
+        padding: 16px 42px 16px 16px;
     }
 
     .faq-q-text {
@@ -1156,6 +1391,22 @@ button {
 
     .about-scroll {
         gap: 16px;
+        max-height: clamp(210px, 34dvh, 300px);
+        padding: 20px 16px 36px;
+        padding-right: 14px;
+    }
+
+    .about-scroll p {
+        font-size: clamp(18px, 4.8vw, 22px);
+    }
+
+    .about-fade--bottom {
+        height: 110px;
+    }
+
+    .about-hint {
+        font-size: 11.5px;
+        bottom: 10px;
     }
 
     .section-title {
@@ -1177,25 +1428,64 @@ button {
     }
 
     .support-pill {
-        padding: 8px 18px;
+        width: auto;
+        min-width: 168px;
+        max-width: 218px;
+        height: 48px;
+        min-height: 48px;
+        padding: 0 16px;
     }
 
-    .support-label {
-        font-size: 8px;
+    .site-footer {
+        margin-bottom: 40px;
+        padding-block: 20px 24px;
     }
 
-    .support-phone {
-        font-size: 13px;
+    .site-footer::after {
+        display: none;
     }
 
     .footer-inner {
+        display: flex;
         flex-direction: column;
-        text-align: center;
-        gap: 18px;
+        align-items: flex-start;
+        gap: 14px;
+        min-height: 0;
     }
 
     .footer-socials {
-        align-items: center;
+        align-items: flex-start;
+        gap: 12px;
+        padding-right: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+    .copyright {
+        justify-content: flex-start;
+        padding-left: 0;
+        text-align: left;
+        font-size: clamp(16px, 4.2vw, 22px);
+    }
+
+    .socials-label {
+        font-size: clamp(16px, 4.2vw, 22px);
+        text-align: left;
+    }
+
+    .social-link {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        background: #ececec;
+        color: #101010;
+        border: 1px solid rgba(122, 125, 150, 0.45);
+    }
+
+    .social-link svg {
+        width: 20px;
+        height: 20px;
     }
 
     .modal-panel {
@@ -1222,11 +1512,14 @@ button {
     right: 0;
     bottom: 0;
     z-index: 90;
-    padding-bottom: var(--safe-bottom);
-    background: rgba(19, 20, 25, 0.97);
-    border-top: 1px solid var(--line);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    padding:
+        16px
+        max(16px, var(--safe-right))
+        max(16px, calc(16px + var(--safe-bottom)))
+        max(16px, var(--safe-left));
+    background: transparent;
+    border: 0;
+    pointer-events: none;
     animation: cookie-in 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -1239,21 +1532,33 @@ button {
 }
 
 .cookie-inner {
+    pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
-    min-height: var(--touch-min);
-    padding-block: 10px;
+    gap: 20px;
+    width: min(920px, 100%);
+    min-height: 64px;
+    margin-inline: auto;
+    padding: 10px 12px 10px 28px;
+    background: rgba(16, 17, 22, 0.98);
+    border: 1px solid #12141a;
+    border-radius: 999px;
 }
 
 .cookie-text {
-    font-size: 14px;
-    color: var(--text);
+    flex: 1;
+    font-family: 'Manrope', var(--font-accent);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: 0;
+    text-align: center;
+    color: #7a7d96;
 }
 
 .cookie-hl {
-    color: var(--lime);
+    color: #e8f213;
 }
 
 .cookie-accept {
@@ -1261,35 +1566,47 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: var(--touch-min);
-    min-width: var(--touch-min);
-    background: var(--violet);
-    color: #fff;
-    font-weight: 600;
-    font-size: 14px;
-    border-radius: 999px;
-    padding: 10px 22px;
-    transition: background 0.25s ease, transform 0.25s ease;
+    width: 194px;
+    height: 52px;
+    min-width: 194px;
+    min-height: 52px;
+    padding: 0;
+    border: 0;
+    border-radius: 50px;
+    background: #593aa1;
+    color: #f5f2f9;
+    font-family: 'Manrope', var(--font-accent);
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: 0;
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .cookie-accept:hover {
-    background: var(--violet-hover);
-    transform: translateY(-1px);
+    background: #6849b0;
+    transform: none;
 }
 
 .cookie-accept:active {
-    transform: scale(0.96);
-    background: #4a46c4;
+    transform: scale(0.97);
+    background: #4f348f;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 760px) {
+    .cookie-inner {
+        flex-direction: column;
+        gap: 14px;
+        padding-block: 16px;
+    }
+
     .cookie-text {
-        font-size: 12.5px;
+        font-size: clamp(18px, 4.8vw, 22px);
     }
 
     .cookie-accept {
-        font-size: 13px;
-        padding: 10px 18px;
+        width: min(194px, 100%);
+        min-width: 0;
     }
 }
 
@@ -1314,15 +1631,16 @@ button {
     }
 
     .support-pill {
-        padding: 8px 12px;
+        min-width: 148px;
+        padding: 0 12px;
     }
 
     .support-label {
-        font-size: 7px;
+        font-size: 11px;
     }
 
     .support-phone {
-        font-size: 11.5px;
+        font-size: 14px;
     }
 }
 
@@ -1331,8 +1649,8 @@ button {
 @media (hover: none) {
     .brand:hover .brand-mark,
     .support-pill:hover,
-    .banner-card:hover img,
     .products-grid .product-card:hover,
+    .pcard-arrow:hover,
     .pcard-cta:hover,
     .btn--lime:hover,
     .btn--violet:hover,
@@ -1344,15 +1662,24 @@ button {
     }
 
     .support-pill:hover {
-        background: var(--violet);
+        background: #593aa1;
+    }
+
+    .pcard-arrow:hover {
+        color: #d9d9d9;
     }
 
     .pcard-cta:hover {
-        background: var(--lime);
+        background: #e8f213;
     }
 
     .btn--violet:hover {
         background: var(--violet);
+    }
+
+    #order-submit:hover {
+        background: #593aa1;
+        transform: none;
     }
 
     .btn--lime:hover {
@@ -1360,7 +1687,7 @@ button {
     }
 
     .social-link:hover {
-        background: var(--text);
+        transform: none;
     }
 
     .modal-close:hover {
@@ -1369,7 +1696,7 @@ button {
     }
 
     .cookie-accept:hover {
-        background: var(--violet);
+        background: #593aa1;
     }
 
     /* :active лишаємо — тактильний відгук на touch-пристроях */
@@ -1382,6 +1709,10 @@ button {
     .cookie-accept:active,
     .faq-question:active {
         transform: scale(0.96);
+    }
+
+    .pcard-arrow:active {
+        transform: scale(0.92);
     }
 
     .social-link:active,

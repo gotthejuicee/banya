@@ -10,21 +10,28 @@
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 
-    /* ---------- Поява елементів при скролі ---------- */
-    const revealEls = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-in');
-                    io.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    /* ---------- About: градієнт + підказка «Гортайте» ---------- */
+    const aboutPanel = document.getElementById('about-panel');
+    const aboutScroll = document.getElementById('about-scroll');
 
-        revealEls.forEach((el) => io.observe(el));
-    } else {
-        revealEls.forEach((el) => el.classList.add('is-in'));
+    const updateAboutScroll = () => {
+        if (!aboutPanel || !aboutScroll) return;
+
+        const { scrollTop, scrollHeight, clientHeight } = aboutScroll;
+        const overflow = scrollHeight > clientHeight + 2;
+        const atTop = scrollTop < 6;
+        const atEnd = scrollTop + clientHeight >= scrollHeight - 6;
+
+        aboutPanel.classList.toggle('is-overflowing', overflow);
+        aboutPanel.classList.toggle('is-at-top', atTop);
+        aboutPanel.classList.toggle('is-at-end', atEnd);
+        aboutPanel.classList.toggle('is-scrolled', !atTop);
+    };
+
+    if (aboutScroll) {
+        updateAboutScroll();
+        aboutScroll.addEventListener('scroll', updateAboutScroll, { passive: true });
+        window.addEventListener('resize', updateAboutScroll, { passive: true });
     }
 
     /* ---------- Cookie-повідомлення ---------- */
@@ -53,6 +60,54 @@
 
         window.addEventListener('resize', updateCookieOffset, { passive: true });
     }
+
+    /* ---------- Карусель фото на картках наборів ---------- */
+    const setCardSlide = (card, index) => {
+        const slides = [...card.querySelectorAll('.pcard-slide')];
+        if (!slides.length) return;
+
+        const total = slides.length;
+        const next = ((index % total) + total) % total;
+
+        slides.forEach((slide, i) => {
+            slide.classList.toggle('is-active', i === next);
+        });
+
+        card.dataset.slideIndex = String(next);
+    };
+
+    document.querySelectorAll('.product-card').forEach((card) => {
+        const slides = card.querySelectorAll('.pcard-slide');
+        if (!slides.length) return;
+
+        card.dataset.slideIndex = '0';
+
+        card.querySelectorAll('.pcard-arrow').forEach((arrow) => {
+            arrow.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const current = Number(card.dataset.slideIndex ?? 0);
+                const step = arrow.classList.contains('pcard-arrow--next') ? 1 : -1;
+                setCardSlide(card, current + step);
+            });
+        });
+
+        if (slides.length < 2) return;
+
+        const carousel = card.querySelector('.pcard-carousel');
+        let touchStartX = 0;
+
+        carousel?.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0]?.clientX ?? 0;
+        }, { passive: true });
+
+        carousel?.addEventListener('touchend', (e) => {
+            const delta = (e.changedTouches[0]?.clientX ?? 0) - touchStartX;
+            if (Math.abs(delta) < 40) return;
+
+            const current = Number(card.dataset.slideIndex ?? 0);
+            setCardSlide(card, current + (delta < 0 ? 1 : -1));
+        }, { passive: true });
+    });
 
     /* ---------- FAQ-акордеон ---------- */
     document.querySelectorAll('.faq-question').forEach((btn) => {

@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    {{-- Позначаємо, що JS доступний: анімації появи вмикаються лише тоді --}}
-    <script>document.documentElement.classList.add('js')</script>
-
     <title>Банні набори IDI_V_BANYU__ — подарунковий набір для лазні в дерев’яній скриньці</title>
     <meta name="description" content="Готові подарункові банні набори для чоловіків і жінок: шапка, кілт, віник, аромаолії в дерев’яній скриньці з гравіюванням. Доставка по Україні 1–3 дні. Не знаєш що подарувати? Вуаля!">
     <meta name="keywords" content="банний набір, набір для лазні, набір для сауни, подарунковий банний набір, подарунок чоловіку, подарунок жінці, банний набір купити, іди в баню">
@@ -70,7 +67,7 @@
         </a>
 
         <a class="support-pill" href="tel:+{{ $supportPhone }}">
-            <span class="support-label">Підтримка</span>
+            <span class="support-label">ПІДТРИМКА</span>
             <span class="support-phone">{{ $supportPhone }}</span>
         </a>
     </div>
@@ -84,7 +81,7 @@
     <section class="banners" aria-label="Акційні банери">
         <div class="container">
             <div class="banners-grid">
-                <figure class="banner-card reveal">
+                <figure class="banner-card">
                     @if ($banners[0])
                         <img src="{{ asset('storage/'.$banners[0]) }}"
                              alt="Не знаєш що подарувати? Вуаля! Банний набір у дерев’яній скриньці"
@@ -98,7 +95,7 @@
                         </picture>
                     @endif
                 </figure>
-                <figure class="banner-card reveal" style="--reveal-delay:.08s">
+                <figure class="banner-card">
                     @if ($banners[1])
                         <img src="{{ asset('storage/'.$banners[1]) }}"
                              alt="Турбота, увага, повага — банні набори з гравіюванням"
@@ -119,11 +116,11 @@
     {{-- Чоловічі набори --}}
     <section class="catalog" id="men">
         <div class="container">
-            <h2 class="section-title reveal">
-                <svg class="section-tri" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                    <path d="M6.5 10.5 H41.5 L24 39.5 Z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+            <h2 class="section-title">
+                <svg class="section-tri" viewBox="0 0 65 65" fill="none" aria-hidden="true">
+                    <path d="M11 18h43L32.5 54Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
                 </svg>
-                <span class="t-display">Чоловічій набір</span>
+                <span class="t-display">Чоловічий набір</span>
             </h2>
 
             <div class="products-grid">
@@ -137,11 +134,11 @@
     {{-- Жіночі набори --}}
     <section class="catalog" id="women">
         <div class="container">
-            <h2 class="section-title reveal">
-                <svg class="section-tri" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                    <path d="M24 8.5 L41.5 37.5 H6.5 Z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>
+            <h2 class="section-title">
+                <svg class="section-tri" viewBox="0 0 65 65" fill="none" aria-hidden="true">
+                    <path d="M32.5 11 54 47H11Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
                 </svg>
-                <span class="t-display">Жіночій набір</span>
+                <span class="t-display">Жіночий набір</span>
             </h2>
 
             <div class="products-grid">
@@ -155,14 +152,14 @@
     {{-- Запитання та відповіді --}}
     <section class="catalog faq" id="faq">
         <div class="container">
-            <h2 class="section-title reveal">
-                <svg class="section-tri" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                    <path d="M24 5.5 30.18 18.02 44 20.04 34 29.78 36.36 43.54 24 37.04 11.64 43.54 14 29.78 4 20.04 17.82 18.02 24 5.5Z" stroke="currentColor" stroke-width="4.5" stroke-linejoin="round"/>
+            <h2 class="section-title">
+                <svg class="section-tri" viewBox="0 0 65 65" fill="none" aria-hidden="true">
+                    <path d="M32.5 9 39.4 27.6 59.5 30.2 44.8 43.8 49.2 63.5 32.5 53.2 15.8 63.5 20.2 43.8 5.5 30.2 25.6 27.6Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
                 </svg>
                 <span class="t-display">Запитання та відповіді</span>
             </h2>
 
-            <div class="faq-panel reveal">
+            <div class="faq-panel">
                 @foreach ($faq as $i => $item)
                     <div class="faq-item">
                         <button type="button"
@@ -193,17 +190,28 @@
     {{-- Не знаєш, що подарувати? — текст у скрол-боксі (як на Beton) --}}
     <section class="catalog about" id="about">
         <div class="container">
-            <h2 class="section-title reveal">
-                <svg class="section-tri" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-                    <circle cx="24" cy="24" r="17.5" stroke="currentColor" stroke-width="5"/>
+            <h2 class="section-title">
+                <svg class="section-tri section-tri--rings" viewBox="0 0 65 65" fill="none" aria-hidden="true">
+                    <circle cx="32.5" cy="23" r="20" stroke="currentColor" stroke-width="3"/>
+                    <circle cx="32.5" cy="42" r="20" stroke="currentColor" stroke-width="3"/>
                 </svg>
                 <span class="t-display">Не знаєш, що подарувати?</span>
             </h2>
 
-            <div class="about-scroll reveal" tabindex="0" role="region" aria-label="Про подарунковий банний набір">
-                @foreach ($aboutParagraphs as $paragraph)
-                    <p>{{ $paragraph }}</p>
-                @endforeach
+            <div class="about-panel" id="about-panel">
+                <div class="about-scroll" id="about-scroll" tabindex="0" role="region" aria-label="Про подарунковий банний набір">
+                    @foreach ($aboutParagraphs as $paragraph)
+                        <p>{{ $paragraph }}</p>
+                    @endforeach
+                </div>
+                <div class="about-fade about-fade--top" aria-hidden="true"></div>
+                <div class="about-fade about-fade--bottom" aria-hidden="true"></div>
+                <p class="about-hint" id="about-hint" aria-hidden="true">
+                    <span>Гортайте, щоб читати</span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="m6 9.5 6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </p>
             </div>
         </div>
     </section>
@@ -214,39 +222,39 @@
 <footer class="site-footer">
     <div class="container footer-inner">
         <div class="footer-socials">
-            <p class="socials-label">Ми в соціальних мережах:</p>
+            <p class="socials-label">Ми в соціальній мережі:</p>
             <div class="socials-row">
                 @foreach ($socials as $social)
-                    <a class="social-link"
-                       href="{{ $social['url'] }}"
-                       target="_blank"
-                       rel="noopener"
-                       aria-label="{{ $social['name'] }}">
-                        @switch($social['icon'])
-                            @case('instagram')
-                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                                    <rect x="3" y="3" width="18" height="18" rx="5.2" stroke="currentColor" stroke-width="1.9"/>
-                                    <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.9"/>
-                                    <circle cx="17.35" cy="6.65" r="1.35" fill="currentColor"/>
-                                </svg>
-                                @break
-                            @case('tiktok')
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.66 5.66 0 1 0 5.66 5.66V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.22-1.48Z" fill="currentColor"/>
-                                </svg>
-                                @break
-                            @case('telegram')
-                                <svg viewBox="0 0 24 24" aria-hidden="true">
-                                    <path d="m21.62 4.52-3.06 14.44c-.23 1.02-.83 1.27-1.69.79l-4.66-3.44-2.25 2.17c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.82c.38-.33-.08-.52-.58-.19L6.72 12.9l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.96-6.92c.83-.31 1.56.19 1.33 1.46Z" fill="currentColor"/>
-                                </svg>
-                                @break
-                        @endswitch
-                    </a>
+                            <a class="social-link"
+                               href="{{ $social['url'] }}"
+                               target="_blank"
+                               rel="noopener"
+                               aria-label="{{ $social['name'] }}">
+                                @switch($social['icon'])
+                                    @case('instagram')
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <rect x="3" y="3" width="18" height="18" rx="5.2" stroke="currentColor" stroke-width="1.9"/>
+                                            <circle cx="12" cy="12" r="4.1" stroke="currentColor" stroke-width="1.9"/>
+                                            <circle cx="17.35" cy="6.65" r="1.35" fill="currentColor"/>
+                                        </svg>
+                                        @break
+                                    @case('tiktok')
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 1 1-2.59-2.59c.27 0 .53.04.78.12V9.77a5.76 5.76 0 0 0-.78-.05 5.66 5.66 0 1 0 5.66 5.66V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3a4.28 4.28 0 0 1-3.22-1.48Z" fill="currentColor"/>
+                                        </svg>
+                                        @break
+                                    @case('telegram')
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <path d="m21.62 4.52-3.06 14.44c-.23 1.02-.83 1.27-1.69.79l-4.66-3.44-2.25 2.17c-.25.25-.46.46-.94.46l.33-4.75 8.65-7.82c.38-.33-.08-.52-.58-.19L6.72 12.9l-4.6-1.44c-1-.31-1.02-1 .21-1.48l17.96-6.92c.83-.31 1.56.19 1.33 1.46Z" fill="currentColor"/>
+                                        </svg>
+                                        @break
+                                @endswitch
+                </a>
                 @endforeach
             </div>
         </div>
 
-        <p class="copyright">{{ date('Y') }} IDI_V_BANYU__ · Всі права захищені</p>
+        <p class="copyright">{{ date('Y') }} IDI_V_BANYU__ Всі права захищені</p>
     </div>
 </footer>
 

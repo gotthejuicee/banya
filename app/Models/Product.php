@@ -21,6 +21,7 @@ class Product extends Model
         'image_dark',
         'image_light',
         'photo',
+        'gallery',
         'photo_dark',
         'photo_light',
         'sort',
@@ -31,6 +32,7 @@ class Product extends Model
     {
         return [
             'contents' => 'array',
+            'gallery' => 'array',
             'price' => 'integer',
             'old_price' => 'integer',
             'sort' => 'integer',
@@ -63,5 +65,34 @@ class Product extends Model
         }
 
         return ['webp' => asset('images/product-box.webp'), 'fallback' => asset('images/product-box.jpg')];
+    }
+
+    /**
+     * Слайди каруселі картки: головне фото боксу + додаткові з галереї.
+     *
+     * @return list<array{webp: ?string, fallback: string, alt: string}>
+     */
+    public function cardSlides(): array
+    {
+        $main = $this->cardPhoto();
+        $slides = [[
+            'webp' => $main['webp'],
+            'fallback' => $main['fallback'],
+            'alt' => "{$this->name} — подарунковий банний набір у дерев’яному боксі",
+        ]];
+
+        foreach ($this->gallery ?? [] as $path) {
+            if (! filled($path)) {
+                continue;
+            }
+
+            $slides[] = [
+                'webp' => null,
+                'fallback' => asset('storage/'.$path),
+                'alt' => "{$this->name} — вміст подарункового боксу",
+            ];
+        }
+
+        return $slides;
     }
 }
