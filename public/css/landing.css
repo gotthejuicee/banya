@@ -1414,17 +1414,26 @@ button {
         margin-bottom: 20px;
     }
 
+    .site-header {
+        position: static;
+        top: auto;
+    }
+
     .header-inner {
         padding-block: 11px;
     }
 
+    .brand-name {
+        display: none;
+    }
+
     .brand-mark {
-        width: 36px;
-        height: 31px;
+        width: 40px;
+        height: 35px;
     }
 
     .brand {
-        gap: 9px;
+        gap: 0;
     }
 
     .support-pill {
@@ -1494,14 +1503,9 @@ button {
 }
 
 @media (max-width: 400px) {
-    .brand-name {
-        font-size: 15px;
-    }
-
     .support-pill {
         padding: 8px 14px;
     }
-
 }
 
 /* ---------- Cookie-повідомлення ---------- */
@@ -1637,10 +1641,6 @@ button {
     .brand-mark {
         width: 28px;
         height: 24px;
-    }
-
-    .brand-name {
-        font-size: 12.5px;
     }
 
     .support-pill {
