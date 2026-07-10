@@ -218,26 +218,44 @@ button {
 
 /* ---------- Шапка ---------- */
 
-/* #header-fixed-bg — чорна смуга (fixed, лишається зверху).
-   #site-header — лого + ПІДТРИМКА у потоці, їдуть зі скролом. */
-#header-fixed-bg {
+:root {
+    --brand-mark-w: 65px;
+    --brand-mark-h: 55px;
+}
+
+/*
+ * Чорна смуга + хедер = position:fixed — НІКОЛИ не скроляться.
+ * Бігунок (.runner-layer) = звичайний потік — їде зі сторінкою.
+ */
+.site-header-bg {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     width: 100%;
     height: calc(var(--header-h) + var(--safe-top));
-    background: var(--bg);
-    z-index: 40;
+    background: #070707;
+    z-index: 49;
     pointer-events: none;
 }
 
 .site-header {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 50;
+    width: 100%;
     min-height: calc(var(--header-h) + var(--safe-top));
     padding-top: var(--safe-top);
-    background: transparent;
+    background: #070707;
+    /* ніяких transform/filter на хедері — інакше fixed-діти «ламаються» */
+    transform: none;
+}
+
+/* Контент стартує під хедером */
+main {
+    padding-top: calc(var(--header-h) + var(--safe-top));
 }
 
 .header-inner {
@@ -249,21 +267,6 @@ button {
     padding-block: 14px;
 }
 
-/* На всяк випадок: жоден елемент шапки не sticky/fixed */
-.site-header,
-.site-header .header-inner,
-.site-header .brand,
-.site-header .support-pill {
-    position: static;
-    top: auto;
-    bottom: auto;
-}
-
-.site-header {
-    position: relative;
-    z-index: 50;
-}
-
 .brand {
     display: inline-flex;
     align-items: center;
@@ -271,16 +274,58 @@ button {
     min-width: 0;
 }
 
+/* Невидимий слот = ширина бігунка, щоб текст не стрибав */
+.brand-mark-slot {
+    width: var(--brand-mark-w);
+    height: var(--brand-mark-h);
+    flex: none;
+    visibility: hidden;
+    pointer-events: none;
+    overflow: hidden;
+    transition: width 0.2s ease;
+}
+
+.site-header.is-runner-away .brand-mark-slot {
+    width: 0;
+}
+
+/*
+ * Шар бігунка: height:0 у потоці (y=0), overflow visible.
+ * При скролі сторінки їде вгору і зникає. Хедер fixed — стоїть.
+ */
+.runner-layer {
+    position: relative;
+    height: 0;
+    z-index: 60;
+    pointer-events: none;
+    /* важливо: не fixed, не sticky */
+}
+
+.runner-layer-inner {
+    display: flex;
+    align-items: center;
+    min-height: var(--header-h);
+    padding-block: 14px;
+    padding-top: calc(14px + var(--safe-top));
+}
+
+.brand-runner {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    pointer-events: auto;
+}
+
 /* Figma desktop logo Vector: 65×55 */
 .brand-mark {
-    width: 65px;
-    height: 55px;
+    width: var(--brand-mark-w);
+    height: var(--brand-mark-h);
     flex: none;
     color: var(--text);
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.brand:hover .brand-mark {
+.brand-runner:hover .brand-mark {
     transform: translateX(4px);
 }
 
@@ -1446,9 +1491,14 @@ button {
     }
 
     /* Між 761–1024: трохи менший бренд, щоб шапка не ламалась */
-    .brand-mark {
-        width: 52px;
-        height: 44px;
+    :root {
+        --brand-mark-w: 52px;
+        --brand-mark-h: 44px;
+    }
+
+    .brand-mark-slot {
+        width: var(--brand-mark-w);
+        height: var(--brand-mark-h);
     }
 
     .brand-name {
@@ -1657,22 +1707,32 @@ button {
         margin-bottom: 20px;
     }
 
-    .header-inner {
+    .header-inner,
+    .runner-layer-inner {
         padding-block: 11px;
+    }
+
+    .runner-layer-inner {
+        padding-top: calc(11px + var(--safe-top));
     }
 
     .brand-name {
         display: none;
     }
 
-    /* Figma mobile logo ~vector in header */
-    .brand-mark {
-        width: 40px;
-        height: 35px;
+    /* Figma mobile logo ~vector in header — на мобайлі тільки бігунок */
+    :root {
+        --brand-mark-w: 40px;
+        --brand-mark-h: 35px;
     }
 
     .brand {
         gap: 0;
+    }
+
+    .brand-mark-slot {
+        width: var(--brand-mark-w);
+        height: var(--brand-mark-h);
     }
 
     /* Figma mobile support pill ~108×48 */
@@ -1897,9 +1957,14 @@ button {
         min-width: 0;
     }
 
-    .brand-mark {
-        width: 28px;
-        height: 24px;
+    :root {
+        --brand-mark-w: 28px;
+        --brand-mark-h: 24px;
+    }
+
+    .brand-mark-slot {
+        width: var(--brand-mark-w);
+        height: var(--brand-mark-h);
     }
 
     .support-pill {
@@ -1919,7 +1984,7 @@ button {
 /* ---------- Touch-пристрої: без «залиплих» hover-ефектів ---------- */
 
 @media (hover: none) {
-    .brand:hover .brand-mark,
+    .brand-runner:hover .brand-mark,
     .support-pill:hover,
     .products-grid .product-card:hover,
     .pcard-arrow:hover,
