@@ -163,6 +163,7 @@ button {
 }
 
 /* Material/Android: миттєвий тап без затримки double-tap zoom */
+.brand,
 .brand-runner,
 .support-pill,
 .social-link,
@@ -224,9 +225,8 @@ button {
 }
 
 /*
- * FIXED: лише чорна смуга #site-header-bar.
+ * FIXED: чорна смуга + надпис IDI_V_BANYU__.
  * СКРОЛ: бігунок + ПІДТРИМКА (#header-float).
- * Надпис IDI_V_BANYU__ у шапці не показуємо.
  */
 .site-header-bar {
     position: fixed;
@@ -236,8 +236,21 @@ button {
     width: 100%;
     height: calc(var(--header-h) + var(--safe-top));
     background: #070707;
-    z-index: 50;
+    z-index: 49;
     pointer-events: none;
+    transform: none;
+}
+
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    width: 100%;
+    min-height: calc(var(--header-h) + var(--safe-top));
+    padding-top: var(--safe-top);
+    background: #070707;
     transform: none;
 }
 
@@ -245,14 +258,7 @@ main {
     padding-top: calc(var(--header-h) + var(--safe-top));
 }
 
-/* Бігунок + ПІДТРИМКА: у потоці (height:0), їдуть зі скролом */
-.header-float {
-    position: relative;
-    height: 0;
-    z-index: 60;
-    pointer-events: none;
-}
-
+.header-inner,
 .header-float-inner {
     display: flex;
     align-items: center;
@@ -260,7 +266,42 @@ main {
     gap: 16px;
     min-height: var(--header-h);
     padding-block: 14px;
+}
+
+.header-float-inner {
     padding-top: calc(14px + var(--safe-top));
+}
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+/* Місце під бігунка / пігулку в fixed-ряді (самі елементи — у #header-float) */
+.brand-mark-slot {
+    width: var(--brand-mark-w);
+    height: var(--brand-mark-h);
+    flex: none;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.support-pill-slot {
+    width: 218px;
+    height: 48px;
+    flex: none;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Бігунок + ПІДТРИМКА: document flow, їдуть зі скролом */
+.header-float {
+    position: relative;
+    height: 0;
+    z-index: 60;
+    pointer-events: none;
 }
 
 .brand-runner {
@@ -285,6 +326,14 @@ main {
 
 .brand-runner:hover .brand-mark {
     transform: translateX(4px);
+}
+
+/* Figma desktop: Inter 900 Italic 40px / 48px */
+.brand-name {
+    font-size: 40px;
+    line-height: 48px;
+    white-space: nowrap;
+    color: var(--text);
 }
 
 /* Фіолетова пігулка підтримки — Figma: 218×48, radius 50, #593AA1 */
@@ -1440,10 +1489,15 @@ main {
         row-gap: 40px;
     }
 
-    /* Між 761–1024: трохи менший бігунок */
+    /* Між 761–1024: трохи менший бренд */
     :root {
         --brand-mark-w: 52px;
         --brand-mark-h: 44px;
+    }
+
+    .brand-name {
+        font-size: 28px;
+        line-height: 34px;
     }
 
     .container {
@@ -1647,15 +1701,33 @@ main {
         margin-bottom: 20px;
     }
 
+    .header-inner,
     .header-float-inner {
         padding-block: 11px;
+    }
+
+    .header-float-inner {
         padding-top: calc(11px + var(--safe-top));
     }
 
-    /* Figma mobile logo ~vector in header — тільки бігунок */
+    /* На мобайлі надпис ховаємо — лишається бігунок + пігулка */
+    .brand-name {
+        display: none;
+    }
+
     :root {
         --brand-mark-w: 40px;
         --brand-mark-h: 35px;
+    }
+
+    .brand-mark-slot {
+        width: var(--brand-mark-w);
+        height: var(--brand-mark-h);
+    }
+
+    .support-pill-slot {
+        width: 108px;
+        height: 48px;
     }
 
     /* Figma mobile support pill ~108×48 */
@@ -1871,6 +1943,7 @@ main {
 
 /* Найвужчі екрани (320–360px): шапка не повинна ламатись */
 @media (max-width: 360px) {
+    .header-inner,
     .header-float-inner {
         gap: 8px;
     }
@@ -1878,6 +1951,11 @@ main {
     :root {
         --brand-mark-w: 28px;
         --brand-mark-h: 24px;
+    }
+
+    .brand-mark-slot {
+        width: var(--brand-mark-w);
+        height: var(--brand-mark-h);
     }
 
     .support-pill {

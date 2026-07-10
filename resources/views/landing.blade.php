@@ -43,19 +43,25 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
-    {{-- ТІЛЬКИ чорна смуга fixed. Бігунок + ПІДТРИМКА скроляться. Без надпису IDI_V_BANYU__. --}}
+    {{-- FIXED: чорна смуга + надпис. СКРОЛ: бігунок + ПІДТРИМКА. --}}
     <style id="header-fixed-critical">
-        #site-header-bar {
+        #site-header-bar,
+        #site-header {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
             width: 100% !important;
-            height: var(--header-h, 76px) !important;
             background: #070707 !important;
-            z-index: 50 !important;
-            pointer-events: none !important;
             transform: none !important;
+        }
+        #site-header-bar {
+            height: var(--header-h, 76px) !important;
+            z-index: 49 !important;
+            pointer-events: none !important;
+        }
+        #site-header {
+            z-index: 50 !important;
         }
         #header-float {
             position: relative !important;
@@ -64,11 +70,6 @@
         }
         main {
             padding-top: var(--header-h, 76px) !important;
-        }
-        /* Надпис у шапці не показуємо */
-        .site-header .brand-name,
-        #site-header .brand-name {
-            display: none !important;
         }
     </style>
 
@@ -89,10 +90,19 @@
 </svg>
 
 {{--
-  FIXED: лише чорна смуга (без надпису).
+  FIXED: чорна смуга + надпис IDI_V_BANYU__.
   СКРОЛ: бігунок + ПІДТРИМКА.
 --}}
 <div class="site-header-bar" id="site-header-bar" aria-hidden="true"></div>
+<header class="site-header" id="site-header">
+    <div class="container header-inner">
+        <a class="brand" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
+            <span class="brand-mark-slot" aria-hidden="true"></span>
+            <span class="brand-name t-display">IDI_V_BANYU__</span>
+        </a>
+        <span class="support-pill-slot" aria-hidden="true"></span>
+    </div>
+</header>
 
 {{-- Бігунок + ПІДТРИМКА в потоці — їдуть зі скролом --}}
 <div class="header-float" id="header-float">

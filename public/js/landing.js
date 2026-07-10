@@ -5,33 +5,43 @@
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     /* ---------- Шапка ----------
-       FIXED: лише чорна смуга.
-       СКРОЛ: бігунок + ПІДТРИМКА. Надпису в шапці немає. */
+       FIXED: чорна смуга + надпис IDI_V_BANYU__.
+       СКРОЛ: бігунок + ПІДТРИМКА. */
     (() => {
         const bar = document.getElementById('site-header-bar');
+        const header = document.getElementById('site-header');
         const float = document.getElementById('header-float');
         const floatInner = float?.querySelector('.header-float-inner');
 
+        const lockFixed = (el, z) => {
+            if (!el) return;
+            el.style.setProperty('position', 'fixed', 'important');
+            el.style.setProperty('top', '0', 'important');
+            el.style.setProperty('left', '0', 'important');
+            el.style.setProperty('right', '0', 'important');
+            el.style.setProperty('background', '#070707', 'important');
+            el.style.setProperty('transform', 'none', 'important');
+            if (z != null) el.style.setProperty('z-index', String(z), 'important');
+        };
+
         const syncHeaderH = () => {
-            // Висота смуги = реальний рядок бігунок/пігулка
-            const h = floatInner
-                ? Math.ceil(floatInner.getBoundingClientRect().height)
-                : 76;
+            const h = header
+                ? Math.ceil(header.getBoundingClientRect().height)
+                : (floatInner ? Math.ceil(floatInner.getBoundingClientRect().height) : 76);
             if (h > 0) {
                 document.documentElement.style.setProperty('--header-h', `${h}px`);
                 if (bar) bar.style.setProperty('height', `${h}px`, 'important');
             }
+            const pill = document.getElementById('support-pill');
+            const pillSlot = header?.querySelector('.support-pill-slot');
+            if (pill && pillSlot) {
+                pillSlot.style.width = `${Math.ceil(pill.getBoundingClientRect().width)}px`;
+                pillSlot.style.height = `${Math.ceil(pill.getBoundingClientRect().height)}px`;
+            }
         };
 
-        if (bar) {
-            bar.style.setProperty('position', 'fixed', 'important');
-            bar.style.setProperty('top', '0', 'important');
-            bar.style.setProperty('left', '0', 'important');
-            bar.style.setProperty('right', '0', 'important');
-            bar.style.setProperty('background', '#070707', 'important');
-            bar.style.setProperty('z-index', '50', 'important');
-            bar.style.setProperty('transform', 'none', 'important');
-        }
+        lockFixed(bar, 49);
+        lockFixed(header, 50);
 
         if (float) {
             float.style.setProperty('position', 'relative', 'important');
