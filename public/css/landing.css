@@ -94,8 +94,9 @@
     --danger: #ff7a6b;
     --figma-dark: #2b2b2b;
     --header-line: #12141a;
-    /* Висота фіксованої чорної смуги (= висота шапки з лого/пігулкою) */
-    --header-h: 83px;
+    --header-h: 76px;
+    --brand-mark-w: 65px;
+    --brand-mark-h: 55px;
 
     --radius: 20px; /* Figma banners / cards radius 20 */
     --radius-lg: 20px;
@@ -217,59 +218,34 @@ button {
     letter-spacing: 0;
 }
 
-/* ---------- Шапка ---------- */
-
-:root {
-    --brand-mark-w: 65px;
-    --brand-mark-h: 55px;
-}
-
-/*
- * FIXED: чорна смуга + надпис IDI_V_BANYU__.
- * СКРОЛ: бігунок + ПІДТРИМКА (#header-float).
+/* ---------- Шапка ----------
+ *
+ * #hdr-fixed  — position:fixed — чорний фон + надпис (НЕ скролиться).
+ * #hdr-scroll — звичайний блок у потоці — ТІЛЬКИ бігунок + ПІДТРИМКА (скроляться).
+ * Жодних height:0 / transform-трюків.
  */
-.site-header-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: calc(var(--header-h) + var(--safe-top));
-    background: #070707;
-    z-index: 49;
-    pointer-events: none;
-    transform: none;
-}
 
-.site-header {
+/* Чорна смуга + надпис — прибиті зверху */
+.hdr-fixed {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 50;
-    width: 100%;
-    min-height: calc(var(--header-h) + var(--safe-top));
-    padding-top: var(--safe-top);
+    height: var(--header-h);
     background: #070707;
-    transform: none;
+    pointer-events: none; /* кліки йдуть у #hdr-scroll, поки він зверху */
 }
 
-main {
-    padding-top: calc(var(--header-h) + var(--safe-top));
+.hdr-fixed .brand {
+    pointer-events: auto;
 }
 
-.header-inner,
-.header-float-inner {
+.hdr-fixed-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: var(--header-h);
-    padding-block: 14px;
-}
-
-.header-float-inner {
-    padding-top: calc(14px + var(--safe-top));
+    height: 100%;
+    padding-top: var(--safe-top);
 }
 
 .brand {
@@ -279,43 +255,47 @@ main {
     min-width: 0;
 }
 
-/* Місце під бігунка / пігулку в fixed-ряді (самі елементи — у #header-float) */
+/* Невидимий слот = ширина бігунка, щоб надпис стояв праворуч від нього */
 .brand-mark-slot {
     width: var(--brand-mark-w);
     height: var(--brand-mark-h);
     flex: none;
     visibility: hidden;
-    pointer-events: none;
 }
 
-.support-pill-slot {
-    width: 218px;
-    height: 48px;
-    flex: none;
-    visibility: hidden;
-    pointer-events: none;
+.brand-name {
+    font-size: 40px;
+    line-height: 48px;
+    white-space: nowrap;
+    color: var(--text);
 }
 
-/* Бігунок + ПІДТРИМКА: document flow, їдуть зі скролом */
-.header-float {
+/*
+ * Ряд бігунок + ПІДТРИМКА — РЕАЛЬНА висота в потоці документа.
+ * При скролі їде разом зі сторінкою. Фон прозорий (чорне — з #hdr-fixed).
+ */
+.hdr-scroll {
     position: relative;
-    height: 0;
     z-index: 60;
-    pointer-events: none;
+    /* висоту задає контент + padding; JS синхронізує --header-h */
+}
+
+.hdr-scroll-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: var(--header-h);
+    padding-top: calc(14px + var(--safe-top));
+    padding-bottom: 14px;
 }
 
 .brand-runner {
     display: inline-flex;
     align-items: center;
     flex: none;
-    pointer-events: auto;
 }
 
-.header-float .support-pill {
-    pointer-events: auto;
-}
-
-/* Figma desktop logo Vector: 65×55 */
 .brand-mark {
     width: var(--brand-mark-w);
     height: var(--brand-mark-h);
@@ -326,14 +306,6 @@ main {
 
 .brand-runner:hover .brand-mark {
     transform: translateX(4px);
-}
-
-/* Figma desktop: Inter 900 Italic 40px / 48px */
-.brand-name {
-    font-size: 40px;
-    line-height: 48px;
-    white-space: nowrap;
-    color: var(--text);
 }
 
 /* Фіолетова пігулка підтримки — Figma: 218×48, radius 50, #593AA1 */
@@ -1701,13 +1673,9 @@ main {
         margin-bottom: 20px;
     }
 
-    .header-inner,
-    .header-float-inner {
-        padding-block: 11px;
-    }
-
-    .header-float-inner {
+    .hdr-scroll-inner {
         padding-top: calc(11px + var(--safe-top));
+        padding-bottom: 11px;
     }
 
     /* На мобайлі надпис ховаємо — лишається бігунок + пігулка */
@@ -1723,11 +1691,6 @@ main {
     .brand-mark-slot {
         width: var(--brand-mark-w);
         height: var(--brand-mark-h);
-    }
-
-    .support-pill-slot {
-        width: 108px;
-        height: 48px;
     }
 
     /* Figma mobile support pill ~108×48 */
@@ -1943,8 +1906,7 @@ main {
 
 /* Найвужчі екрани (320–360px): шапка не повинна ламатись */
 @media (max-width: 360px) {
-    .header-inner,
-    .header-float-inner {
+    .hdr-scroll-inner {
         gap: 8px;
     }
 

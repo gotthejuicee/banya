@@ -43,35 +43,6 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
-    {{-- FIXED: чорна смуга + надпис. СКРОЛ: бігунок + ПІДТРИМКА. --}}
-    <style id="header-fixed-critical">
-        #site-header-bar,
-        #site-header {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-            background: #070707 !important;
-            transform: none !important;
-        }
-        #site-header-bar {
-            height: var(--header-h, 76px) !important;
-            z-index: 49 !important;
-            pointer-events: none !important;
-        }
-        #site-header {
-            z-index: 50 !important;
-        }
-        #header-float {
-            position: relative !important;
-            height: 0 !important;
-            z-index: 60 !important;
-        }
-        main {
-            padding-top: var(--header-h, 76px) !important;
-        }
-    </style>
 
     <script type="application/ld+json">{!! $siteJsonLd !!}</script>
     <script type="application/ld+json">{!! $productsJsonLd !!}</script>
@@ -90,23 +61,20 @@
 </svg>
 
 {{--
-  FIXED: чорна смуга + надпис IDI_V_BANYU__.
-  СКРОЛ: бігунок + ПІДТРИМКА.
+  #hdr-fixed  — FIXED: чорний фон + надпис (НЕ скролиться).
+  #hdr-scroll — ПОТІК: тільки бігунок + ПІДТРИМКА (скроляться).
 --}}
-<div class="site-header-bar" id="site-header-bar" aria-hidden="true"></div>
-<header class="site-header" id="site-header">
-    <div class="container header-inner">
+<div class="hdr-fixed" id="hdr-fixed">
+    <div class="container hdr-fixed-inner">
         <a class="brand" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <span class="brand-mark-slot" aria-hidden="true"></span>
             <span class="brand-name t-display">IDI_V_BANYU__</span>
         </a>
-        <span class="support-pill-slot" aria-hidden="true"></span>
     </div>
-</header>
+</div>
 
-{{-- Бігунок + ПІДТРИМКА в потоці — їдуть зі скролом --}}
-<div class="header-float" id="header-float">
-    <div class="container header-float-inner">
+<div class="hdr-scroll" id="hdr-scroll">
+    <div class="container hdr-scroll-inner">
         <a class="brand-runner" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <svg class="brand-mark" id="brand-runner" aria-hidden="true"><use href="#i-runner"/></svg>
         </a>

@@ -5,53 +5,36 @@
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     /* ---------- Шапка ----------
-       FIXED: чорна смуга + надпис IDI_V_BANYU__.
-       СКРОЛ: бігунок + ПІДТРИМКА. */
+       #hdr-fixed  — fixed (чорне + надпис).
+       #hdr-scroll — звичайний блок (бігунок + ПІДТРИМКА), скролиться сам. */
     (() => {
-        const bar = document.getElementById('site-header-bar');
-        const header = document.getElementById('site-header');
-        const float = document.getElementById('header-float');
-        const floatInner = float?.querySelector('.header-float-inner');
+        const fixed = document.getElementById('hdr-fixed');
+        const scroll = document.getElementById('hdr-scroll');
+        if (!fixed || !scroll) return;
 
-        const lockFixed = (el, z) => {
-            if (!el) return;
-            el.style.setProperty('position', 'fixed', 'important');
-            el.style.setProperty('top', '0', 'important');
-            el.style.setProperty('left', '0', 'important');
-            el.style.setProperty('right', '0', 'important');
-            el.style.setProperty('background', '#070707', 'important');
-            el.style.setProperty('transform', 'none', 'important');
-            if (z != null) el.style.setProperty('z-index', String(z), 'important');
+        const sync = () => {
+            const h = Math.ceil(scroll.getBoundingClientRect().height) || 76;
+            document.documentElement.style.setProperty('--header-h', `${h}px`);
+            fixed.style.height = `${h}px`;
         };
 
-        const syncHeaderH = () => {
-            const h = header
-                ? Math.ceil(header.getBoundingClientRect().height)
-                : (floatInner ? Math.ceil(floatInner.getBoundingClientRect().height) : 76);
-            if (h > 0) {
-                document.documentElement.style.setProperty('--header-h', `${h}px`);
-                if (bar) bar.style.setProperty('height', `${h}px`, 'important');
-            }
-            const pill = document.getElementById('support-pill');
-            const pillSlot = header?.querySelector('.support-pill-slot');
-            if (pill && pillSlot) {
-                pillSlot.style.width = `${Math.ceil(pill.getBoundingClientRect().width)}px`;
-                pillSlot.style.height = `${Math.ceil(pill.getBoundingClientRect().height)}px`;
-            }
-        };
+        // Гарантія: fixed шар ніколи не «поїде»
+        fixed.style.setProperty('position', 'fixed', 'important');
+        fixed.style.setProperty('top', '0', 'important');
+        fixed.style.setProperty('left', '0', 'important');
+        fixed.style.setProperty('right', '0', 'important');
+        fixed.style.setProperty('background', '#070707', 'important');
+        fixed.style.setProperty('z-index', '50', 'important');
+        fixed.style.setProperty('transform', 'none', 'important');
 
-        lockFixed(bar, 49);
-        lockFixed(header, 50);
+        // Гарантія: скрол-ряд — НЕ fixed
+        scroll.style.setProperty('position', 'relative', 'important');
+        scroll.style.removeProperty('top');
+        scroll.style.setProperty('z-index', '60', 'important');
 
-        if (float) {
-            float.style.setProperty('position', 'relative', 'important');
-            float.style.setProperty('height', '0', 'important');
-            float.style.setProperty('z-index', '60', 'important');
-        }
-
-        syncHeaderH();
-        window.addEventListener('resize', syncHeaderH, { passive: true });
-        if (document.fonts?.ready) document.fonts.ready.then(syncHeaderH);
+        sync();
+        window.addEventListener('resize', sync, { passive: true });
+        if (document.fonts?.ready) document.fonts.ready.then(sync);
     })();
 
     /* ---------- About: градієнт + підказка «Гортайте» ---------- */
