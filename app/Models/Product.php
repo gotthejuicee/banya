@@ -86,8 +86,18 @@ class Product extends Model
                 continue;
             }
 
+            // Якщо є sibling .webp поруч із png/jpg у storage — віддаємо його
+            $webp = null;
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
+            if ($ext !== '') {
+                $webpRel = preg_replace('/\.'.preg_quote($ext, '/').'$/i', '.webp', $path);
+                if ($webpRel && is_file(storage_path('app/public/'.$webpRel))) {
+                    $webp = asset('storage/'.$webpRel);
+                }
+            }
+
             $slides[] = [
-                'webp' => null,
+                'webp' => $webp,
                 'fallback' => asset('storage/'.$path),
                 'alt' => "{$this->name} — вміст подарункового боксу",
             ];

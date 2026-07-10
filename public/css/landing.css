@@ -79,22 +79,25 @@
 /* ---------- Токени ---------- */
 
 :root {
-    --bg: #060608;
+    /* Figma Frame 3/4: background #070707 */
+    --bg: #070707;
     --surface: #131419;
-    --surface-2: #1a1b22;
+    --surface-2: #1e212b; /* FAQ rows Figma #1E212B */
     --line: rgba(244, 242, 250, 0.08);
     --text: #f5f2f9;
     --muted: #7a7d96;
-    --lime: #d6ff41;
-    --lime-ink: #0a0a0c;
-    --lime-glow: rgba(214, 255, 65, 0.25);
+    --lime: #e8f213; /* Figma accent */
+    --lime-ink: #070707;
+    --lime-glow: rgba(232, 242, 19, 0.25);
     --violet: #5b57d6;
     --violet-hover: #6d69f2;
     --danger: #ff7a6b;
+    --figma-dark: #2b2b2b;
+    --header-line: #12141a;
 
-    --radius: 16px;
+    --radius: 20px; /* Figma banners / cards radius 20 */
     --radius-lg: 20px;
-    --container: 1240px;
+    --container: 1200px; /* Figma Frame 3 */
 
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
@@ -181,11 +184,12 @@ button {
     border-radius: 4px;
 }
 
+/* Figma Frame 3: content inset ~40px on 1200 */
 .container {
     max-width: var(--container);
     margin-inline: auto;
-    padding-left: max(24px, var(--safe-left));
-    padding-right: max(24px, var(--safe-right));
+    padding-left: max(40px, var(--safe-left));
+    padding-right: max(40px, var(--safe-right));
 }
 
 /* Для скрінрідерів і пошуковиків, невидиме оку (h1 тощо) */
@@ -212,11 +216,10 @@ button {
 
 /* ---------- Шапка ---------- */
 
-/* Прозорий хедер (десктоп + мобілка): над контентом «плавають» лише
-   бренд і кнопка ПІДТРИМКА, сторінка проходить під ними. Без панелі/блюру. */
+/* Хедер у звичайному потоці: бігунок + ПІДТРИМКА скролляться разом зі
+   сторінкою (уїжджають угору). Без панелі, блюру й лінії знизу. */
 .site-header {
-    position: sticky;
-    top: 0;
+    position: static;
     z-index: 50;
     padding-top: var(--safe-top);
     background: transparent;
@@ -237,13 +240,12 @@ button {
     min-width: 0;
 }
 
+/* Figma desktop logo Vector: 65×55 */
 .brand-mark {
-    width: 46px;
-    height: 40px;
+    width: 65px;
+    height: 55px;
     flex: none;
     color: var(--text);
-    /* тінь, щоб білий бегунок читався над світлими ділянками контенту */
-    filter: drop-shadow(0 2px 7px rgba(0, 0, 0, 0.65));
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -251,11 +253,12 @@ button {
     transform: translateX(4px);
 }
 
+/* Figma desktop: Inter 900 Italic 40px / 48px, #F5F2F9 */
 .brand-name {
-    font-size: clamp(17px, 2.1vw, 26px);
+    font-size: 40px;
+    line-height: 48px;
     white-space: nowrap;
     color: var(--text);
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 /* Фіолетова пігулка підтримки — Figma: 218×48, radius 50, #593AA1 */
@@ -276,8 +279,6 @@ button {
     line-height: 1;
     text-align: center;
     flex: none;
-    /* відділяє пігулку від контенту, що проходить під прозорим хедером */
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     transition: background 0.2s ease, transform 0.15s ease;
 }
 
@@ -311,20 +312,20 @@ button {
     color: #ffffff;
 }
 
-/* ---------- Банери ---------- */
+/* ---------- Банери — Figma: 540×250, gap 40, radius 20, inset 40 ---------- */
 
 .banners {
-    padding-top: 26px;
+    padding-top: 16px;
 }
 
 .banners-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 40px;
 }
 
 .banner-card {
-    border-radius: var(--radius);
+    border-radius: 20px;
     overflow: hidden;
     background: var(--surface);
     isolation: isolate;
@@ -352,13 +353,13 @@ button {
     margin-bottom: 30px;
 }
 
-/* Заголовки секцій за Figma: Inter 900 Italic 48px, line-height 100%, #F5F2F9 */
+/* Заголовки секцій — Figma desktop Inter 900 Italic 48/58, #F5F2F9 */
 .section-title .t-display {
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
     font-size: 48px;
-    line-height: 1;
+    line-height: 58px;
     letter-spacing: 0;
     text-transform: uppercase;
     color: #f5f2f9;
@@ -372,7 +373,7 @@ button {
     color: #e8f213;
 }
 
-/* ---------- Картки товарів (мінімальні, за оновленим макетом) ---------- */
+/* ---------- Картки товарів — Figma desktop: sticker 350×338, 2 колонки ---------- */
 
 .products-grid {
     display: grid;
@@ -381,12 +382,12 @@ button {
     row-gap: 48px;
 }
 
-/* Широкі екрани: обмежуємо ширину колонок і центруємо пару */
+/* Figma: stickers left 160 / 690 → колонки ~350 + gap ~180, тінь 523 */
 @media (min-width: 1025px) {
     .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 440px));
+        grid-template-columns: repeat(2, minmax(0, 450px));
         justify-content: center;
-        column-gap: 140px;
+        column-gap: 120px;
         row-gap: 56px;
     }
 }
@@ -407,6 +408,7 @@ button {
 
 .pcard-media {
     display: flex;
+    /* Стрілки центруються по фіксованій висоті боксу — не стрибають */
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -415,58 +417,94 @@ button {
     overflow: visible;
 }
 
+/* Фіксований кадр: 350×350 + місце під тінь. Висота НЕ залежить від слайду. */
 .pcard-box {
+    --pcard-frame: 350px;
     position: relative;
-    flex: 0 0 330px;
-    width: 330px;
-    max-width: 330px;
-    padding-bottom: 64px;
-    overflow-x: clip;
-    overflow-y: visible;
+    flex: 0 0 var(--pcard-frame);
+    width: var(--pcard-frame);
+    max-width: var(--pcard-frame);
+    height: calc(var(--pcard-frame) + 64px);
+    padding-bottom: 0;
+    overflow: visible;
 }
 
 .pcard-carousel {
     position: relative;
-    width: 100%;
+    width: var(--pcard-frame);
+    height: var(--pcard-frame);
+    flex: none;
+    /* visible: кути боксу не зрізаються overflow */
+    overflow: visible;
 }
 
-/* М’яка тінь під скринькою — Figma: Ellipse 523×63, #2B2B2B 20%, blur 30 */
+/* Figma Ellipse: 523×63, #2B2B2B 20%, blur 15 (mobile 309×63) */
 .pcard-ground {
     position: absolute;
     left: 50%;
     bottom: 0;
     width: min(523px, 158%);
     height: 63px;
-    background: #2b2b2b;
+    background: var(--figma-dark);
     opacity: 0.2;
     border-radius: 50%;
-    filter: blur(30px);
-    -webkit-filter: blur(30px);
+    filter: blur(15px);
+    -webkit-filter: blur(15px);
     transform: translateX(-50%);
     pointer-events: none;
 }
 
+/* Усі слайди absolute у фіксованому кадрі — жоден не задає висоту */
 .pcard-slide {
-    display: none;
-}
-
-.pcard-slide.is-active {
-    display: block;
-}
-
-.pcard-slide img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.pcard-arrow {
-    flex: 0 0 auto;
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: var(--touch-min);
-    min-height: var(--touch-min);
+    /* невеликий внутрішній відступ, щоб кути не впирались у край кадру */
+    padding: 4%;
+    box-sizing: border-box;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.pcard-slide.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* contain + 100%×100%: ціле фото в кадрі без обрізки кутів */
+.pcard-slide img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center center;
+}
+
+/* Стрілки лише коли є кілька фото */
+.product-card:not(.has-multiple-slides) .pcard-arrow {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* Figma chevron hit 50×50 — завжди на місці (flex center по фікс. боксу) */
+.pcard-arrow {
+    position: relative;
+    flex: 0 0 50px;
+    align-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    min-height: 50px;
     padding: 0;
     border: 0;
     background: transparent;
@@ -477,7 +515,25 @@ button {
     user-select: none;
 }
 
+/* Figma Ellipse 20–27: 50×50, #2B2B2B 25%, blur 15 */
+.pcard-arrow::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 50px;
+    height: 50px;
+    background: var(--figma-dark);
+    opacity: 0.25;
+    border-radius: 50%;
+    filter: blur(15px);
+    -webkit-filter: blur(15px);
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 .pcard-arrow svg {
+    position: relative;
     display: block;
     width: 12.5px;
     height: 25px;
@@ -493,40 +549,39 @@ button {
     color: #ffffff;
 }
 
+/* Не форсуємо width:100% — інакше високі фото ріже overflow каруселі */
 .pcard-media img {
     display: block;
-    width: 100%;
-    height: auto;
 }
 
-/* Сабтайтл картки за Figma: Inter 900 Italic 24px, #7A7D96 */
+/* Сабтайтл — Figma desktop 24/29, mobile 16/19, #7A7D96 */
 .pcard-subtitle {
     margin-top: 0;
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
     font-size: 24px;
-    line-height: 1;
+    line-height: 29px;
     letter-spacing: 0;
     text-transform: uppercase;
     text-align: center;
     color: #7a7d96;
 }
 
-/* Ціна картки за Figma: Inter 900 Italic 48px, #F5F2F9 */
+/* Ціна — Figma desktop 48/58, mobile 36/44, #F5F2F9 */
 .pcard-price {
     margin-top: 12px;
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
     font-size: 48px;
-    line-height: 1;
+    line-height: 58px;
     letter-spacing: 0;
     text-align: center;
     color: #f5f2f9;
 }
 
-/* Кнопка «Замовити» за Figma: 240×70, radius 50, #E8F213, текст 32px #070707 */
+/* «Замовити» — Figma 240×70, radius 50, #E8F213, Inter 900 Italic 32/39 #070707 */
 .pcard-cta {
     margin-top: 14px;
     display: inline-flex;
@@ -544,7 +599,7 @@ button {
     font-weight: 900;
     font-style: italic;
     font-size: 32px;
-    line-height: 1;
+    line-height: 39px;
     letter-spacing: 0;
     text-align: center;
     border-radius: 50px;
@@ -627,36 +682,54 @@ button {
     pointer-events: none;
 }
 
-/* ---------- Запитання та відповіді ---------- */
+/* ---------- Запитання та відповіді — Figma ----------
+   Desktop: rows 1120×78, #1E212B, radius 20, gap 16
+   Soft glow Rectangle 17: #2B2B2B 20%, blur 25, radius 20
+   Q text: Manrope 800 26/36 #F5F2F9; chevron 35 / mobile 25 */
 
-/* За оновленим макетом рядки питань лежать прямо на чорному, без панелі */
 .faq-panel {
+    position: relative;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    isolation: isolate;
+}
+
+/* Figma Rectangle 17 under FAQ block */
+.faq-panel::before {
+    content: '';
+    position: absolute;
+    inset: -8px 0;
+    background: var(--figma-dark);
+    opacity: 0.2;
+    border-radius: 20px;
+    filter: blur(25px);
+    -webkit-filter: blur(25px);
+    pointer-events: none;
+    z-index: -1;
 }
 
 .faq-item {
-    background: var(--surface-2);
+    position: relative;
+    background: #1e212b;
     border: 1px solid transparent;
-    border-radius: 18px;
+    border-radius: 20px;
     overflow: hidden;
     transition: border-color 0.3s ease;
 }
 
 .faq-item.is-open {
-    border-color: rgba(214, 255, 65, 0.28);
+    border-color: rgba(232, 242, 19, 0.28);
 }
 
-/* Питання: Manrope 800, по лівому краю; шеврон праворуч абсолютом */
 .faq-question {
     position: relative;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    min-height: var(--touch-min);
-    padding: 20px 56px 20px 20px;
+    min-height: 78px;
+    padding: 20px 56px 20px 24px;
     text-align: left;
     color: var(--text);
     transition: color 0.15s ease, background 0.15s ease;
@@ -671,11 +744,11 @@ button {
 }
 
 .faq-q-text {
-    font-family: var(--font-accent);
+    font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: clamp(15px, 1.9vw, 26px);
+    font-size: 26px;
     letter-spacing: 0;
-    line-height: 1.25;
+    line-height: 36px;
     color: #f5f2f9;
     text-align: left;
     transition: color 0.25s ease;
@@ -691,10 +764,10 @@ button {
 .faq-chevron {
     position: absolute;
     right: 20px;
-    top: calc(50% - 11px);
-    width: 22px;
-    height: 22px;
-    color: var(--muted);
+    top: calc(50% - 17.5px);
+    width: 35px;
+    height: 35px;
+    color: #d9d9d9;
     transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s ease;
 }
 
@@ -736,19 +809,20 @@ button {
     font-weight: 800;
     font-size: clamp(14px, 1.4vw, 17px);
     line-height: 1.6;
-    text-align: center;
+    text-align: left;
 }
 
 .faq-answer-content p:first-child {
     color: #cfcdd9;
 }
 
-/* ---------- «Не знаєш, що подарувати?» — прихований текст у панелі зі скролом ----------
-   Довгий текст не займає всю сторінку: видно початок, решта — за градієнтом.
-   На мобілці внутрішній скрол із overscroll-behavior: contain (без «залипання»). */
+/* ---------- «Не знаєш…» — Figma: Manrope 800 26/36 #7A7D96, center, ~868px ----------
+   Довгий текст у скрол-зоні (макет не показує всю стіну тексту одразу). */
+/* На всю ширину контейнера — меньше чёрной «дыры» справа */
 .about-panel {
     position: relative;
-    max-width: 820px;
+    max-width: none;
+    width: 100%;
     margin-inline: 0;
 }
 
@@ -797,7 +871,7 @@ button {
 .about-fade--bottom {
     bottom: 0;
     height: 140px;
-    background: linear-gradient(to bottom, transparent 0%, rgba(6, 6, 8, 0.55) 35%, var(--bg) 92%);
+    background: linear-gradient(to bottom, transparent 0%, rgba(7, 7, 7, 0.55) 35%, var(--bg) 92%);
 }
 
 .about-panel.is-at-end .about-fade--bottom {
@@ -872,13 +946,13 @@ button {
     border-radius: 6px;
 }
 
-/* Текст секції «Не знаєш…» за Figma: Manrope 800, 26px, #7A7D96, left */
+/* Manrope 800, 26px / 36px, #7A7D96 — по лівому краю (як на макеті/скріні) */
 .about-scroll p {
     color: #7a7d96;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
     font-size: 26px;
-    line-height: 1;
+    line-height: 36px;
     letter-spacing: 0;
     text-align: left;
 }
@@ -910,7 +984,7 @@ button {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: stretch;
-    min-height: 88px;
+    min-height: 120px;
 }
 
 .footer-socials {
@@ -936,11 +1010,12 @@ button {
     gap: 12px;
 }
 
+/* Figma desktop social: ~89×89 */
 .social-link {
-    width: 48px;
-    height: 48px;
-    min-width: var(--touch-min);
-    min-height: var(--touch-min);
+    width: 89px;
+    height: 89px;
+    min-width: 89px;
+    min-height: 89px;
     border-radius: 50%;
     display: grid;
     place-items: center;
@@ -951,8 +1026,8 @@ button {
 }
 
 .social-link svg {
-    width: 22px;
-    height: 22px;
+    width: 40px;
+    height: 40px;
 }
 
 .social-link:hover {
@@ -1334,28 +1409,74 @@ button {
         column-gap: 48px;
         row-gap: 40px;
     }
+
+    /* Між 761–1024: трохи менший бренд, щоб шапка не ламалась */
+    .brand-mark {
+        width: 52px;
+        height: 44px;
+    }
+
+    .brand-name {
+        font-size: 28px;
+        line-height: 34px;
+    }
+
+    .container {
+        padding-left: max(24px, var(--safe-left));
+        padding-right: max(24px, var(--safe-right));
+    }
+
+    .social-link {
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        min-height: 64px;
+    }
+
+    .social-link svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .faq-q-text {
+        font-size: clamp(16px, 2.2vw, 26px);
+        line-height: 1.35;
+    }
+
+    .pcard-box {
+        --pcard-frame: min(350px, 42vw, 100%);
+        flex: 0 0 var(--pcard-frame);
+        width: var(--pcard-frame);
+        max-width: var(--pcard-frame);
+        height: calc(var(--pcard-frame) + 64px);
+    }
+
+    .pcard-carousel {
+        width: var(--pcard-frame);
+        height: var(--pcard-frame);
+    }
 }
 
+/* ---------- Mobile — Figma Frame 4: 360px ---------- */
 @media (max-width: 760px) {
     .container {
-        padding-left: max(16px, var(--safe-left));
-        padding-right: max(16px, var(--safe-right));
+        padding-left: max(19px, var(--safe-left));
+        padding-right: max(19px, var(--safe-right));
     }
 
     .banners {
-        padding-top: 14px;
+        padding-top: 8px;
     }
 
-    /* За мобільним макетом банери йдуть один під одним, на всю ширину */
+    /* Figma: banners stack, ~8px gap, radius 20 */
     .banners-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 8px;
     }
 
-    /* За мобільним макетом картки йдуть одна під одною */
     .products-grid {
         grid-template-columns: 1fr;
-        gap: 38px;
+        gap: 48px;
     }
 
     .pcard-media {
@@ -1364,56 +1485,79 @@ button {
     }
 
     .pcard-arrow {
+        width: 40px;
+        height: 40px;
         min-width: 40px;
         min-height: 40px;
         flex: 0 0 40px;
     }
 
+    .pcard-arrow::before {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Мобільний кадр — теж фіксована висота, стрілки не стрибають */
     .pcard-box {
-        flex: 1 1 auto;
-        width: auto;
-        max-width: min(300px, calc(100% - 100px));
+        --pcard-frame: min(228px, calc(100vw - 120px));
+        flex: 0 0 var(--pcard-frame);
+        width: var(--pcard-frame);
+        max-width: var(--pcard-frame);
+        height: calc(var(--pcard-frame) + 52px);
         min-width: 0;
-        padding-bottom: 52px;
+        padding-bottom: 0;
     }
 
+    .pcard-carousel {
+        width: 100%;
+        height: var(--pcard-frame);
+    }
+
+    /* Figma Ellipse mobile: 309×63, blur 15 */
     .pcard-ground {
-        width: min(523px, 120%);
-        height: clamp(48px, 14vw, 63px);
-        filter: blur(24px);
-        -webkit-filter: blur(24px);
+        width: min(309px, 120%);
+        height: 63px;
+        filter: blur(15px);
+        -webkit-filter: blur(15px);
     }
 
-
-
+    /* Figma mobile subtitle 16/19 */
     .pcard-subtitle {
         margin-top: 0;
-        font-size: clamp(16px, 4.5vw, 20px);
+        font-size: 16px;
+        line-height: 19px;
     }
 
+    /* Figma mobile price 36/44 */
     .pcard-price {
-        font-size: clamp(30px, 8vw, 40px);
+        font-size: 36px;
+        line-height: 44px;
     }
 
+    /* Figma section title mobile 20/24 */
     .section-title .t-display {
-        font-size: clamp(26px, 7vw, 36px);
+        font-size: 20px;
+        line-height: 24px;
     }
 
+    /* Figma icons mobile 40×40 */
     .section-tri {
-        width: clamp(40px, 12vw, 52px);
-        height: clamp(40px, 12vw, 52px);
+        width: 40px;
+        height: 40px;
     }
 
+    /* Figma CTA same 240×70 / 32px on mobile */
     .pcard-cta {
         width: min(240px, 100%);
         min-width: 0;
-        height: 58px;
-        min-height: 58px;
-        font-size: clamp(22px, 6vw, 28px);
+        height: 70px;
+        min-height: 70px;
+        font-size: 32px;
+        line-height: 39px;
     }
 
     .catalog {
-        padding-top: 46px;
+        padding-top: 40px;
     }
 
     .catalog.about {
@@ -1421,22 +1565,27 @@ button {
     }
 
     .faq-panel {
-        gap: 8px;
+        gap: 16px;
     }
 
+    /* Figma FAQ row mobile 314×70 */
     .faq-question {
-        padding: 16px 42px 16px 16px;
+        min-height: 70px;
+        padding: 16px 48px 16px 16px;
     }
 
+    /* Figma FAQ Q mobile Manrope 800 14/19 */
     .faq-q-text {
-        font-size: 15px;
+        font-size: 14px;
+        line-height: 19px;
     }
 
+    /* Figma chevron mobile 25×25 */
     .faq-chevron {
-        right: 13px;
-        top: calc(50% - 9px);
-        width: 18px;
-        height: 18px;
+        right: 12px;
+        top: calc(50% - 12.5px);
+        width: 25px;
+        height: 25px;
     }
 
     .faq-answer-content {
@@ -1446,11 +1595,13 @@ button {
     .about-scroll {
         gap: 16px;
         max-height: clamp(210px, 34dvh, 300px);
-        padding: 0 12px 36px 0;
+        padding: 0 12px 36px;
     }
 
+    /* Figma about body stays 26/36 even on mobile */
     .about-scroll p {
-        font-size: clamp(18px, 4.8vw, 22px);
+        font-size: 26px;
+        line-height: 36px;
     }
 
     .about-fade--bottom {
@@ -1475,6 +1626,7 @@ button {
         display: none;
     }
 
+    /* Figma mobile logo ~vector in header */
     .brand-mark {
         width: 40px;
         height: 35px;
@@ -1484,13 +1636,22 @@ button {
         gap: 0;
     }
 
+    /* Figma mobile support pill ~108×48 */
     .support-pill {
         width: auto;
-        min-width: 168px;
-        max-width: 218px;
+        min-width: 108px;
+        max-width: 160px;
         height: 48px;
         min-height: 48px;
-        padding: 0 16px;
+        padding: 0 14px;
+    }
+
+    .support-label {
+        font-size: 12px;
+    }
+
+    .support-phone {
+        font-size: 12px;
     }
 
     .site-footer {
@@ -1518,31 +1679,35 @@ button {
         border-bottom: none;
     }
 
+    /* Figma mobile footer Manrope 800 15/20 */
     .copyright {
         justify-content: flex-start;
         padding-left: 0;
         text-align: left;
-        font-size: clamp(16px, 4.2vw, 22px);
+        font-size: 15px;
+        line-height: 20px;
     }
 
     .socials-label {
-        font-size: clamp(16px, 4.2vw, 22px);
+        font-size: 15px;
+        line-height: 20px;
         text-align: left;
     }
 
+    /* Figma mobile social 40×40 */
     .social-link {
-        width: 44px;
-        height: 44px;
-        min-width: 44px;
-        min-height: 44px;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
         background: #ececec;
         color: #101010;
         border: 1px solid rgba(122, 125, 150, 0.45);
     }
 
     .social-link svg {
-        width: 21px;
-        height: 21px;
+        width: 18px;
+        height: 18px;
     }
 
     .modal-panel {
@@ -1552,13 +1717,12 @@ button {
 
 @media (max-width: 400px) {
     .support-pill {
-        padding: 8px 14px;
+        padding: 0 10px;
+        min-width: 100px;
     }
 
-    /* На найвужчих екранах тінь не ширша за бокс — жодного горизонт. скролу
-       навіть без підтримки overflow: clip (старий iOS) */
     .pcard-ground {
-        width: min(523px, 100%);
+        width: min(309px, 100%);
     }
 }
 
@@ -1587,29 +1751,31 @@ button {
 
 @keyframes cookie-in {
     from { transform: translateY(100%); }
+    to { transform: translateY(0); }
 }
 
+/* Figma desktop cookie: 900×98, #1E212B, radius 50 */
 .cookie-inner {
     pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    width: min(920px, 100%);
-    min-height: 64px;
+    width: min(900px, 100%);
+    min-height: 98px;
     margin-inline: auto;
     padding: 10px 12px 10px 28px;
-    background: rgba(16, 17, 22, 0.98);
+    background: #1e212b;
     border: 1px solid #12141a;
-    border-radius: 999px;
+    border-radius: 50px;
 }
 
 .cookie-text {
     flex: 1;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 26px;
-    line-height: 1;
+    font-size: 24px;
+    line-height: 33px;
     letter-spacing: 0;
     text-align: center;
     color: #7a7d96;

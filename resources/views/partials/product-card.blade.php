@@ -10,14 +10,17 @@
         <div class="pcard-box">
             <div class="pcard-carousel" data-slide-count="{{ count($slides) }}">
                 @foreach ($slides as $index => $slide)
-                    <div class="pcard-slide @if ($index === 0) is-active @endif" data-index="{{ $index }}">
+                    <div class="pcard-slide{{ $index === 0 ? ' is-active' : '' }}" data-index="{{ $index }}">
                         <picture>
                             @if ($slide['webp'])
                                 <source srcset="{{ $slide['webp'] }}" type="image/webp">
                             @endif
+                            {{-- Перші 2 слайди eager — карусель без «порожнього» кадру --}}
                             <img src="{{ $slide['fallback'] }}"
                                  alt="{{ $slide['alt'] }}"
-                                 loading="lazy" decoding="async">
+                                 loading="{{ $index < 2 ? 'eager' : 'lazy' }}"
+                                 decoding="async"
+                                 draggable="false">
                         </picture>
                     </div>
                 @endforeach

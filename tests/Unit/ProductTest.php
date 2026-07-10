@@ -80,4 +80,78 @@ class ProductTest extends TestCase
         $this->assertStringContainsString('storage/products/gallery/inside-1.jpg', $slides[1]['fallback']);
         $this->assertStringContainsString('вміст подарункового боксу', $slides[1]['alt']);
     }
+
+    public function test_card_slides_skips_empty_gallery_entries(): void
+    {
+        $product = Product::create([
+            'slug' => 'slides-empty-entries',
+            'category' => 'male',
+            'name' => 'Sparse Gallery',
+            'price' => 1000,
+            'image' => 'images/products/box-male-light',
+            'gallery' => ['products/gallery/a.png', '', null, 'products/gallery/b.png'],
+            'is_active' => true,
+        ]);
+
+        $slides = $product->cardSlides();
+
+        $this->assertCount(3, $slides);
+        $this->assertStringContainsString('box-male-light.png', $slides[0]['fallback']);
+        $this->assertStringContainsString('gallery/a.png', $slides[1]['fallback']);
+        $this->assertStringContainsString('gallery/b.png', $slides[2]['fallback']);
+    }
+
+    public function test_card_slides_prefers_webp_sibling_when_file_exists(): void
+    {
+        $dir = storage_path('app/public/products/gallery');
+        if (! is_dir($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        $png = $dir.DIRECTORY_SEPARATOR.'_test-slide.png';
+        $webp = $dir.DIRECTORY_SEPARATOR.'_test-slide.webp';
+        // мінімальні валідні файли-заглушки (не зображення — is_file достатньо)
+        file_put_contents($png, 'png');
+        file_put_contents($webp, 'webp');
+
+        try {
+            $product = Product::create([
+                'slug' => 'slides-webp',
+                'category' => 'female',
+                'name' => 'Webp Box',
+                'price' => 1100,
+                'image' => 'images/products/box-female-light',
+                'gallery' => ['products/gallery/_test-slide.png'],
+                'is_active' => true,
+            ]);
+
+            $slides = $product->cardSlides();
+
+            $this->assertCount(2, $slides);
+            $this->assertNotNull($slides[1]['webp']);
+            $this->assertStringContainsString('products/gallery/_test-slide.webp', $slides[1]['webp']);
+            $this->assertStringContainsString('products/gallery/_test-slide.png', $slides[1]['fallback']);
+        } finally {
+            @unlink($png);
+            @unlink($webp);
+        }
+    }
+
+    public function test_card_slides_webp_null_when_sibling_missing(): void
+    {
+        $product = Product::create([
+            'slug' => 'slides-no-webp',
+            'category' => 'male',
+            'name' => 'No Webp',
+            'price' => 1000,
+            'photo' => 'products/main.png',
+            'gallery' => ['products/gallery/only-png.png'],
+            'is_active' => true,
+        ]);
+
+        $slides = $product->cardSlides();
+
+        $this->assertNull($slides[1]['webp']);
+        $this->assertStringContainsString('only-png.png', $slides[1]['fallback']);
+    }
 }

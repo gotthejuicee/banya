@@ -36,6 +36,12 @@ class ProductSeeder extends Seeder
                 'contents' => $maleContents,
                 'price' => 2290,
                 'image' => 'images/products/box-male-light',
+                'gallery' => [
+                    'products/gallery/male-light-2.png',
+                    'products/gallery/male-light-3.png',
+                    'products/gallery/male-light-4.png',
+                    'products/gallery/male-light-5.png',
+                ],
                 'sort' => 1,
             ],
             [
@@ -45,6 +51,12 @@ class ProductSeeder extends Seeder
                 'contents' => $maleContents,
                 'price' => 2490,
                 'image' => 'images/products/box-male-dark',
+                'gallery' => [
+                    'products/gallery/male-dark-2.png',
+                    'products/gallery/male-dark-3.png',
+                    'products/gallery/male-dark-4.png',
+                    'products/gallery/male-dark-5.png',
+                ],
                 'sort' => 2,
             ],
             [
@@ -54,6 +66,12 @@ class ProductSeeder extends Seeder
                 'contents' => $femaleContents,
                 'price' => 2290,
                 'image' => 'images/products/box-female-light',
+                'gallery' => [
+                    'products/gallery/female-light-2.png',
+                    'products/gallery/female-light-3.png',
+                    'products/gallery/female-light-4.png',
+                    'products/gallery/female-light-5.png',
+                ],
                 'sort' => 1,
             ],
             [
@@ -63,6 +81,12 @@ class ProductSeeder extends Seeder
                 'contents' => $femaleContents,
                 'price' => 2490,
                 'image' => 'images/products/box-female-dark',
+                'gallery' => [
+                    'products/gallery/female-dark-2.png',
+                    'products/gallery/female-dark-3.png',
+                    'products/gallery/female-dark-4.png',
+                    'products/gallery/female-dark-5.png',
+                ],
                 'sort' => 2,
             ],
         ];

@@ -4,11 +4,10 @@
 
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    /* ---------- Шапка: тінь при скролі ---------- */
-    const header = document.getElementById('site-header');
-    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
+    /* ---------- Шапка ----------
+       Логотип/ПІДТРИМКА — CSS static (їдуть зі скролом).
+       Полоска — CSS fixed top:0 (лишається). JS тут нічого не «тримає». */
+    // no-op: поведінка повністю в CSS
 
     /* ---------- About: градієнт + підказка «Гортайте» ---------- */
     const aboutPanel = document.getElementById('about-panel');
@@ -70,10 +69,25 @@
         const next = ((index % total) + total) % total;
 
         slides.forEach((slide, i) => {
-            slide.classList.toggle('is-active', i === next);
+            const on = i === next;
+            slide.classList.toggle('is-active', on);
+            // Підвантажити зображення активного + сусідніх слайдів
+            if (on || i === (next + 1) % total || i === (next - 1 + total) % total) {
+                slide.querySelectorAll('img').forEach((img) => {
+                    if (img.dataset.src && !img.getAttribute('src')) {
+                        img.src = img.dataset.src;
+                    }
+                    img.loading = 'eager';
+                });
+            }
         });
 
         card.dataset.slideIndex = String(next);
+
+        card.querySelectorAll('.pcard-arrow').forEach((arrow) => {
+            arrow.disabled = total < 2;
+            arrow.setAttribute('aria-disabled', total < 2 ? 'true' : 'false');
+        });
     };
 
     document.querySelectorAll('.product-card').forEach((card) => {
@@ -81,17 +95,19 @@
         if (!slides.length) return;
 
         card.dataset.slideIndex = '0';
+        setCardSlide(card, 0);
+
+        if (slides.length < 2) return;
 
         card.querySelectorAll('.pcard-arrow').forEach((arrow) => {
             arrow.addEventListener('click', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 const current = Number(card.dataset.slideIndex ?? 0);
                 const step = arrow.classList.contains('pcard-arrow--next') ? 1 : -1;
                 setCardSlide(card, current + step);
             });
         });
-
-        if (slides.length < 2) return;
 
         const carousel = card.querySelector('.pcard-carousel');
         let touchStartX = 0;
