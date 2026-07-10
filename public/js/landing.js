@@ -5,9 +5,40 @@
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     /* ---------- Шапка ----------
-       Логотип/ПІДТРИМКА — CSS static (їдуть зі скролом).
-       Полоска — CSS fixed top:0 (лишається). JS тут нічого не «тримає». */
-    // no-op: поведінка повністю в CSS
+       Лого + ПІДТРИМКА їдуть зі скролом; чорна смуга #header-fixed-bg fixed.
+       Підганяємо висоту смуги під реальний хедер + знімаємо sticky/fixed. */
+    (() => {
+        const header = document.getElementById('site-header');
+        const bar = document.getElementById('header-fixed-bg');
+        if (!header) return;
+
+        const unlock = (el) => {
+            if (!el) return;
+            el.style.setProperty('position', el === header ? 'relative' : 'static', 'important');
+            el.style.setProperty('top', 'auto', 'important');
+            el.style.setProperty('bottom', 'auto', 'important');
+            el.style.setProperty('left', 'auto', 'important');
+            el.style.setProperty('right', 'auto', 'important');
+        };
+
+        const syncBar = () => {
+            const h = Math.ceil(header.getBoundingClientRect().height);
+            if (h > 0) {
+                document.documentElement.style.setProperty('--header-h', `${h}px`);
+                if (bar) bar.style.height = `${h}px`;
+            }
+        };
+
+        unlock(header);
+        header.querySelectorAll('.header-inner, .brand, .support-pill').forEach(unlock);
+        // header сам — relative (кліки над fixed-баром)
+        header.style.setProperty('position', 'relative', 'important');
+        header.style.setProperty('z-index', '50', 'important');
+
+        syncBar();
+        window.addEventListener('resize', syncBar, { passive: true });
+        if (document.fonts?.ready) document.fonts.ready.then(syncBar);
+    })();
 
     /* ---------- About: градієнт + підказка «Гортайте» ---------- */
     const aboutPanel = document.getElementById('about-panel');

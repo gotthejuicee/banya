@@ -43,6 +43,45 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
+    {{-- Критичні стилі хедера: лого/ПІДТРИМКА скроляться, чорна смуга fixed.
+         Inline + !important, щоб браузерний кеш CSS не ламав поведінку. --}}
+    <style id="header-scroll-fix">
+        #header-fixed-bg {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            height: var(--header-h, 83px) !important;
+            background: #070707 !important;
+            z-index: 40 !important;
+            pointer-events: none !important;
+        }
+        /* Лого + кнопка — НІКОЛИ sticky/fixed, їдуть зі скролом */
+        #site-header .header-inner,
+        #site-header .brand,
+        #site-header .brand-name,
+        #site-header .support-pill {
+            position: static !important;
+            top: auto !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: auto !important;
+        }
+        #site-header {
+            position: relative !important;
+            top: auto !important;
+            bottom: auto !important;
+            left: auto !important;
+            right: auto !important;
+            z-index: 50 !important;
+            background: transparent !important;
+        }
+        #site-header .brand,
+        #site-header .support-pill {
+            display: inline-flex !important;
+        }
+    </style>
 
     <script type="application/ld+json">{!! $siteJsonLd !!}</script>
     <script type="application/ld+json">{!! $productsJsonLd !!}</script>
@@ -60,6 +99,8 @@
     </symbol>
 </svg>
 
+{{-- Чорна смуга завжди зверху; лого + ПІДТРИМКА — у потоці, їдуть зі скролом --}}
+<div id="header-fixed-bg" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
     <div class="container header-inner">
         <a class="brand" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
