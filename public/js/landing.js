@@ -5,13 +5,12 @@
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     /* ---------- Шапка ----------
-       Чорна смуга + хедер = fixed (НІКОЛИ не скроляться).
-       Бігунок = #runner-layer у document flow (їде зі сторінкою). */
+       FIXED: чорне + надпис IDI_V_BANYU__.
+       СКРОЛ: бігунок + ПІДТРИМКА (#header-float). */
     (() => {
         const header = document.getElementById('site-header');
         const bar = document.getElementById('site-header-bg');
-        const runner = document.getElementById('brand-runner');
-        const slot = header?.querySelector('.brand-mark-slot');
+        const float = document.getElementById('header-float');
         if (!header) return;
 
         const lockFixed = (el) => {
@@ -30,15 +29,13 @@
                 document.documentElement.style.setProperty('--header-h', `${h}px`);
                 if (bar) bar.style.setProperty('height', `${h}px`, 'important');
             }
-        };
-
-        // Сховати «дірку» під бігунка, коли він уже поїхав зі скролом
-        const onScroll = () => {
-            if (!runner || !slot) return;
-            const gone = runner.getBoundingClientRect().bottom < 4;
-            slot.style.width = gone ? '0px' : '';
-            slot.style.margin = gone ? '0' : '';
-            header.classList.toggle('is-runner-away', gone);
+            // Слот пігулки = реальна ширина кнопки
+            const pill = document.getElementById('support-pill');
+            const pillSlot = header.querySelector('.support-pill-slot');
+            if (pill && pillSlot) {
+                pillSlot.style.width = `${Math.ceil(pill.getBoundingClientRect().width)}px`;
+                pillSlot.style.height = `${Math.ceil(pill.getBoundingClientRect().height)}px`;
+            }
         };
 
         lockFixed(header);
@@ -46,26 +43,15 @@
         header.style.setProperty('z-index', '50', 'important');
         if (bar) bar.style.setProperty('z-index', '49', 'important');
 
-        // Бігунок — точно НЕ fixed
-        const layer = document.getElementById('runner-layer');
-        if (layer) {
-            layer.style.setProperty('position', 'relative', 'important');
-            layer.style.setProperty('height', '0', 'important');
+        if (float) {
+            float.style.setProperty('position', 'relative', 'important');
+            float.style.setProperty('height', '0', 'important');
+            float.style.setProperty('z-index', '60', 'important');
         }
 
         syncHeaderH();
-        onScroll();
-        window.addEventListener('scroll', onScroll, { passive: true });
-        window.addEventListener('resize', () => {
-            syncHeaderH();
-            onScroll();
-        }, { passive: true });
-        if (document.fonts?.ready) {
-            document.fonts.ready.then(() => {
-                syncHeaderH();
-                onScroll();
-            });
-        }
+        window.addEventListener('resize', syncHeaderH, { passive: true });
+        if (document.fonts?.ready) document.fonts.ready.then(syncHeaderH);
     })();
 
     /* ---------- About: градієнт + підказка «Гортайте» ---------- */

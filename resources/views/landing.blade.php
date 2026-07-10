@@ -43,35 +43,31 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
-    {{-- Критично: чорний хедер FIXED (не скролиться). Тільки бігунок у потоці. --}}
+    {{-- Критично: ТІЛЬКИ чорний хедер + надпис fixed. Бігунок і ПІДТРИМКА — у потоці. --}}
     <style id="header-fixed-critical">
-        #site-header-bg {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            width: 100% !important;
-            height: var(--header-h, 83px) !important;
-            background: #070707 !important;
-            z-index: 49 !important;
-            pointer-events: none !important;
-            transform: none !important;
-        }
+        #site-header-bg,
         #site-header {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
             width: 100% !important;
-            z-index: 50 !important;
             background: #070707 !important;
             transform: none !important;
         }
-        #runner-layer {
+        #site-header-bg {
+            height: var(--header-h, 83px) !important;
+            z-index: 49 !important;
+            pointer-events: none !important;
+        }
+        #site-header {
+            z-index: 50 !important;
+        }
+        /* Бігунок + ПІДТРИМКА — document flow, НЕ fixed */
+        #header-float {
             position: relative !important;
             height: 0 !important;
             z-index: 60 !important;
-            /* НЕ fixed / НЕ sticky — інакше бігунок «прилипне» */
         }
         main {
             padding-top: var(--header-h, 83px) !important;
@@ -95,30 +91,31 @@
 </svg>
 
 {{--
-  1) .site-header-bg + .site-header — FIXED, ніколи не їдуть (чорне + текст + пігулка).
-  2) .runner-layer — у потоці документа: тільки бігунок скролиться зі сторінкою.
+  FIXED (на місці): чорна смуга + надпис IDI_V_BANYU__.
+  СКРОЛЯТЬСЯ: бігунок + кнопка ПІДТРИМКА (#header-float у потоці).
 --}}
 <div class="site-header-bg" id="site-header-bg" aria-hidden="true"></div>
 <header class="site-header" id="site-header">
     <div class="container header-inner">
         <a class="brand" href="{{ route('home') }}" id="site-brand" aria-label="IDI_V_BANYU__ — на головну">
-            {{-- порожнє місце під бігунка (сам бігунок — поза хедером) --}}
+            {{-- місце під бігунка (бігунок у #header-float) --}}
             <span class="brand-mark-slot" aria-hidden="true"></span>
             <span class="brand-name t-display">IDI_V_BANYU__</span>
         </a>
-
-        <a class="support-pill" href="tel:+{{ $supportPhone }}">
-            <span class="support-label">ПІДТРИМКА</span>
-            <span class="support-phone">{{ $supportPhone }}</span>
-        </a>
+        {{-- місце під пігулку, щоб надпис не роз’їжджався --}}
+        <span class="support-pill-slot" aria-hidden="true"></span>
     </div>
 </header>
 
-{{-- ТІЛЬКИ бігунок скролиться (звичайний document flow, без fixed/sticky) --}}
-<div class="runner-layer" id="runner-layer">
-    <div class="container runner-layer-inner">
+{{-- Бігунок + ПІДТРИМКА — звичайний потік, їдуть зі скролом --}}
+<div class="header-float" id="header-float">
+    <div class="container header-float-inner">
         <a class="brand-runner" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <svg class="brand-mark" id="brand-runner" aria-hidden="true"><use href="#i-runner"/></svg>
+        </a>
+        <a class="support-pill" id="support-pill" href="tel:+{{ $supportPhone }}">
+            <span class="support-label">ПІДТРИМКА</span>
+            <span class="support-phone">{{ $supportPhone }}</span>
         </a>
     </div>
 </div>

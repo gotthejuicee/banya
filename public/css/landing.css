@@ -224,8 +224,8 @@ button {
 }
 
 /*
- * Чорна смуга + хедер = position:fixed — НІКОЛИ не скроляться.
- * Бігунок (.runner-layer) = звичайний потік — їде зі сторінкою.
+ * FIXED: чорна смуга + надпис IDI_V_BANYU__ (ніколи не скроляться).
+ * СКРОЛ: #header-float — бігунок + ПІДТРИМКА (document flow).
  */
 .site-header-bg {
     position: fixed;
@@ -237,6 +237,7 @@ button {
     background: #070707;
     z-index: 49;
     pointer-events: none;
+    transform: none;
 }
 
 .site-header {
@@ -249,22 +250,25 @@ button {
     min-height: calc(var(--header-h) + var(--safe-top));
     padding-top: var(--safe-top);
     background: #070707;
-    /* ніяких transform/filter на хедері — інакше fixed-діти «ламаються» */
     transform: none;
 }
 
-/* Контент стартує під хедером */
 main {
     padding-top: calc(var(--header-h) + var(--safe-top));
 }
 
-.header-inner {
+.header-inner,
+.header-float-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
     min-height: var(--header-h);
     padding-block: 14px;
+}
+
+.header-float-inner {
+    padding-top: calc(14px + var(--safe-top));
 }
 
 .brand {
@@ -274,45 +278,42 @@ main {
     min-width: 0;
 }
 
-/* Невидимий слот = ширина бігунка, щоб текст не стрибав */
+/* Невидимі слоти = місце під бігунка / пігулку в fixed-хедері */
 .brand-mark-slot {
     width: var(--brand-mark-w);
     height: var(--brand-mark-h);
     flex: none;
     visibility: hidden;
     pointer-events: none;
-    overflow: hidden;
-    transition: width 0.2s ease;
 }
 
-.site-header.is-runner-away .brand-mark-slot {
-    width: 0;
+.support-pill-slot {
+    width: 218px;
+    height: 48px;
+    flex: none;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 /*
- * Шар бігунка: height:0 у потоці (y=0), overflow visible.
- * При скролі сторінки їде вгору і зникає. Хедер fixed — стоїть.
+ * Бігунок + ПІДТРИМКА: height:0 у потоці, overflow visible.
+ * Їдуть зі скролом. Чорний хедер fixed — стоїть.
  */
-.runner-layer {
+.header-float {
     position: relative;
     height: 0;
     z-index: 60;
     pointer-events: none;
-    /* важливо: не fixed, не sticky */
-}
-
-.runner-layer-inner {
-    display: flex;
-    align-items: center;
-    min-height: var(--header-h);
-    padding-block: 14px;
-    padding-top: calc(14px + var(--safe-top));
 }
 
 .brand-runner {
     display: inline-flex;
     align-items: center;
     flex: none;
+    pointer-events: auto;
+}
+
+.header-float .support-pill {
     pointer-events: auto;
 }
 
@@ -1708,12 +1709,17 @@ main {
     }
 
     .header-inner,
-    .runner-layer-inner {
+    .header-float-inner {
         padding-block: 11px;
     }
 
-    .runner-layer-inner {
+    .header-float-inner {
         padding-top: calc(11px + var(--safe-top));
+    }
+
+    .support-pill-slot {
+        width: 108px;
+        height: 48px;
     }
 
     .brand-name {
