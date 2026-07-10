@@ -5,43 +5,33 @@
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     /* ---------- Шапка ----------
-       FIXED: чорне + надпис IDI_V_BANYU__.
-       СКРОЛ: бігунок + ПІДТРИМКА (#header-float). */
+       FIXED: лише чорна смуга.
+       СКРОЛ: бігунок + ПІДТРИМКА. Надпису в шапці немає. */
     (() => {
-        const header = document.getElementById('site-header');
-        const bar = document.getElementById('site-header-bg');
+        const bar = document.getElementById('site-header-bar');
         const float = document.getElementById('header-float');
-        if (!header) return;
-
-        const lockFixed = (el) => {
-            if (!el) return;
-            el.style.setProperty('position', 'fixed', 'important');
-            el.style.setProperty('top', '0', 'important');
-            el.style.setProperty('left', '0', 'important');
-            el.style.setProperty('right', '0', 'important');
-            el.style.setProperty('transform', 'none', 'important');
-            el.style.setProperty('background', '#070707', 'important');
-        };
+        const floatInner = float?.querySelector('.header-float-inner');
 
         const syncHeaderH = () => {
-            const h = Math.ceil(header.getBoundingClientRect().height);
+            // Висота смуги = реальний рядок бігунок/пігулка
+            const h = floatInner
+                ? Math.ceil(floatInner.getBoundingClientRect().height)
+                : 76;
             if (h > 0) {
                 document.documentElement.style.setProperty('--header-h', `${h}px`);
                 if (bar) bar.style.setProperty('height', `${h}px`, 'important');
             }
-            // Слот пігулки = реальна ширина кнопки
-            const pill = document.getElementById('support-pill');
-            const pillSlot = header.querySelector('.support-pill-slot');
-            if (pill && pillSlot) {
-                pillSlot.style.width = `${Math.ceil(pill.getBoundingClientRect().width)}px`;
-                pillSlot.style.height = `${Math.ceil(pill.getBoundingClientRect().height)}px`;
-            }
         };
 
-        lockFixed(header);
-        lockFixed(bar);
-        header.style.setProperty('z-index', '50', 'important');
-        if (bar) bar.style.setProperty('z-index', '49', 'important');
+        if (bar) {
+            bar.style.setProperty('position', 'fixed', 'important');
+            bar.style.setProperty('top', '0', 'important');
+            bar.style.setProperty('left', '0', 'important');
+            bar.style.setProperty('right', '0', 'important');
+            bar.style.setProperty('background', '#070707', 'important');
+            bar.style.setProperty('z-index', '50', 'important');
+            bar.style.setProperty('transform', 'none', 'important');
+        }
 
         if (float) {
             float.style.setProperty('position', 'relative', 'important');

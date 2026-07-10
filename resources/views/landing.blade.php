@@ -43,34 +43,32 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
-    {{-- Критично: ТІЛЬКИ чорний хедер + надпис fixed. Бігунок і ПІДТРИМКА — у потоці. --}}
+    {{-- ТІЛЬКИ чорна смуга fixed. Бігунок + ПІДТРИМКА скроляться. Без надпису IDI_V_BANYU__. --}}
     <style id="header-fixed-critical">
-        #site-header-bg,
-        #site-header {
+        #site-header-bar {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
             right: 0 !important;
             width: 100% !important;
+            height: var(--header-h, 76px) !important;
             background: #070707 !important;
+            z-index: 50 !important;
+            pointer-events: none !important;
             transform: none !important;
         }
-        #site-header-bg {
-            height: var(--header-h, 83px) !important;
-            z-index: 49 !important;
-            pointer-events: none !important;
-        }
-        #site-header {
-            z-index: 50 !important;
-        }
-        /* Бігунок + ПІДТРИМКА — document flow, НЕ fixed */
         #header-float {
             position: relative !important;
             height: 0 !important;
             z-index: 60 !important;
         }
         main {
-            padding-top: var(--header-h, 83px) !important;
+            padding-top: var(--header-h, 76px) !important;
+        }
+        /* Надпис у шапці не показуємо */
+        .site-header .brand-name,
+        #site-header .brand-name {
+            display: none !important;
         }
     </style>
 
@@ -91,23 +89,12 @@
 </svg>
 
 {{--
-  FIXED (на місці): чорна смуга + надпис IDI_V_BANYU__.
-  СКРОЛЯТЬСЯ: бігунок + кнопка ПІДТРИМКА (#header-float у потоці).
+  FIXED: лише чорна смуга (без надпису).
+  СКРОЛ: бігунок + ПІДТРИМКА.
 --}}
-<div class="site-header-bg" id="site-header-bg" aria-hidden="true"></div>
-<header class="site-header" id="site-header">
-    <div class="container header-inner">
-        <a class="brand" href="{{ route('home') }}" id="site-brand" aria-label="IDI_V_BANYU__ — на головну">
-            {{-- місце під бігунка (бігунок у #header-float) --}}
-            <span class="brand-mark-slot" aria-hidden="true"></span>
-            <span class="brand-name t-display">IDI_V_BANYU__</span>
-        </a>
-        {{-- місце під пігулку, щоб надпис не роз’їжджався --}}
-        <span class="support-pill-slot" aria-hidden="true"></span>
-    </div>
-</header>
+<div class="site-header-bar" id="site-header-bar" aria-hidden="true"></div>
 
-{{-- Бігунок + ПІДТРИМКА — звичайний потік, їдуть зі скролом --}}
+{{-- Бігунок + ПІДТРИМКА в потоці — їдуть зі скролом --}}
 <div class="header-float" id="header-float">
     <div class="container header-float-inner">
         <a class="brand-runner" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
