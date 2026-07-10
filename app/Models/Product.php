@@ -86,19 +86,36 @@ class Product extends Model
                 continue;
             }
 
-            // Якщо є sibling .webp поруч із png/jpg у storage — віддаємо його
+            // public/images/... (в git) або storage (аплоад з адмінки)
+            $fromPublic = str_starts_with($path, 'images/');
+            $diskFile = $fromPublic
+                ? public_path($path)
+                : storage_path('app/public/'.$path);
+            $urlBase = $fromPublic ? asset($path) : asset('storage/'.$path);
+
+            // Sibling .webp поруч із png/jpg
             $webp = null;
             $ext = pathinfo($path, PATHINFO_EXTENSION);
             if ($ext !== '') {
                 $webpRel = preg_replace('/\.'.preg_quote($ext, '/').'$/i', '.webp', $path);
-                if ($webpRel && is_file(storage_path('app/public/'.$webpRel))) {
-                    $webp = asset('storage/'.$webpRel);
+                if ($webpRel) {
+                    $webpFile = $fromPublic
+                        ? public_path($webpRel)
+                        : storage_path('app/public/'.$webpRel);
+                    if (is_file($webpFile)) {
+                        $webp = $fromPublic ? asset($webpRel) : asset('storage/'.$webpRel);
+                    }
                 }
+            }
+
+            // Пропускаємо биті шляхи, щоб не показувати порожні слайди
+            if (! is_file($diskFile) && $webp === null) {
+                continue;
             }
 
             $slides[] = [
                 'webp' => $webp,
-                'fallback' => asset('storage/'.$path),
+                'fallback' => is_file($diskFile) ? $urlBase : ($webp ?? $urlBase),
                 'alt' => "{$this->name} — вміст подарункового боксу",
             ];
         }
