@@ -43,6 +43,28 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
+    {{-- Критично: pin FIXED — бігунок + ПІДТРИМКА БЕЗ фону; надпис скролиться --}}
+    <style id="header-pin-critical">
+        #hdr-pin {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            z-index: 200 !important;
+            height: var(--header-h, 76px) !important;
+            background: transparent !important;
+            transform: none !important;
+            pointer-events: none;
+        }
+        #hdr-pin a { pointer-events: auto; }
+        #hdr-flow {
+            position: relative !important;
+            z-index: 210 !important;
+            pointer-events: none;
+        }
+        #hdr-flow .brand { pointer-events: auto; }
+    </style>
 
     <script type="application/ld+json">{!! $siteJsonLd !!}</script>
     <script type="application/ld+json">{!! $productsJsonLd !!}</script>
@@ -61,26 +83,26 @@
 </svg>
 
 {{--
-  #hdr-fixed  — FIXED: чорний фон + надпис (НЕ скролиться).
-  #hdr-scroll — ПОТІК: тільки бігунок + ПІДТРИМКА (скроляться).
+  #hdr-pin  — FIXED: бігунок + ПІДТРИМКА без фону (НЕ скроляться).
+  #hdr-flow — ПОТІК: надпис IDI_V_BANYU__ без фону (скролиться).
 --}}
-<div class="hdr-fixed" id="hdr-fixed">
-    <div class="container hdr-fixed-inner">
-        <a class="brand" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
-            <span class="brand-mark-slot" aria-hidden="true"></span>
-            <span class="brand-name t-display">IDI_V_BANYU__</span>
-        </a>
-    </div>
-</div>
-
-<div class="hdr-scroll" id="hdr-scroll">
-    <div class="container hdr-scroll-inner">
+<div class="hdr-pin" id="hdr-pin">
+    <div class="container hdr-pin-inner">
         <a class="brand-runner" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <svg class="brand-mark" id="brand-runner" aria-hidden="true"><use href="#i-runner"/></svg>
         </a>
         <a class="support-pill" id="support-pill" href="tel:+{{ $supportPhone }}">
             <span class="support-label">ПІДТРИМКА</span>
             <span class="support-phone">{{ $supportPhone }}</span>
+        </a>
+    </div>
+</div>
+
+<div class="hdr-flow" id="hdr-flow">
+    <div class="container hdr-flow-inner">
+        <a class="brand" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
+            <span class="brand-mark-slot" aria-hidden="true"></span>
+            <span class="brand-name t-display">IDI_V_BANYU__</span>
         </a>
     </div>
 </div>

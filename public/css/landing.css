@@ -220,30 +220,34 @@ button {
 
 /* ---------- Шапка ----------
  *
- * #hdr-fixed  — position:fixed — чорний фон + надпис (НЕ скролиться).
- * #hdr-scroll — звичайний блок у потоці — ТІЛЬКИ бігунок + ПІДТРИМКА (скроляться).
- * Жодних height:0 / transform-трюків.
+ * #hdr-pin  — position:fixed — бігунок + ПІДТРИМКА БЕЗ фону (НЕ скроляться).
+ * #hdr-flow — звичайний блок у потоці — надпис IDI_V_BANYU__ БЕЗ фону (скролиться).
+ * Жодних height:0 / sticky / transform-трюків / чорної смуги.
  */
 
-/* Чорна смуга + надпис — прибиті зверху */
-.hdr-fixed {
+/* Бігунок + пігулка — fixed, прозорий фон (контент видно під ними) */
+.hdr-pin {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    z-index: 50;
+    width: 100%;
+    z-index: 200;
     height: var(--header-h);
-    background: #070707;
-    pointer-events: none; /* кліки йдуть у #hdr-scroll, поки він зверху */
+    background: transparent;
+    transform: none;
+    pointer-events: none;
 }
 
-.hdr-fixed .brand {
+.hdr-pin a {
     pointer-events: auto;
 }
 
-.hdr-fixed-inner {
+.hdr-pin-inner {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 16px;
     height: 100%;
     padding-top: var(--safe-top);
 }
@@ -271,19 +275,24 @@ button {
 }
 
 /*
- * Ряд бігунок + ПІДТРИМКА — РЕАЛЬНА висота в потоці документа.
- * При скролі їде разом зі сторінкою. Фон прозорий (чорне — з #hdr-fixed).
+ * Надпис — РЕАЛЬНА висота в потоці документа, без фону.
+ * При скролі їде разом зі сторінкою поверх контенту.
  */
-.hdr-scroll {
+.hdr-flow {
     position: relative;
-    z-index: 60;
+    z-index: 210;
+    background: transparent;
+    pointer-events: none; /* кліки в порожнечі йдуть у #hdr-pin (пігулка) */
     /* висоту задає контент + padding; JS синхронізує --header-h */
 }
 
-.hdr-scroll-inner {
+.hdr-flow .brand {
+    pointer-events: auto;
+}
+
+.hdr-flow-inner {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
     min-height: var(--header-h);
     padding-top: calc(14px + var(--safe-top));
@@ -1673,7 +1682,7 @@ button {
         margin-bottom: 20px;
     }
 
-    .hdr-scroll-inner {
+    .hdr-flow-inner {
         padding-top: calc(11px + var(--safe-top));
         padding-bottom: 11px;
     }
@@ -1906,7 +1915,7 @@ button {
 
 /* Найвужчі екрани (320–360px): шапка не повинна ламатись */
 @media (max-width: 360px) {
-    .hdr-scroll-inner {
+    .hdr-flow-inner {
         gap: 8px;
     }
 

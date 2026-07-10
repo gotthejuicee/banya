@@ -5,32 +5,34 @@
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
     /* ---------- Шапка ----------
-       #hdr-fixed  — fixed (чорне + надпис).
-       #hdr-scroll — звичайний блок (бігунок + ПІДТРИМКА), скролиться сам. */
+       #hdr-pin  — fixed (бігунок + ПІДТРИМКА, без фону).
+       #hdr-flow — звичайний блок (надпис без фону), скролиться сам. */
     (() => {
-        const fixed = document.getElementById('hdr-fixed');
-        const scroll = document.getElementById('hdr-scroll');
-        if (!fixed || !scroll) return;
+        const pin = document.getElementById('hdr-pin');
+        const flow = document.getElementById('hdr-flow');
+        if (!pin || !flow) return;
 
         const sync = () => {
-            const h = Math.ceil(scroll.getBoundingClientRect().height) || 76;
+            const h = Math.ceil(flow.getBoundingClientRect().height) || 76;
             document.documentElement.style.setProperty('--header-h', `${h}px`);
-            fixed.style.height = `${h}px`;
+            pin.style.setProperty('height', `${h}px`, 'important');
         };
 
-        // Гарантія: fixed шар ніколи не «поїде»
-        fixed.style.setProperty('position', 'fixed', 'important');
-        fixed.style.setProperty('top', '0', 'important');
-        fixed.style.setProperty('left', '0', 'important');
-        fixed.style.setProperty('right', '0', 'important');
-        fixed.style.setProperty('background', '#070707', 'important');
-        fixed.style.setProperty('z-index', '50', 'important');
-        fixed.style.setProperty('transform', 'none', 'important');
+        // Гарантія: pin — fixed, прозорий фон
+        pin.style.setProperty('position', 'fixed', 'important');
+        pin.style.setProperty('top', '0', 'important');
+        pin.style.setProperty('left', '0', 'important');
+        pin.style.setProperty('right', '0', 'important');
+        pin.style.setProperty('width', '100%', 'important');
+        pin.style.setProperty('background', 'transparent', 'important');
+        pin.style.setProperty('z-index', '200', 'important');
+        pin.style.setProperty('transform', 'none', 'important');
 
-        // Гарантія: скрол-ряд — НЕ fixed
-        scroll.style.setProperty('position', 'relative', 'important');
-        scroll.style.removeProperty('top');
-        scroll.style.setProperty('z-index', '60', 'important');
+        // Гарантія: flow — НЕ fixed / НЕ sticky, без фону
+        flow.style.setProperty('position', 'relative', 'important');
+        flow.style.removeProperty('top');
+        flow.style.setProperty('z-index', '210', 'important');
+        flow.style.setProperty('background', 'transparent', 'important');
 
         sync();
         window.addEventListener('resize', sync, { passive: true });
