@@ -13,12 +13,12 @@
         if (!pin || !flow) return;
 
         const sync = () => {
-            const h = Math.ceil(flow.getBoundingClientRect().height) || 76;
+            const h = Math.ceil(flow.getBoundingClientRect().height) || 90;
             document.documentElement.style.setProperty('--header-h', `${h}px`);
             pin.style.setProperty('height', `${h}px`, 'important');
         };
 
-        // Гарантія: pin — fixed, прозорий фон
+        // Гарантія: pin — fixed (бігунок + ПІДТРИМКА + лінія ::after)
         pin.style.setProperty('position', 'fixed', 'important');
         pin.style.setProperty('top', '0', 'important');
         pin.style.setProperty('left', '0', 'important');
@@ -27,8 +27,9 @@
         pin.style.setProperty('background', 'transparent', 'important');
         pin.style.setProperty('z-index', '200', 'important');
         pin.style.setProperty('transform', 'none', 'important');
+        pin.style.setProperty('border', '0', 'important');
 
-        // Гарантія: flow — НЕ fixed / НЕ sticky, без фону
+        // Гарантія: flow — НЕ fixed / НЕ sticky, без фону (надпис скролиться)
         flow.style.setProperty('position', 'relative', 'important');
         flow.style.removeProperty('top');
         flow.style.setProperty('z-index', '210', 'important');

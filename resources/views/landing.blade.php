@@ -43,7 +43,7 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
-    {{-- Критично: pin FIXED — бігунок + ПІДТРИМКА БЕЗ фону; надпис скролиться --}}
+    {{-- Критично: pin FIXED (бігунок + ПІДТРИМКА). Лінія — у #hdr-flow, їде зі скролом. --}}
     <style id="header-pin-critical">
         #hdr-pin {
             position: fixed !important;
@@ -52,12 +52,14 @@
             right: 0 !important;
             width: 100% !important;
             z-index: 200 !important;
-            height: var(--header-h, 76px) !important;
+            height: var(--header-h, 90px) !important;
             background: transparent !important;
             transform: none !important;
-            pointer-events: none;
+            pointer-events: none !important;
+            border: 0 !important;
         }
-        #hdr-pin a { pointer-events: auto; }
+        #hdr-pin a { pointer-events: auto !important; }
+        #hdr-pin::after { content: none !important; display: none !important; }
         #hdr-flow {
             position: relative !important;
             z-index: 210 !important;
@@ -224,7 +226,7 @@
     {{-- Не знаєш, що подарувати? — текст у скрол-боксі (як на Beton) --}}
     <section class="catalog about" id="about">
         <div class="container">
-            <h2 class="section-title">
+            <h2 class="section-title section-title--about">
                 <svg class="section-tri section-tri--rings" viewBox="0 0 65 65" fill="none" aria-hidden="true">
                     <circle cx="32.5" cy="23" r="20" stroke="currentColor" stroke-width="3"/>
                     <circle cx="32.5" cy="42" r="20" stroke="currentColor" stroke-width="3"/>
@@ -240,12 +242,6 @@
                 </div>
                 <div class="about-fade about-fade--top" aria-hidden="true"></div>
                 <div class="about-fade about-fade--bottom" aria-hidden="true"></div>
-                <p class="about-hint" id="about-hint" aria-hidden="true">
-                    <span>Гортайте, щоб читати</span>
-                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="m6 9.5 6 6 6-6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </p>
             </div>
         </div>
     </section>
@@ -256,7 +252,10 @@
 <footer class="site-footer">
     <div class="container footer-inner">
         <div class="footer-socials">
-            <p class="socials-label">Ми в соціальній мережі:</p>
+            <p class="socials-label">
+                <span class="socials-label-d">Ми в соціальних мережах:</span>
+                <span class="socials-label-m">Ми в соціальній мережі:</span>
+            </p>
             <div class="socials-row">
                 @foreach ($socials as $social)
                             <a class="social-link"
