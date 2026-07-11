@@ -30,7 +30,7 @@ class SendOrderToTelegram implements ShouldQueue
             return;
         }
 
-        $product = e($this->order->product?->name ?? 'Не вказано');
+        $product = e($this->order->product?->name ?? 'Підтримка (без набору)');
         $comment = filled($this->order->comment)
             ? e($this->order->comment)
             : '—';

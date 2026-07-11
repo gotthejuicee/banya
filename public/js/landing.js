@@ -309,6 +309,22 @@
         btn.addEventListener('click', () => openModal(btn.dataset.productId, btn.dataset.productName));
     });
 
+    /* ПІДТРИМКА: mobile → tel:; desktop → форма заявки в Telegram */
+    const supportPill = document.getElementById('support-pill');
+    if (supportPill) {
+        const isMobileSupport = () => window.matchMedia('(max-width: 760px)').matches;
+
+        supportPill.addEventListener('click', (e) => {
+            if (isMobileSupport()) {
+                // лишаємо href="tel:..." — нативний дзвінок
+                return;
+            }
+
+            e.preventDefault();
+            openModal('', 'Зв’язок з підтримкою');
+        });
+    }
+
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
 
     document.addEventListener('keydown', (e) => {

@@ -38,10 +38,6 @@ class ProductsTable
                     ->label('Стара ціна')
                     ->formatStateUsing(fn (?int $state): string => $state ? number_format($state, 0, ',', ' ').' ₴' : '—')
                     ->toggleable(),
-                TextColumn::make('badge')
-                    ->label('Бейдж')
-                    ->placeholder('—')
-                    ->toggleable(),
                 ToggleColumn::make('is_active')
                     ->label('На сайті'),
                 TextColumn::make('sort')

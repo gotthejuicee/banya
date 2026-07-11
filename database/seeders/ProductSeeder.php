@@ -92,7 +92,24 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-            Product::updateOrCreate(['slug' => $product['slug']], $product + [
+            $existing = Product::query()->where('slug', $product['slug'])->first();
+
+            if ($existing) {
+                // Не затираємо ціну / photo / name з адмінки.
+                // Галерею bundled завжди відновлюємо (FileUpload часто її зносить).
+                $existing->update([
+                    'image' => $product['image'],
+                    'gallery' => $product['gallery'],
+                    'category' => $product['category'],
+                    'contents' => $product['contents'],
+                    'sort' => $product['sort'],
+                    'badge' => null,
+                ]);
+
+                continue;
+            }
+
+            Product::query()->create($product + [
                 'tagline' => 'Подарунковий банний набір',
                 'description' => 'Готовий подарунок у дерев’яному боксі з гравіюванням.',
                 'old_price' => null,
@@ -102,6 +119,7 @@ class ProductSeeder extends Seeder
                 'photo_light' => null,
                 'image_dark' => null,
                 'image_light' => null,
+                'is_active' => true,
             ]);
         }
     }

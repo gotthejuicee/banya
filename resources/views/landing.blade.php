@@ -94,7 +94,12 @@
         <a class="brand-runner" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <svg class="brand-mark" id="brand-runner" aria-hidden="true"><use href="#i-runner"/></svg>
         </a>
-        <a class="support-pill" id="support-pill" href="tel:+{{ $supportPhone }}">
+        {{-- Desktop: клік → модалка заявки; mobile: tel: дзвінок (див. landing.js) --}}
+        <a class="support-pill"
+           id="support-pill"
+           href="tel:+{{ $supportPhone }}"
+           data-support-phone="{{ $supportPhone }}"
+           aria-label="Підтримка: на телефоні — подзвонити, на комп’ютері — форма заявки">
             <span class="support-label">ПІДТРИМКА</span>
             <span class="support-phone">{{ $supportPhone }}</span>
         </a>

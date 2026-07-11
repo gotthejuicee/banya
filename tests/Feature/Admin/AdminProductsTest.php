@@ -73,4 +73,76 @@ class AdminProductsTest extends TestCase
         $this->get('/')
             ->assertDontSee('Чоловічий набір — світлий бокс', false);
     }
+
+    public function test_saving_product_does_not_wipe_bundled_gallery(): void
+    {
+        $admin = $this->createAdmin();
+        $gallery = [
+            'images/products/gallery/female-light-2.png',
+            'images/products/gallery/female-light-3.png',
+        ];
+
+        $product = Product::create([
+            'slug' => 'dlia-nezaimanoi',
+            'category' => 'female',
+            'name' => 'Жіночий набір — світлий бокс',
+            'tagline' => 'Подарунковий банний набір',
+            'price' => 2290,
+            'image' => 'images/products/box-female-light',
+            'gallery' => $gallery,
+            'sort' => 1,
+            'is_active' => true,
+        ]);
+
+        Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\Products\Pages\EditProduct::class, [
+                'record' => $product->getRouteKey(),
+            ])
+            // FileUpload не бачить images/* → state []. Save не повинен зносити стрілки.
+            ->fillForm([
+                'price' => 2390,
+                'gallery' => [],
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $product->refresh();
+
+        $this->assertSame(2390, $product->price);
+        $this->assertSame($gallery, $product->gallery);
+        $this->assertGreaterThan(1, count($product->cardSlides()));
+    }
+
+    public function test_saving_restores_wiped_default_gallery_by_slug(): void
+    {
+        $admin = $this->createAdmin();
+
+        $product = Product::create([
+            'slug' => 'dlia-nezaimanoi',
+            'category' => 'female',
+            'name' => 'Жіночий набір — світлий бокс',
+            'tagline' => 'Подарунковий банний набір',
+            'price' => 2290,
+            'image' => 'images/products/box-female-light',
+            'gallery' => [], // уже змило
+            'sort' => 1,
+            'is_active' => true,
+        ]);
+
+        Livewire::actingAs($admin)
+            ->test(\App\Filament\Resources\Products\Pages\EditProduct::class, [
+                'record' => $product->getRouteKey(),
+            ])
+            ->fillForm([
+                'price' => 2290,
+                'gallery' => [],
+            ])
+            ->call('save')
+            ->assertHasNoFormErrors();
+
+        $product->refresh();
+
+        $this->assertSame(Product::defaultGalleryForSlug('dlia-nezaimanoi'), $product->gallery);
+        $this->assertGreaterThan(1, count($product->cardSlides()));
+    }
 }

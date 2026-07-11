@@ -46,6 +46,42 @@ class Product extends Model
     }
 
     /**
+     * Стандартна карусель з public/images (сидер / відновлення після зносу FileUpload).
+     *
+     * @return list<string>|null
+     */
+    public static function defaultGalleryForSlug(string $slug): ?array
+    {
+        return match ($slug) {
+            'dlia-nezaimanoho' => [
+                'images/products/gallery/male-light-2.png',
+                'images/products/gallery/male-light-3.png',
+                'images/products/gallery/male-light-4.png',
+                'images/products/gallery/male-light-5.png',
+            ],
+            'dlia-batka-lazni' => [
+                'images/products/gallery/male-dark-2.png',
+                'images/products/gallery/male-dark-3.png',
+                'images/products/gallery/male-dark-4.png',
+                'images/products/gallery/male-dark-5.png',
+            ],
+            'dlia-nezaimanoi' => [
+                'images/products/gallery/female-light-2.png',
+                'images/products/gallery/female-light-3.png',
+                'images/products/gallery/female-light-4.png',
+                'images/products/gallery/female-light-5.png',
+            ],
+            'dlia-tsarytsi-paru' => [
+                'images/products/gallery/female-dark-2.png',
+                'images/products/gallery/female-dark-3.png',
+                'images/products/gallery/female-dark-4.png',
+                'images/products/gallery/female-dark-5.png',
+            ],
+            default => null,
+        };
+    }
+
+    /**
      * Фото картки. Пріоритет: завантажене в адмінці (storage) →
      * стандартне з public (пара webp + png/jpg) → резервна скринька.
      *

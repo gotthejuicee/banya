@@ -36,11 +36,6 @@ class ProductForm
                             ->label('Підзаголовок')
                             ->maxLength(120)
                             ->placeholder('Подарунковий банний набір'),
-                        TextInput::make('badge')
-                            ->label('Бейдж на фото')
-                            ->maxLength(30)
-                            ->placeholder('ХІТ ПРОДАЖІВ')
-                            ->helperText('Порожньо — картка без бейджа'),
                         TextInput::make('price')
                             ->label('Ціна, грн')
                             ->numeric()
@@ -96,7 +91,11 @@ class ProductForm
                             ->disk('public')
                             ->directory('products/gallery')
                             ->maxSize(4096)
-                            ->helperText('Вміст боксу та інші ракурси. На сайті гортайте стрілками поруч із фото.'),
+                            // Порожній state НЕ пишемо в БД — інакше FileUpload зносить
+                            // стандартну карусель images/products/gallery/* при будь-якому Save.
+                            ->dehydrated(fn ($state): bool => is_array($state)
+                                && collect($state)->filter(fn ($v) => filled($v))->isNotEmpty())
+                            ->helperText('Лише нові завантаження в storage. Стандартна карусель сайту не чіпається, якщо поле порожнє.'),
                     ]),
             ]);
     }
