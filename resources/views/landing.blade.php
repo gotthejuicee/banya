@@ -247,7 +247,6 @@
                     @endforeach
                 </div>
                 <div class="about-fade about-fade--top" aria-hidden="true"></div>
-                <div class="about-fade about-fade--bottom" aria-hidden="true"></div>
             </div>
         </div>
     </section>

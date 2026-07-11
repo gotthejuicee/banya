@@ -839,11 +839,11 @@ button {
     color: var(--lime);
 }
 
-/* Плавне розгортання без фіксованих висот: 0fr → 1fr */
+/* Плавне розгортання: висота 0fr→1fr + fade/slide тексту */
 .faq-answer {
     display: grid;
     grid-template-rows: 0fr;
-    transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: grid-template-rows 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .faq-item.is-open .faq-answer {
@@ -862,21 +862,26 @@ button {
     margin: 0 20px;
     padding: 16px 0 20px;
     border-top: 1px solid var(--line);
+    opacity: 0;
+    transform: translateY(-8px);
+    transition:
+        opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.08s,
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
 }
 
-/* Світліший відтінок тієї ж гами: #7a7d96 на панелі не дотягує
-   до контрасту AA для дрібного тексту */
+.faq-item.is-open .faq-answer-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Один сірий колір для всіх абзаців відповіді */
 .faq-answer-content p {
-    color: #9aa0b5;
+    color: #7a7d96;
     font-family: var(--font-accent);
     font-weight: 800;
     font-size: clamp(14px, 1.4vw, 17px);
     line-height: 1.6;
     text-align: left;
-}
-
-.faq-answer-content p:first-child {
-    color: #cfcdd9;
 }
 
 /* ---------- «Не знаєш…» — скрол-бокс (як раніше), без підказки «Гортайте» ---------- */
@@ -898,7 +903,7 @@ button {
     flex-direction: column;
     gap: 22px;
     text-align: left;
-    padding: 0 14px 40px 0;
+    padding: 0 14px 8px 0;
     border: 0;
     border-radius: 0;
     background: transparent;
@@ -929,15 +934,7 @@ button {
     opacity: 0;
 }
 
-.about-fade--bottom {
-    bottom: 0;
-    height: 140px;
-    background: linear-gradient(to bottom, transparent 0%, rgba(7, 7, 7, 0.55) 35%, var(--bg) 92%);
-}
-
-.about-panel.is-at-end .about-fade--bottom {
-    opacity: 0;
-}
+/* Нижнє затемнення прибрали за запитом */
 
 /* Підказку «Гортайте, щоб читати» прибрали — не показуємо */
 .about-hint {
@@ -1405,6 +1402,7 @@ button {
     .pcard-arrow,
     .pcard-cta,
     .faq-answer,
+    .faq-answer-content,
     .faq-chevron {
         transition: none;
     }
@@ -1634,7 +1632,7 @@ button {
         gap: 16px;
         max-height: clamp(210px, 34dvh, 300px);
         overflow-y: auto;
-        padding: 0 12px 36px;
+        padding: 0 12px 8px;
     }
 
     /* Figma about body stays 26/36 even on mobile */
@@ -1644,9 +1642,7 @@ button {
         text-align: left;
     }
 
-    .about-fade--bottom {
-        height: 110px;
-    }
+
 
     .section-title {
         gap: 12px;
