@@ -31,11 +31,12 @@
     @endif
 
     <meta name="theme-color" content="#060608">
-    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-    <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon-48.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}?v={{ filemtime(public_path('favicon.svg')) }}">
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ asset('favicon-48.png') }}?v={{ filemtime(public_path('favicon-48.png')) }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96.png') }}?v={{ filemtime(public_path('favicon-96.png')) }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicon-192.png') }}?v={{ filemtime(public_path('favicon-192.png')) }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}?v={{ filemtime(public_path('favicon.ico')) }}">
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}?v={{ filemtime(public_path('apple-touch-icon.png')) }}">
     <link rel="manifest" href="{{ asset('site.webmanifest') }}">
     <link rel="canonical" href="{{ url('/') }}">
 

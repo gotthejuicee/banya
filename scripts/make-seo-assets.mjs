@@ -13,7 +13,7 @@ await sharp(pub + 'images/banner-boxes.png')
     .toFile(pub + 'images/og.jpg');
 console.log('og.jpg: 1200x630');
 
-// 2) Фавіконки з favicon.svg (бігунець на чорному скругленому квадраті)
+// 2) Фавіконки з favicon.svg (білий бігунець, прозорий фон, крупніше)
 const sizes = [
     [48, 'favicon-48.png'],
     [96, 'favicon-96.png'],
