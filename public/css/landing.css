@@ -100,7 +100,26 @@
 
     --radius: 20px; /* Figma banners / cards radius 20 */
     --radius-lg: 20px;
-    --container: 1200px; /* Figma Frame 3 */
+    /* Контент: Figma 1200; на великих екранах росте (див. min-width) */
+    --container: 1200px;
+    --pad-x: clamp(16px, 2.8vw, 40px);
+
+    /* Fluid type — плавно між phone → desktop */
+    --title-size: clamp(1.25rem, 0.7rem + 2.4vw, 3rem);       /* 20→48 */
+    --title-lh: clamp(1.5rem, 0.85rem + 2.6vw, 3.625rem);      /* 24→58 */
+    --price-size: clamp(2rem, 1.2rem + 2vw, 3rem);             /* 32→48 */
+    --price-lh: clamp(2.4rem, 1.4rem + 2.2vw, 3.625rem);       /* 38→58 */
+    --subtitle-size: clamp(1rem, 0.85rem + 0.6vw, 1.5rem);     /* 16→24 */
+    --subtitle-lh: clamp(1.2rem, 1rem + 0.6vw, 1.8125rem);     /* 19→29 */
+    --faq-q-size: clamp(0.875rem, 0.7rem + 0.7vw, 1.625rem);   /* 14→26 */
+    --faq-q-lh: clamp(1.2rem, 1rem + 0.7vw, 2.25rem);          /* 19→36 */
+    --about-size: clamp(1rem, 0.75rem + 0.9vw, 1.625rem);      /* 16→26 */
+    --about-lh: clamp(1.4rem, 1rem + 1.1vw, 2.25rem);          /* 22→36 */
+    --footer-size: clamp(0.9375rem, 0.8rem + 0.5vw, 1.625rem); /* 15→26 */
+    --catalog-pt: clamp(2.5rem, 2rem + 3vw, 4.5rem);           /* 40→72 */
+    --banner-gap: clamp(8px, 1.5vw, 40px);
+    --products-col-gap: clamp(24px, 4vw, 120px);
+    --products-row-gap: clamp(32px, 3vw, 56px);
 
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
@@ -127,6 +146,7 @@
 html {
     scroll-behavior: smooth;
     color-scheme: dark;
+    overflow-x: clip;
 }
 
 body {
@@ -142,6 +162,7 @@ body {
     min-height: 100vh;
     min-height: 100dvh;
     padding-bottom: var(--cookie-bar-offset);
+    overflow-x: clip;
 }
 
 img {
@@ -188,12 +209,13 @@ button {
     border-radius: 4px;
 }
 
-/* Figma Frame 3: content inset ~40px on 1200 */
+/* Fluid inset: phone 16 → desktop 40; контейнер росте на 2K/4K */
 .container {
     max-width: var(--container);
     margin-inline: auto;
-    padding-left: max(40px, var(--safe-left));
-    padding-right: max(40px, var(--safe-right));
+    padding-left: max(var(--pad-x), var(--safe-left));
+    padding-right: max(var(--pad-x), var(--safe-right));
+    width: 100%;
 }
 
 /* Для скрінрідерів і пошуковиків, невидиме оку (h1 тощо) */
@@ -390,84 +412,92 @@ button {
     color: #ffffff;
 }
 
-/* ---------- Банери — Figma: 540×250, gap 40, radius 20, inset 40, top 106 ---------- */
+/* ---------- Банери — Figma: 540×250, gap 40, radius 20 ---------- */
 
 .banners {
-    /* header 90 + 16 → banners top ~106 as in Figma */
-    padding-top: 16px;
+    padding-top: clamp(8px, 1.2vw, 16px);
 }
 
 .banners-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 40px;
+    gap: var(--banner-gap);
 }
 
 .banner-card {
-    border-radius: 20px;
+    border-radius: var(--radius);
     overflow: hidden;
     background: var(--surface);
     isolation: isolate;
+    min-width: 0;
 }
 
+/* Повне зображення без обрізки (cover різав краї на iPad/tablet) */
 .banner-card img {
+    display: block;
     width: 100%;
     height: auto;
+    object-fit: contain;
+    object-position: center;
 }
 
 /* ---------- Секції каталогу ---------- */
 
 .catalog {
-    padding-top: 72px;
+    padding-top: var(--catalog-pt);
 }
 
 .catalog.about {
-    padding-bottom: 64px;
+    padding-bottom: clamp(40px, 5vw, 64px);
 }
 
 .section-title {
     display: flex;
     align-items: center;
-    gap: 18px;
-    margin-bottom: 30px;
+    gap: clamp(10px, 1.5vw, 18px);
+    margin-bottom: clamp(16px, 2.2vw, 30px);
+    min-width: 0;
 }
 
-/* Заголовки секцій — Figma desktop Inter 900 Italic 48/58, #F5F2F9 */
+/* Заголовки — fluid 20→48 (Figma desktop 48/58) */
 .section-title .t-display {
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
-    font-size: 48px;
-    line-height: 58px;
+    font-size: var(--title-size);
+    line-height: var(--title-lh);
     letter-spacing: 0;
     text-transform: uppercase;
     color: #f5f2f9;
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
-/* Маркери секцій за Figma: 65×65, обводка 3px, #E8F213 */
+/* Маркери секцій: 40→65 */
 .section-tri {
-    width: 65px;
-    height: 65px;
+    width: clamp(40px, 4.5vw, 65px);
+    height: clamp(40px, 4.5vw, 65px);
     flex: none;
     color: #e8f213;
 }
 
-/* ---------- Картки товарів — Figma desktop: sticker 350×338, 2 колонки ---------- */
+/* ---------- Картки товарів — 2 колонки з tablet+, fluid gap ---------- */
 
 .products-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    column-gap: 80px;
-    row-gap: 48px;
+    column-gap: var(--products-col-gap);
+    row-gap: var(--products-row-gap);
+    min-width: 0;
 }
 
-/* Figma: stickers left 160 / 690 → колонки ~350 + gap ~180, тінь 523 */
+/* Desktop+: фіксовані колонки під sticker ~350–420 */
 @media (min-width: 1025px) {
     .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 450px));
+        grid-template-columns: repeat(2, minmax(0, min(450px, 38vw)));
         justify-content: center;
-        column-gap: 120px;
-        row-gap: 56px;
+        column-gap: clamp(64px, 8vw, 140px);
+        row-gap: clamp(48px, 4vw, 64px);
     }
 }
 
@@ -476,6 +506,8 @@ button {
     flex-direction: column;
     align-items: center;
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     text-align: center;
     overflow: visible;
 }
@@ -630,52 +662,53 @@ button {
     display: block;
 }
 
-/* Сабтайтл — Figma desktop 24/29, mobile 16/19, #7A7D96 */
+/* Сабтайтл — fluid 16→24 */
 .pcard-subtitle {
     margin-top: 0;
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
-    font-size: 24px;
-    line-height: 29px;
+    font-size: var(--subtitle-size);
+    line-height: var(--subtitle-lh);
     letter-spacing: 0;
     text-transform: uppercase;
     text-align: center;
     color: #7a7d96;
 }
 
-/* Ціна — Figma desktop 48/58, mobile 36/44, #F5F2F9 */
+/* Ціна — fluid 32→48 */
 .pcard-price {
-    margin-top: 12px;
+    margin-top: clamp(8px, 1vw, 12px);
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
-    font-size: 48px;
-    line-height: 58px;
+    font-size: var(--price-size);
+    line-height: var(--price-lh);
     letter-spacing: 0;
     text-align: center;
     color: #f5f2f9;
 }
 
-/* «Замовити» — Figma 240×70, radius 50, #E8F213, Inter 900 Italic 32/39 #070707 */
+/* «Замовити» — Figma 240×70; на вузьких екранах стискається */
 .pcard-cta {
-    margin-top: 14px;
+    margin-top: clamp(10px, 1.2vw, 14px);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 240px;
-    height: 70px;
-    min-width: 240px;
-    min-height: 70px;
-    padding: 0;
+    width: min(240px, 100%);
+    height: clamp(52px, 8vw, 70px);
+    min-width: 0;
+    min-height: 52px;
+    max-width: 240px;
+    padding: 0 16px;
     border: 0;
     background: #e8f213;
     color: #070707;
     font-family: 'Inter', var(--font-body);
     font-weight: 900;
     font-style: italic;
-    font-size: 32px;
-    line-height: 39px;
+    font-size: clamp(1.25rem, 1rem + 1.2vw, 2rem);
+    line-height: 1.2;
     letter-spacing: 0;
     text-align: center;
     border-radius: 50px;
@@ -822,12 +855,13 @@ button {
 .faq-q-text {
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 26px;
+    font-size: var(--faq-q-size);
     letter-spacing: 0;
-    line-height: 36px;
+    line-height: var(--faq-q-lh);
     color: #f5f2f9;
     text-align: left;
     transition: color 0.25s ease;
+    min-width: 0;
 }
 
 .faq-question:hover .faq-q-text,
@@ -979,13 +1013,13 @@ button {
     border-radius: 6px;
 }
 
-/* Manrope 800, 26px / 36px, #7A7D96 — по лівому краю, як раніше */
+/* Manrope 800, fluid 16→26 / lh, #7A7D96 */
 .about-scroll p {
     color: #7a7d96;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 26px;
-    line-height: 36px;
+    font-size: var(--about-size);
+    line-height: var(--about-lh);
     letter-spacing: 0;
     text-align: left;
 }
@@ -1033,8 +1067,8 @@ button {
 .socials-label {
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 26px;
-    line-height: 36px; /* Figma identical to box height */
+    font-size: var(--footer-size);
+    line-height: 1.35;
     letter-spacing: 0;
     color: #7a7d96;
 }
@@ -1085,8 +1119,8 @@ button {
     text-align: right;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 26px;
-    line-height: 36px;
+    font-size: var(--footer-size);
+    line-height: 1.35;
     letter-spacing: 0;
     color: #7a7d96;
 }
@@ -1458,22 +1492,12 @@ button {
         line-height: 34px;
     }
 
-    .container {
-        padding-left: max(24px, var(--safe-left));
-        padding-right: max(24px, var(--safe-right));
-    }
-
     /* Хедер лишається ширшим за контент і на ноуті */
     .hdr-pin-inner.container,
     .hdr-flow-inner.container {
         max-width: none;
         padding-left: max(16px, var(--safe-left));
         padding-right: max(16px, var(--safe-right));
-    }
-
-    .faq-q-text {
-        font-size: clamp(16px, 2.2vw, 26px);
-        line-height: 1.35;
     }
 
     .pcard-media {
@@ -1502,16 +1526,11 @@ button {
         --brand-mark-h: 55px;
     }
 
-    .container {
-        padding-left: max(19px, var(--safe-left));
-        padding-right: max(19px, var(--safe-right));
-    }
-
     .banners {
         padding-top: 8px;
     }
 
-    /* Figma: banners stack, ~8px gap, radius 20, height ~150 */
+    /* Figma: banners stack, ~8px gap — повна картинка, без crop */
     .banners-grid {
         grid-template-columns: 1fr;
         gap: 8px;
@@ -1519,8 +1538,8 @@ button {
 
     .banner-card img {
         width: 100%;
-        height: 150px;
-        object-fit: cover;
+        height: auto;
+        object-fit: contain;
     }
 
     .products-grid {
@@ -1572,45 +1591,18 @@ button {
         -webkit-filter: blur(15px);
     }
 
-    /* Figma mobile subtitle 16/19 */
-    .pcard-subtitle {
-        margin-top: 0;
-        font-size: 16px;
-        line-height: 19px;
-    }
-
-    /* Figma mobile price 36/44 */
-    .pcard-price {
-        font-size: 36px;
-        line-height: 44px;
-    }
-
-    /* Figma section title mobile 20/24 (каталог / FAQ) */
-    .section-title .t-display {
-        font-size: 20px;
-        line-height: 24px;
-    }
-
-    /* Figma «НЕ ЗНАЄШ…» mobile: 16/19 */
+    /* Mobile: fluid-токени вже дають 16/19, 32–36 price; about title трохи менший */
     .section-title--about .t-display {
-        font-size: 16px;
-        line-height: 19px;
+        font-size: clamp(14px, 4.2vw, 18px);
+        line-height: 1.2;
     }
 
-    /* Figma icons mobile 40×40 */
-    .section-tri {
-        width: 40px;
-        height: 40px;
-    }
-
-    /* Figma CTA same 240×70 / 32px on mobile */
     .pcard-cta {
         width: min(240px, 100%);
-        min-width: 0;
-        height: 70px;
-        min-height: 70px;
-        font-size: 32px;
-        line-height: 39px;
+        max-width: 240px;
+        height: clamp(56px, 14vw, 70px);
+        min-height: 56px;
+        font-size: clamp(1.35rem, 5vw, 2rem);
     }
 
     .catalog {
@@ -1631,12 +1623,6 @@ button {
         padding: 16px 48px 16px 16px;
     }
 
-    /* Figma FAQ Q mobile Manrope 800 14/19 */
-    .faq-q-text {
-        font-size: 14px;
-        line-height: 19px;
-    }
-
     /* Figma chevron mobile 25×25 */
     .faq-chevron {
         right: 12px;
@@ -1654,20 +1640,11 @@ button {
     }
 
     .about-scroll {
-        gap: 16px;
-        max-height: clamp(210px, 34dvh, 300px);
+        gap: 14px;
+        max-height: clamp(200px, 38dvh, 320px);
         overflow-y: auto;
-        padding: 0 12px 8px;
+        padding: 0 8px 8px 0;
     }
-
-    /* Figma about body stays 26/36 even on mobile */
-    .about-scroll p {
-        font-size: 26px;
-        line-height: 36px;
-        text-align: left;
-    }
-
-
 
     .section-title {
         gap: 12px;
@@ -1924,15 +1901,16 @@ button {
     }
 }
 
-/* Найвужчі екрани (320–359px): трохи стискаємо шапку, не ламаємо Figma-пропорції */
+/* Найвужчі екрани (320–359px) */
 @media (max-width: 359px) {
     .hdr-flow-inner {
         gap: 8px;
     }
 
     :root {
-        --brand-mark-w: 48px;
-        --brand-mark-h: 40px;
+        --brand-mark-w: 44px;
+        --brand-mark-h: 37px;
+        --pad-x: 12px;
     }
 
     .brand-mark-slot {
@@ -1941,16 +1919,277 @@ button {
     }
 
     .support-pill {
-        width: 100px;
-        min-width: 100px;
-        max-width: 100px;
+        width: 96px;
+        min-width: 96px;
+        max-width: 96px;
+        height: 44px;
+        min-height: 44px;
         padding: 0 4px;
     }
 
     .support-label,
     .support-phone {
-        font-size: 11px;
-        line-height: 13px;
+        font-size: 10px;
+        line-height: 12px;
+    }
+
+    .pcard-media {
+        --pcard-frame: min(200px, calc(100vw - 100px));
+        gap: 4px;
+    }
+
+    .products-grid {
+        gap: 36px;
+    }
+
+    .copyright,
+    .socials-label {
+        font-size: 13px;
+        line-height: 1.3;
+    }
+}
+
+/* ---------- Планшет portrait (761–899): 1 колонка товарів, 2 банери ---------- */
+@media (min-width: 761px) and (max-width: 899px) {
+    .banners-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(12px, 2vw, 20px);
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        row-gap: 40px;
+    }
+
+    .pcard-media {
+        --pcard-frame: min(300px, 55vw);
+    }
+
+    .product-card {
+        width: min(100%, 420px);
+    }
+
+    .support-pill {
+        width: auto;
+        min-width: 150px;
+        max-width: 190px;
+        height: 48px;
+        padding: 0 12px;
+    }
+
+    .cookie-inner {
+        width: min(520px, 90vw);
+    }
+}
+
+/* ---------- Планшет landscape / iPad (900–1024) — 2 колонки, компактні бокси ---------- */
+@media (min-width: 900px) and (max-width: 1024px) {
+    .banners-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(12px, 2vw, 24px);
+    }
+
+    .banner-card img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr 1fr;
+        column-gap: clamp(16px, 2.5vw, 36px);
+        row-gap: clamp(28px, 4vw, 40px);
+    }
+
+    .pcard-media {
+        --pcard-frame: min(240px, 28vw);
+        gap: 6px;
+    }
+
+    .pcard-arrow {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        flex: 0 0 40px;
+        margin-top: calc((var(--pcard-frame) - 40px) / 2);
+    }
+
+    .pcard-arrow::before {
+        width: 40px;
+        height: 40px;
+    }
+
+    .support-pill {
+        width: auto;
+        min-width: 160px;
+        max-width: 200px;
+        height: 48px;
+        padding: 0 14px;
+    }
+
+    .support-phone {
+        font-size: 14px;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        min-height: 100px;
+    }
+
+    .cookie-inner {
+        width: min(560px, 92vw);
+    }
+}
+
+/* ---------- Ноут / стандартний desktop (1025–1399) — Figma 1200 ---------- */
+@media (min-width: 1025px) and (max-width: 1399px) {
+    :root {
+        --container: 1200px;
+        --pad-x: 40px;
+    }
+
+    .pcard-media {
+        --pcard-frame: min(350px, 28vw);
+    }
+}
+
+/* ---------- Великий монітор (1400–1679) ---------- */
+@media (min-width: 1400px) {
+    :root {
+        --container: 1320px;
+        --pad-x: 40px;
+    }
+
+    .pcard-media {
+        --pcard-frame: 360px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 480px));
+        column-gap: 100px;
+    }
+}
+
+/* ---------- Wide / ultrawide (1680–1919) ---------- */
+@media (min-width: 1680px) {
+    :root {
+        --container: 1480px;
+    }
+
+    .pcard-media {
+        --pcard-frame: 380px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 500px));
+        column-gap: 120px;
+    }
+
+    .banners-grid {
+        gap: 48px;
+    }
+
+    .brand-name {
+        font-size: 42px;
+        line-height: 50px;
+    }
+}
+
+/* ---------- Full HD+ / TV (1920–2559) ---------- */
+@media (min-width: 1920px) {
+    :root {
+        --container: min(1600px, 86vw);
+        --pad-x: clamp(40px, 3vw, 56px);
+        --title-size: 3rem;
+        --title-lh: 3.625rem;
+        --price-size: 3rem;
+        --price-lh: 3.625rem;
+    }
+
+    .pcard-media {
+        --pcard-frame: 400px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 520px));
+        column-gap: 140px;
+        row-gap: 64px;
+    }
+
+    .support-pill {
+        width: 230px;
+        min-width: 230px;
+    }
+
+    .cookie-inner {
+        width: min(720px, 48vw);
+    }
+}
+
+/* ---------- 2K / 4K TV (2560+) — не розтягуємо в нескінченність ---------- */
+@media (min-width: 2560px) {
+    :root {
+        --container: min(1760px, 72vw);
+        --pad-x: 48px;
+    }
+
+    .pcard-media {
+        --pcard-frame: 420px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 540px));
+        column-gap: 160px;
+    }
+
+    .brand-name {
+        font-size: 44px;
+        line-height: 52px;
+    }
+
+    .section-tri {
+        width: 70px;
+        height: 70px;
+    }
+}
+
+/* ---------- Landscape phone / короткий viewport ---------- */
+@media (max-height: 480px) and (orientation: landscape) {
+    .banners {
+        padding-top: 6px;
+    }
+
+    .banner-card img {
+        width: 100%;
+        height: auto;
+        max-height: 140px;
+        object-fit: contain;
+    }
+
+    .catalog {
+        padding-top: 28px;
+    }
+
+    .about-scroll {
+        max-height: min(180px, 50dvh);
+    }
+
+    .hdr-flow-inner {
+        padding-top: calc(8px + var(--safe-top));
+        padding-bottom: 8px;
+    }
+
+    :root {
+        --header-h: 64px;
+    }
+}
+
+/* ---------- Високі tablet landscape (iPad Pro тощо) ---------- */
+@media (min-width: 1024px) and (max-width: 1366px) and (orientation: landscape) {
+    .pcard-media {
+        --pcard-frame: min(320px, 30vw);
     }
 }
 
