@@ -1891,10 +1891,12 @@ button {
     }
 
     .cookie-accept {
-        width: min(282px, 100%);
+        width: auto;
         min-width: 0;
+        max-width: none;
         height: 28px;
         min-height: 28px;
+        padding: 0 20px; /* по ширині тексту, без «крил» на всю плашку */
         border-radius: 20px;
         font-size: 12px;
         line-height: 16px;
