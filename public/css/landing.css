@@ -259,6 +259,17 @@ button {
     padding-top: var(--safe-top);
 }
 
+/* Laptop/PC: лого і ПІДТРИМКА майже до країв екрана (не 1200-колонка) */
+@media (min-width: 761px) {
+    .hdr-pin-inner.container,
+    .hdr-flow-inner.container {
+        max-width: none;
+        width: 100%;
+        padding-left: max(16px, var(--safe-left));
+        padding-right: max(16px, var(--safe-right));
+    }
+}
+
 .brand {
     display: inline-flex;
     align-items: center;
@@ -470,9 +481,10 @@ button {
 }
 
 .pcard-media {
+    --pcard-frame: 350px;
     display: flex;
-    /* Стрілки центруються по фіксованій висоті боксу — не стрибають */
-    align-items: center;
+    /* flex-start + margin: стрілки по центру фото, не з урахуванням тіні */
+    align-items: flex-start;
     justify-content: center;
     width: 100%;
     gap: clamp(12px, 1.6vw, 20px);
@@ -482,7 +494,6 @@ button {
 
 /* Фіксований кадр: 350×350 + місце під тінь. Висота НЕ залежить від слайду. */
 .pcard-box {
-    --pcard-frame: 350px;
     position: relative;
     flex: 0 0 var(--pcard-frame);
     width: var(--pcard-frame);
@@ -556,11 +567,13 @@ button {
     pointer-events: none;
 }
 
-/* Figma chevron hit 50×50 — завжди на місці (flex center по фікс. боксу) */
+/* Figma chevron 50×50 — по вертикалі середина кадру фото (не +тінь) */
 .pcard-arrow {
     position: relative;
     flex: 0 0 50px;
-    align-self: center;
+    align-self: flex-start;
+    /* (висота фото − висота кнопки) / 2 */
+    margin-top: calc((var(--pcard-frame) - 50px) / 2);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1450,13 +1463,24 @@ button {
         padding-right: max(24px, var(--safe-right));
     }
 
+    /* Хедер лишається ширшим за контент і на ноуті */
+    .hdr-pin-inner.container,
+    .hdr-flow-inner.container {
+        max-width: none;
+        padding-left: max(16px, var(--safe-left));
+        padding-right: max(16px, var(--safe-right));
+    }
+
     .faq-q-text {
         font-size: clamp(16px, 2.2vw, 26px);
         line-height: 1.35;
     }
 
-    .pcard-box {
+    .pcard-media {
         --pcard-frame: min(350px, 42vw, 100%);
+    }
+
+    .pcard-box {
         flex: 0 0 var(--pcard-frame);
         width: var(--pcard-frame);
         max-width: var(--pcard-frame);
@@ -1505,6 +1529,7 @@ button {
     }
 
     .pcard-media {
+        --pcard-frame: min(228px, calc(100vw - 120px));
         gap: 8px;
         margin-bottom: 16px;
     }
@@ -1516,6 +1541,7 @@ button {
         min-width: 50px;
         min-height: 50px;
         flex: 0 0 50px;
+        margin-top: calc((var(--pcard-frame) - 50px) / 2);
     }
 
     .pcard-arrow::before {
@@ -1525,7 +1551,6 @@ button {
 
     /* Figma sticker mobile: 228×220 */
     .pcard-box {
-        --pcard-frame: min(228px, calc(100vw - 120px));
         flex: 0 0 var(--pcard-frame);
         width: var(--pcard-frame);
         max-width: var(--pcard-frame);
@@ -1795,30 +1820,30 @@ button {
     to { transform: translateY(0); }
 }
 
-/* Desktop cookie — в 2 раза компактнее макета (≈450×49, text 12, btn 97×26) */
+/* Cookie ×0.75 Figma (×1.5 от компактного): 675×74, text 18, btn 146×39 */
 .cookie-inner {
     pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    width: min(450px, 100%);
-    min-height: 49px;
+    gap: 16px;
+    width: min(675px, 100%);
+    min-height: 74px;
     margin-inline: auto;
-    padding: 5px 6px 5px 14px;
+    padding: 8px 10px 8px 20px;
     background: #1e212b;
     border: 1px solid #12141a;
-    border-radius: 25px;
+    border-radius: 37px;
 }
 
 .cookie-text {
     flex: 1;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 12px;
-    line-height: 16px;
+    font-size: 18px;
+    line-height: 24px;
     letter-spacing: 0;
-    text-align: center;
+    text-align: left; /* к лівому краю плашки */
     color: #7a7d96;
 }
 
@@ -1831,18 +1856,18 @@ button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 97px;
-    height: 26px;
-    min-width: 97px;
-    min-height: 26px;
+    width: 146px;
+    height: 39px;
+    min-width: 146px;
+    min-height: 39px;
     padding: 0;
     border: 0;
-    border-radius: 25px;
+    border-radius: 37px;
     background: #593aa1;
     color: #f5f2f9;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
-    font-size: 12px;
+    font-size: 18px;
     line-height: 1;
     letter-spacing: 0;
     transition: background 0.2s ease, transform 0.15s ease;
