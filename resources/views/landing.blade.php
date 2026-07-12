@@ -327,37 +327,37 @@
                 {{-- Honeypot: людина цього поля не бачить --}}
                 <input class="hp-field" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
 
-                <div class="form-group">
-                    <label class="visually-hidden" for="field-name">Ваше ім’я</label>
-                    <input type="text" id="field-name" name="name" placeholder="Напишіть ваше ім’я" autocomplete="name" required>
-                    <p class="field-error" data-error="name"></p>
+                {{-- Поля форми: ховаються після успішної відправки --}}
+                <div id="order-form-fields">
+                    <div class="form-group">
+                        <label class="visually-hidden" for="field-name">Ваше ім’я</label>
+                        <input type="text" id="field-name" name="name" placeholder="Напишіть ваше ім’я" autocomplete="name" required>
+                        <p class="field-error" data-error="name"></p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="visually-hidden" for="field-phone">Телефон</label>
+                        <input type="tel" id="field-phone" name="phone" placeholder="Введіть номер телефону" inputmode="tel" autocomplete="tel" required>
+                        <p class="field-error" data-error="phone"></p>
+                    </div>
+
+                    <p class="field-error field-error--global" data-error="global" role="alert" aria-live="assertive"></p>
+
+                    <button type="submit" class="btn btn--violet btn--block" id="order-submit">
+                        <span class="t-display">Відправити</span>
+                    </button>
                 </div>
 
-                <div class="form-group">
-                    <label class="visually-hidden" for="field-phone">Телефон</label>
-                    <input type="tel" id="field-phone" name="phone" placeholder="Введіть номер телефону" inputmode="tel" autocomplete="tel" required>
-                    <p class="field-error" data-error="phone"></p>
+                {{-- Успіх у тій самій модалці: жовтий текст + смужка-таймер, через 3с закриється --}}
+                <div class="order-success" id="order-success" hidden>
+                    <p class="order-success-msg t-display" id="order-success-msg" role="status" aria-live="polite">
+                        Дякуємо за замовлення
+                    </p>
+                    <div class="order-success-bar" aria-hidden="true">
+                        <span class="order-success-bar-fill" id="order-success-bar-fill"></span>
+                    </div>
                 </div>
-
-                <p class="field-error field-error--global" data-error="global" role="alert" aria-live="assertive"></p>
-
-                <button type="submit" class="btn btn--violet btn--block" id="order-submit">
-                    <span class="t-display">Відправити</span>
-                </button>
             </form>
-        </div>
-
-        <div class="modal-view modal-success" id="modal-success-view" role="status" aria-live="polite" hidden>
-            <svg class="success-bolt" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <path d="M36 4 14 36h12l-4 24 22-32H32l4-24Z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-            </svg>
-            <h3 class="modal-title t-display">Заявку прийнято!</h3>
-            <p class="success-text" id="success-message">Дякуємо! Ми з вами зв’яжемося найближчим часом.</p>
-            <button type="button" class="btn btn--lime btn--block" data-close>
-                <span class="t-display">Супер</span>
-            </button>
-            {{-- Смужка-таймер: вікно закриється саме через кілька секунд --}}
-            <div class="success-progress" aria-hidden="true"></div>
         </div>
     </div>
 </div>

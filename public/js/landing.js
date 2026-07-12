@@ -179,18 +179,37 @@
     const modal = document.getElementById('order-modal');
     const modalPanel = modal?.querySelector('.modal-panel');
     const formView = document.getElementById('modal-form-view');
-    const successView = document.getElementById('modal-success-view');
     const form = document.getElementById('order-form');
+    const formFields = document.getElementById('order-form-fields');
+    const successBlock = document.getElementById('order-success');
+    const successBarFill = document.getElementById('order-success-bar-fill');
     const submitBtn = document.getElementById('order-submit');
     const productIdField = document.getElementById('field-product-id');
     const productNameEl = document.getElementById('modal-product-name');
-    const successMessage = document.getElementById('success-message');
     const submitLabel = submitBtn.querySelector('.t-display');
     const defaultSubmitText = submitLabel.textContent;
+    const SUCCESS_AUTO_CLOSE_MS = 3000;
 
     let lastFocused = null;
     let successTimer = null;
     let keyboardTimer = null;
+
+    const resetFormUi = () => {
+        form?.reset();
+        clearErrors();
+        if (formFields) formFields.hidden = false;
+        if (successBlock) successBlock.hidden = true;
+        if (successBarFill) {
+            successBarFill.style.animation = 'none';
+            // force reflow so next open restarts animation
+            void successBarFill.offsetWidth;
+            successBarFill.style.animation = '';
+        }
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitLabel.textContent = defaultSubmitText;
+        }
+    };
 
     const clearErrors = () => {
         modal.querySelectorAll('.field-error').forEach((el) => {
@@ -253,11 +272,12 @@
 
     const openModal = (productId, productName) => {
         lastFocused = document.activeElement;
+        clearTimeout(successTimer);
+        successTimer = null;
+        resetFormUi();
         productIdField.value = productId;
         productNameEl.textContent = productName;
-        formView.hidden = false;
-        successView.hidden = true;
-        clearErrors();
+        if (formView) formView.hidden = false;
         modal.hidden = false;
         lockScroll();
         setTimeout(() => {
@@ -273,9 +293,22 @@
         resetModalKeyboard();
         modal.hidden = true;
         unlockScroll();
+        resetFormUi();
+        lastFocused?.focus?.();
+    };
+
+    const showInlineSuccess = () => {
         form.reset();
         clearErrors();
-        lastFocused?.focus?.();
+        if (formFields) formFields.hidden = true;
+        if (successBlock) successBlock.hidden = false;
+        if (successBarFill) {
+            successBarFill.style.animation = 'none';
+            void successBarFill.offsetWidth;
+            successBarFill.style.animation = `order-success-countdown ${SUCCESS_AUTO_CLOSE_MS}ms linear forwards`;
+        }
+        clearTimeout(successTimer);
+        successTimer = setTimeout(closeModal, SUCCESS_AUTO_CLOSE_MS);
     };
 
     modal.addEventListener('focusin', (e) => focusFieldInModal(e.target));
@@ -377,20 +410,18 @@
                 throw new Error(`HTTP ${response.status}`);
             }
 
-            const data = await response.json();
-            if (data.message) successMessage.textContent = data.message;
-            formView.hidden = true;
-            successView.hidden = false;
-            successView.querySelector('button')?.focus();
-
-            // Підтвердження закривається саме — кнопка лише для нетерплячих
-            clearTimeout(successTimer);
-            successTimer = setTimeout(closeModal, 4000);
+            // Успіх: поля зникають, жовтий «Дякуємо…» у тій самій модалці, через ~4с закриється
+            showInlineSuccess();
         } catch (err) {
             showError('global', 'Щось пішло не так. Спробуйте ще раз або зателефонуйте нам.');
-        } finally {
             submitBtn.disabled = false;
             submitLabel.textContent = defaultSubmitText;
+        } finally {
+            // На success кнопка вже hidden — не повертаємо стан, щоб не миготіло
+            if (formFields && !formFields.hidden) {
+                submitBtn.disabled = false;
+                submitLabel.textContent = defaultSubmitText;
+            }
         }
     });
 })();
