@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\FaqItem;
 use App\Models\Product;
 use App\Models\Setting;
 use App\Support\OpenGraph;
@@ -19,10 +18,10 @@ class LandingController extends Controller
             ->get()
             ->groupBy('category');
 
-        $faq = FaqItem::query()
-            ->published()
-            ->get()
-            ->map(fn (FaqItem $item) => ['q' => $item->question, 'a' => $item->paragraphs])
+        // FAQ з config/landing.php — щоб git pull одразу оновлював тексти на сайті
+        $faq = collect(config('landing.faq', []))
+            ->map(fn (array $item) => ['q' => $item['q'], 'a' => $item['a']])
+            ->values()
             ->all();
 
         $aboutText = Setting::get('about_text', config('landing.about'));

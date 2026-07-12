@@ -35,20 +35,11 @@ class AdminFaqTest extends TestCase
         $this->assertSame(['Так.', 'По всій Україні.'], $item->paragraphs);
     }
 
-    public function test_inactive_faq_is_hidden_on_landing(): void
+    public function test_landing_shows_faq_from_config(): void
     {
-        $this->seedLandingFixtures();
-        $admin = $this->createAdmin();
-        $item = FaqItem::query()->where('question', 'Як замовити?')->first();
-
-        Livewire::actingAs($admin)
-            ->test(ManageFaqItems::class)
-            ->callTableAction('edit', $item, data: [
-                'question' => $item->question,
-                'answer' => $item->answer,
-                'is_active' => false,
-            ]);
-
-        $this->get('/')->assertDontSee('Як замовити?', false);
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('Не знаєте, що подарувати?', false)
+            ->assertSee('Подарунковий банний набір «Іди в баню»', false);
     }
 }
