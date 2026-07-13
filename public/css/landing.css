@@ -186,7 +186,6 @@ button {
 
 /* Material/Android: миттєвий тап без затримки double-tap zoom */
 .brand,
-.brand-runner,
 .support-pill,
 .social-link,
 .pcard-arrow,
@@ -247,44 +246,28 @@ button {
  * Жодних height:0 / sticky / transform-трюків / чорної смуги.
  */
 
-/* Бігунок + пігулка — fixed. Лінія НЕ тут: інакше ріже баннери при скролі. */
-.hdr-pin {
-    position: fixed;
+/* Хедер: суцільна темна смуга, закріплена вгорі (sticky) — стабільно на iOS.
+   Фон = колір сторінки, контент безшовно ховається під хедером. */
+.site-header {
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
     z-index: 200;
-    height: var(--header-h);
-    background: transparent;
-    transform: none;
-    pointer-events: none;
-    border: 0;
+    background: var(--bg);
+    padding-top: var(--safe-top);
 }
 
-.hdr-pin a {
-    pointer-events: auto;
-}
-
-/* Лінію з fixed-шапки прибрали навмисно */
-.hdr-pin::after {
-    content: none;
-    display: none;
-}
-
-.hdr-pin-inner {
+.header-inner {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    height: 100%;
-    padding-top: var(--safe-top);
+    min-height: var(--header-h);
+    padding-block: 12px;
 }
 
 /* Laptop/PC: лого і ПІДТРИМКА майже до країв екрана (не 1200-колонка) */
 @media (min-width: 761px) {
-    .hdr-pin-inner.container,
-    .hdr-flow-inner.container {
+    .header-inner.container {
         max-width: none;
         width: 100%;
         padding-left: max(16px, var(--safe-left));
@@ -299,54 +282,11 @@ button {
     min-width: 0;
 }
 
-/* Невидимий слот = ширина бігунка, щоб надпис стояв праворуч від нього */
-.brand-mark-slot {
-    width: var(--brand-mark-w);
-    height: var(--brand-mark-h);
-    flex: none;
-    visibility: hidden;
-}
-
 .brand-name {
     font-size: 40px;
     line-height: 48px;
     white-space: nowrap;
     color: var(--text);
-}
-
-/*
- * Надпис + лінія шапки — у потоці документа.
- * На top: лінія під хедером (Figma Line 2).
- * При скролі — їде вниз разом із надписом, НЕ ріже баннери.
- * Бігунок / ПІДТРИМКА лишаються fixed без лінії.
- */
-.hdr-flow {
-    position: relative;
-    z-index: 210;
-    background: transparent;
-    pointer-events: none; /* кліки в порожнечі йдуть у #hdr-pin (пігулка) */
-    /* висоту задає контент + padding; JS синхронізує --header-h */
-    border-bottom: 1px solid var(--header-line);
-}
-
-.hdr-flow .brand {
-    pointer-events: auto;
-}
-
-.hdr-flow-inner {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    min-height: var(--header-h);
-    /* Figma: logo top ~16, header zone ~90 */
-    padding-top: calc(16px + var(--safe-top));
-    padding-bottom: 16px;
-}
-
-.brand-runner {
-    display: inline-flex;
-    align-items: center;
-    flex: none;
 }
 
 .brand-mark {
@@ -357,7 +297,7 @@ button {
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.brand-runner:hover .brand-mark {
+.brand:hover .brand-mark {
     transform: translateX(4px);
 }
 
@@ -1511,8 +1451,7 @@ button {
     }
 
     /* Хедер лишається ширшим за контент і на ноуті */
-    .hdr-pin-inner.container,
-    .hdr-flow-inner.container {
+    .header-inner.container {
         max-width: none;
         padding-left: max(16px, var(--safe-left));
         padding-right: max(16px, var(--safe-right));
@@ -1669,7 +1608,7 @@ button {
         margin-bottom: 20px;
     }
 
-    .hdr-flow-inner {
+    .header-inner {
         /* Figma logo top 21 */
         padding-top: calc(18px + var(--safe-top));
         padding-bottom: 14px;
@@ -1678,11 +1617,6 @@ button {
     /* На мобайлі надпис ховаємо — лишається бігунок + пігулка */
     .brand-name {
         display: none;
-    }
-
-    .brand-mark-slot {
-        width: var(--brand-mark-w);
-        height: var(--brand-mark-h);
     }
 
     /* Figma mobile support pill 108×48, phone Inter 900 12/15 */
@@ -1923,7 +1857,7 @@ button {
 
 /* Найвужчі екрани (320–359px) */
 @media (max-width: 359px) {
-    .hdr-flow-inner {
+    .header-inner {
         gap: 8px;
     }
 
@@ -1931,11 +1865,6 @@ button {
         --brand-mark-w: 44px;
         --brand-mark-h: 37px;
         --pad-x: 12px;
-    }
-
-    .brand-mark-slot {
-        width: var(--brand-mark-w);
-        height: var(--brand-mark-h);
     }
 
     .support-pill {
@@ -2196,7 +2125,7 @@ button {
         max-height: min(180px, 50dvh);
     }
 
-    .hdr-flow-inner {
+    .header-inner {
         padding-top: calc(8px + var(--safe-top));
         padding-bottom: 8px;
     }
@@ -2216,7 +2145,7 @@ button {
 /* ---------- Touch-пристрої: без «залиплих» hover-ефектів ---------- */
 
 @media (hover: none) {
-    .brand-runner:hover .brand-mark,
+    .brand:hover .brand-mark,
     .support-pill:hover,
     .pcard-arrow:hover,
     .pcard-cta:hover,
