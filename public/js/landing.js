@@ -4,40 +4,65 @@
 
     const csrf = document.querySelector('meta[name="csrf-token"]')?.content ?? '';
 
-    /* ---------- Шапка ----------
-       #hdr-pin  — fixed (бігунок + ПІДТРИМКА, без фону).
-       #hdr-flow — звичайний блок (надпис без фону), скролиться сам. */
+    /* Якщо body лишився залоченим після модалки/старого JS — відпускаємо скрол */
     (() => {
-        const pin = document.getElementById('hdr-pin');
-        const flow = document.getElementById('hdr-flow');
-        if (!pin || !flow) return;
+        const b = document.body;
+        if (b && (b.style.position === 'fixed' || b.style.overflow === 'hidden')) {
+            ['position', 'top', 'left', 'right', 'overflow', 'width'].forEach((p) => {
+                b.style[p] = '';
+            });
+        }
+    })();
+
+    /* ---------- Хедер fixed: висота спейсера = реальна висота шапки ---------- */
+    (() => {
+        const siteHeader = document.getElementById('site-header');
+        const spacer = document.getElementById('site-header-spacer');
+        if (!siteHeader || !spacer) return;
 
         const sync = () => {
-            const h = Math.ceil(flow.getBoundingClientRect().height) || 90;
-            document.documentElement.style.setProperty('--header-h', `${h}px`);
-            pin.style.setProperty('height', `${h}px`, 'important');
+            const h = Math.ceil(siteHeader.getBoundingClientRect().height) || 90;
+            document.documentElement.style.setProperty('--header-offset', `${h}px`);
+            spacer.style.height = `${h}px`;
         };
-
-        // Гарантія: pin — fixed (бігунок + ПІДТРИМКА + лінія ::after)
-        pin.style.setProperty('position', 'fixed', 'important');
-        pin.style.setProperty('top', '0', 'important');
-        pin.style.setProperty('left', '0', 'important');
-        pin.style.setProperty('right', '0', 'important');
-        pin.style.setProperty('width', '100%', 'important');
-        pin.style.setProperty('background', 'transparent', 'important');
-        pin.style.setProperty('z-index', '200', 'important');
-        pin.style.setProperty('transform', 'none', 'important');
-        pin.style.setProperty('border', '0', 'important');
-
-        // Гарантія: flow — НЕ fixed / НЕ sticky, без фону (надпис скролиться)
-        flow.style.setProperty('position', 'relative', 'important');
-        flow.style.removeProperty('top');
-        flow.style.setProperty('z-index', '210', 'important');
-        flow.style.setProperty('background', 'transparent', 'important');
 
         sync();
         window.addEventListener('resize', sync, { passive: true });
         if (document.fonts?.ready) document.fonts.ready.then(sync);
+    })();
+
+    /* ---------- Круглий бігунок після скролу (незалежний від хедера) ---------- */
+    (() => {
+        const brandFloat = document.getElementById('brand-float');
+        if (!brandFloat) return;
+
+        const OPEN_AT = 64;
+        const CLOSE_AT = 12;
+        let open = false;
+        let ticking = false;
+
+        const setOpen = (next) => {
+            if (next === open) return;
+            open = next;
+            document.body.classList.toggle('is-scrolled', open);
+            brandFloat.classList.toggle('is-open', open);
+            brandFloat.setAttribute('aria-hidden', open ? 'false' : 'true');
+            brandFloat.tabIndex = open ? 0 : -1;
+        };
+
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(() => {
+                const y = window.scrollY || document.documentElement.scrollTop || 0;
+                if (!open && y >= OPEN_AT) setOpen(true);
+                else if (open && y <= CLOSE_AT) setOpen(false);
+                ticking = false;
+            });
+        };
+
+        onScroll();
+        window.addEventListener('scroll', onScroll, { passive: true });
     })();
 
     /* ---------- About: градієнт + підказка «Гортайте» ---------- */

@@ -146,7 +146,12 @@
 html {
     scroll-behavior: smooth;
     color-scheme: dark;
-    overflow-x: clip;
+    /*
+     * ВАЖЛИВО: НЕ став overflow-x: clip/hidden на body!
+     * Будь-який overflow ≠ visible на body робить його scrollport —
+     * position:sticky ламається, а fixed+скрол/тачпад глючать у Chrome/Edge.
+     * Горизонтальний виліт ріжемо max-width, не overflow.
+     */
 }
 
 body {
@@ -158,11 +163,10 @@ body {
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     -webkit-tap-highlight-color: transparent;
-    overscroll-behavior-y: contain;
     min-height: 100vh;
     min-height: 100dvh;
     padding-bottom: var(--cookie-bar-offset);
-    overflow-x: clip;
+    max-width: 100%;
 }
 
 img {
@@ -186,6 +190,7 @@ button {
 
 /* Material/Android: миттєвий тап без затримки double-tap zoom */
 .brand,
+.brand-float,
 .support-pill,
 .social-link,
 .pcard-arrow,
@@ -240,33 +245,29 @@ button {
 }
 
 /* ---------- Шапка ----------
- *
- * #hdr-pin  — position:fixed — бігунок + ПІДТРИМКА БЕЗ фону (НЕ скроляться).
- * #hdr-flow — звичайний блок у потоці — надпис IDI_V_BANYU__ БЕЗ фону (скролиться).
- * Жодних height:0 / sticky / transform-трюків / чорної смуги.
+ * position: fixed — завжди прибитий до viewport.
+ * Спейсер у потоці тримає висоту, щоб контент не залазив під хедер.
+ * brand-float — окремий круглий бігунок після скролу.
  */
-
-/* Чорна смуга-хедер зафіксована вгорі (body::before, НЕ скролиться), а бігунок +
-   IDI_V_BANYU__ + ПІДТРИМКА лежать у потоці й ЇДУТЬ зі сторінкою під смугу.
-   Плаває тільки суцільно-чорна смуга (= фон), тож будь-який iOS-джитер невидимий;
-   самі елементи — у потоці, тому не «плавають». */
-body::before {
-    content: '';
+.site-header {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    height: calc(var(--header-h) + var(--safe-top));
+    width: 100%;
+    z-index: 1000;
     background: var(--bg);
-    z-index: 40;
-    pointer-events: none;
+    padding-top: var(--safe-top);
 }
 
-.site-header {
-    position: relative;
-    z-index: 45;
-    background: transparent;
-    padding-top: var(--safe-top);
+/* Реальна висота хедера (JS підганяє). Fallback ≈ --header-h + safe. */
+.site-header-spacer {
+    display: block;
+    width: 100%;
+    height: var(--header-offset, calc(var(--header-h) + var(--safe-top)));
+    flex: none;
+    pointer-events: none;
+    visibility: hidden;
 }
 
 .header-inner {
@@ -312,6 +313,97 @@ body::before {
 
 .brand:hover .brand-mark {
     transform: translateX(4px);
+}
+
+/* ---------- Незалежний бігунок у кругій оболонці (після скролу) ----------
+ * Колір круга ≈ #3A3F4D зі скріна. Оригінал у хедері лишається.
+ */
+.brand-float {
+    --float-size: 78px;
+    --float-mark-w: 50px;
+    --float-mark-h: 42px;
+    position: fixed;
+    top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 10px);
+    left: max(12px, var(--safe-left));
+    z-index: 90;
+    display: block;
+    width: var(--float-size);
+    height: var(--float-size);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.75) translateY(-10px);
+    transition:
+        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.4s;
+}
+
+.brand-float.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: scale(1) translateY(0);
+}
+
+.brand-float-shell {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: #3a3f4d;
+    border: 0;
+    box-shadow:
+        0 6px 20px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    color: var(--text);
+    transition:
+        background 0.2s ease,
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.2s ease;
+}
+
+.brand-float-mark {
+    width: var(--float-mark-w);
+    height: var(--float-mark-h);
+    color: var(--text);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.brand-float:hover .brand-float-shell {
+    background: #454b5c;
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(232, 242, 19, 0.14),
+        0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    transform: scale(1.05);
+}
+
+.brand-float:hover .brand-float-mark {
+    transform: translateX(2px);
+}
+
+.brand-float:active .brand-float-shell {
+    transform: scale(0.96);
+}
+
+@media (max-width: 1024px) {
+    .brand-float {
+        --float-size: 72px;
+        --float-mark-w: 46px;
+        --float-mark-h: 39px;
+        top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 8px);
+        left: max(10px, var(--safe-left));
+    }
+}
+
+@media (max-width: 400px) {
+    .brand-float {
+        --float-size: 66px;
+        --float-mark-w: 42px;
+        --float-mark-h: 36px;
+    }
 }
 
 /* Фіолетова пігулка підтримки — Figma: 218×48, radius 50, #593AA1 */
@@ -1417,6 +1509,9 @@ body::before {
     }
 
     .brand-mark,
+    .brand-float,
+    .brand-float-shell,
+    .brand-float-mark,
     .pcard-arrow,
     .pcard-cta,
     .faq-answer,
@@ -1576,8 +1671,8 @@ body::before {
     }
 
     .header-inner {
-        /* Figma logo top 21 */
-        padding-top: calc(18px + var(--safe-top));
+        /* Figma logo top 21; safe-top уже на .site-header */
+        padding-top: 18px;
         padding-bottom: 14px;
     }
 
@@ -2065,7 +2160,7 @@ body::before {
     }
 
     .header-inner {
-        padding-top: calc(8px + var(--safe-top));
+        padding-top: 8px;
         padding-bottom: 8px;
     }
 
@@ -2078,6 +2173,8 @@ body::before {
 
 @media (hover: none) {
     .brand:hover .brand-mark,
+    .brand-float:hover .brand-float-shell,
+    .brand-float:hover .brand-float-mark,
     .support-pill:hover,
     .pcard-arrow:hover,
     .pcard-cta:hover,
@@ -2088,6 +2185,10 @@ body::before {
     .cookie-accept:hover {
         transform: none;
         box-shadow: none;
+    }
+
+    .brand-float:hover .brand-float-shell {
+        background: #3a3f4d;
     }
 
     .support-pill:hover {

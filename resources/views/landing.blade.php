@@ -44,6 +44,26 @@
     <link rel="preload" href="{{ asset('fonts/manrope-800-cyrillic.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ asset('fonts/rubik-v31-cyrillic_latin-regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
+    {{-- Критичний pin хедера: inline, щоб не залежати від кешу landing.css --}}
+    <style id="critical-header">
+        #site-header.site-header {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            z-index: 1000 !important;
+            background: #070707 !important;
+            margin: 0 !important;
+        }
+        #site-header-spacer {
+            display: block !important;
+            width: 100% !important;
+            height: var(--header-offset, 90px) !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+    </style>
 
     <script type="application/ld+json">{!! $siteJsonLd !!}</script>
     <script type="application/ld+json">{!! $productsJsonLd !!}</script>
@@ -61,11 +81,10 @@
     </symbol>
 </svg>
 
-{{-- Єдиний хедер: суцільна темна смуга, закріплена вгорі (sticky).
-     Бігунок + IDI_V_BANYU__ + ПІДТРИМКА завжди вгорі, контент іде під ним. --}}
+{{-- Fixed-хедер + спейсер у потоці (місце під шапкою). --}}
 <header class="site-header" id="site-header">
     <div class="container header-inner">
-        <a class="brand" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
+        <a class="brand" id="brand-header" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <svg class="brand-mark" aria-hidden="true"><use href="#i-runner"/></svg>
             <span class="brand-name t-display">IDI_V_BANYU__</span>
         </a>
@@ -80,6 +99,19 @@
         </a>
     </div>
 </header>
+<div class="site-header-spacer" id="site-header-spacer" aria-hidden="true"></div>
+
+{{-- Незалежний бігунок: з’являється після скролу вниз, зникає на самому верху --}}
+<a class="brand-float"
+   id="brand-float"
+   href="{{ route('home') }}"
+   aria-label="IDI_V_BANYU__ — на головну"
+   aria-hidden="true"
+   tabindex="-1">
+    <span class="brand-float-shell">
+        <svg class="brand-mark brand-float-mark" aria-hidden="true"><use href="#i-runner"/></svg>
+    </span>
+</a>
 
 <main>
     {{-- Єдиний h1 сторінки: логотип у шапці — картинка, тому h1 прихований візуально --}}
