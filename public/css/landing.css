@@ -246,13 +246,12 @@ button {
  * Жодних height:0 / sticky / transform-трюків / чорної смуги.
  */
 
-/* Хедер: суцільна темна смуга, закріплена вгорі (sticky) — стабільно на iOS.
-   Фон = колір сторінки, контент безшовно ховається під хедером. */
+/* Хедер у звичайному потоці (static): бігунок + IDI_V_BANYU__ + ПІДТРИМКА
+   просто їдуть зі сторінкою вгору/вниз. Без смуги, без фону. Немає fixed/sticky
+   — тому фізично неможливий iOS-баг із «плаванням». */
 .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 200;
-    background: var(--bg);
+    position: static;
+    background: transparent;
     padding-top: var(--safe-top);
 }
 
