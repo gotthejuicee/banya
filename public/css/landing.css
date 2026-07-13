@@ -434,7 +434,7 @@ body::before {
     color: #e8f213;
 }
 
-/* ---------- Картки товарів — 2 колонки на desktop (1025+), fluid gap ---------- */
+/* ---------- Картки товарів — 2 колонки tablet/desktop, 1 на phone ---------- */
 
 .products-grid {
     display: grid;
@@ -1672,6 +1672,72 @@ body::before {
 
     .modal-panel {
         padding: 28px 20px 24px;
+    }
+}
+
+/* ---------- Tablet (761–1024): 2 бокси в ряд, як на ноуті/ПК ---------- */
+@media (min-width: 761px) and (max-width: 1024px) {
+    .banners-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(12px, 2vw, 24px);
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr 1fr;
+        column-gap: clamp(12px, 2vw, 36px);
+        row-gap: clamp(28px, 3.5vw, 48px);
+        justify-items: center;
+    }
+
+    /* Стікер + стрілки мають вміститись у половину ширини */
+    .pcard-media {
+        --pcard-frame: min(240px, calc(50vw - 88px));
+        gap: 4px;
+        margin-bottom: 12px;
+    }
+
+    .pcard-arrow {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        flex: 0 0 40px;
+        margin-top: calc((var(--pcard-frame) - 40px) / 2);
+    }
+
+    .pcard-arrow::before {
+        width: 40px;
+        height: 40px;
+    }
+
+    .pcard-box {
+        flex: 0 0 var(--pcard-frame);
+        width: var(--pcard-frame);
+        max-width: var(--pcard-frame);
+        height: calc(var(--pcard-frame) + 52px);
+    }
+
+    .pcard-carousel {
+        width: 100%;
+        height: var(--pcard-frame);
+    }
+
+    .pcard-ground {
+        width: min(280px, 120%);
+        height: 56px;
+    }
+
+    .pcard-cta {
+        width: min(200px, 100%);
+        max-width: 200px;
+        height: clamp(48px, 7vw, 60px);
+        min-height: 48px;
+        font-size: clamp(1.15rem, 2.8vw, 1.6rem);
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 100%;
     }
 }
 
