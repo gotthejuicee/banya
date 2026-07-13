@@ -363,14 +363,17 @@ body.is-scrolled .site-header .header-inner {
 }
 
 /* ---------- Незалежний бігунок у кругій оболонці (після скролу) ----------
- * Колір круга ≈ #3A3F4D зі скріна. Оригінал у хедері лишається.
+ * top одразу від тонкої смуги (body.is-scrolled) — без стрибка після JS-заміру.
+ * Колір круга ≈ #3A3F4D зі скріна.
  */
 .brand-float {
     --float-size: 78px;
     --float-mark-w: 50px;
     --float-mark-h: 42px;
+    /* тонка смуга = safe-top + 10px; gap 8–10px під нею */
+    --float-top: calc(var(--safe-top) + 18px);
     position: fixed;
-    top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 10px);
+    top: var(--float-top);
     left: max(12px, var(--safe-left));
     z-index: 90;
     display: block;
@@ -380,10 +383,11 @@ body.is-scrolled .site-header .header-inner {
     visibility: hidden;
     pointer-events: none;
     transform: scale(0.75) translateY(-10px);
+    /* top НЕ анімуємо — інакше «стрибок» з неправильної позиції */
     transition:
-        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
-        visibility 0.4s;
+        opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.35s;
 }
 
 .brand-float.is-open {
@@ -440,7 +444,7 @@ body.is-scrolled .site-header .header-inner {
         --float-size: 72px;
         --float-mark-w: 46px;
         --float-mark-h: 39px;
-        top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 8px);
+        --float-top: calc(var(--safe-top) + 16px);
         left: max(10px, var(--safe-left));
     }
 }
@@ -455,8 +459,9 @@ body.is-scrolled .site-header .header-inner {
 
 /* ---------- Незалежна пігулка «Підтримка» (після скролу, справа) ---------- */
 .support-float {
+    --float-top: calc(var(--safe-top) + 14px);
     position: fixed;
-    top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 14px);
+    top: var(--float-top);
     right: max(12px, var(--safe-right));
     left: auto;
     z-index: 90;
@@ -469,9 +474,9 @@ body.is-scrolled .site-header .header-inner {
         0 8px 24px rgba(0, 0, 0, 0.4),
         0 1px 0 rgba(255, 255, 255, 0.08) inset;
     transition:
-        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-        transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
-        visibility 0.4s,
+        opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.35s,
         background 0.2s ease,
         box-shadow 0.2s ease;
 }
@@ -495,7 +500,7 @@ body.is-scrolled .site-header .header-inner {
 
 @media (max-width: 1024px) {
     .support-float {
-        top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 12px);
+        --float-top: calc(var(--safe-top) + 12px);
         right: max(10px, var(--safe-right));
     }
 }

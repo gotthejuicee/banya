@@ -123,13 +123,26 @@
         const setOpen = (next) => {
             if (next === open) return;
             open = next;
+
+            /*
+             * Спочатку клас is-scrolled (тонка смуга + CSS top для floats),
+             * потім is-open (fade-in). Так floats одразу в правильному місці,
+             * без «спочатку внизу → через секунду вгорі».
+             */
             document.body.classList.toggle('is-scrolled', open);
+
+            /* Синхронно: offset = тонка смуга (не чекаємо rAF/transition) */
+            if (open) {
+                document.documentElement.style.setProperty('--header-offset', '10px');
+            }
+
             floats.forEach((el) => {
                 el.classList.toggle('is-open', open);
                 el.setAttribute('aria-hidden', open ? 'false' : 'true');
                 el.tabIndex = open ? 0 : -1;
             });
-            /* Спейсер НЕ чіпаємо (інакше стрибок скролу); лише offset для floats */
+
+            /* Після paint — уточнити заміри (спейсер не чіпаємо) */
             requestAnimationFrame(() => {
                 if (typeof window.__headerRemeasure === 'function') {
                     window.__headerRemeasure();
