@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="{{ asset('css/landing.css') }}?v={{ filemtime(public_path('css/landing.css')) }}">
     {{-- Критичний pin хедера: inline, щоб не залежати від кешу landing.css --}}
     <style id="critical-header">
+        /* Гарантований pin: навіть якщо кеш CSS старий */
         #site-header.site-header {
             position: fixed !important;
             top: 0 !important;
@@ -55,13 +56,22 @@
             z-index: 1000 !important;
             background: #070707 !important;
             margin: 0 !important;
+            transform: none !important;
+            box-shadow: 0 1px 0 rgba(245, 242, 249, 0.08);
         }
         #site-header-spacer {
             display: block !important;
             width: 100% !important;
-            height: var(--header-offset, 90px) !important;
+            /* Повна висота шапки, НЕ тонка --header-offset */
+            height: var(--header-full, 90px) !important;
+            min-height: 88px !important;
             visibility: hidden !important;
             pointer-events: none !important;
+            flex: none !important;
+        }
+        /* Ніколи не даємо body стати scrollport (ламає fixed у Chrome) */
+        html, body {
+            overflow-x: visible !important;
         }
     </style>
 
@@ -81,8 +91,9 @@
     </symbol>
 </svg>
 
-{{-- Fixed-хедер + спейсер у потоці (місце під шапкою). --}}
-<header class="site-header" id="site-header">
+{{-- Fixed-хедер: смуга завжди зверху. Контент шапки ховається після скролу (див. body.is-scrolled). --}}
+<header class="site-header" id="site-header"
+        style="position:fixed;top:0;left:0;right:0;width:100%;z-index:1000;background:#070707">
     <div class="container header-inner">
         <a class="brand" id="brand-header" href="{{ route('home') }}" aria-label="IDI_V_BANYU__ — на головну">
             <svg class="brand-mark" aria-hidden="true"><use href="#i-runner"/></svg>
@@ -101,7 +112,7 @@
 </header>
 <div class="site-header-spacer" id="site-header-spacer" aria-hidden="true"></div>
 
-{{-- Незалежний бігунок: з’являється після скролу вниз, зникає на самому верху --}}
+{{-- Незалежні floats: з’являються після скролу вниз, зникають на самому верху --}}
 <a class="brand-float"
    id="brand-float"
    href="{{ route('home') }}"
@@ -111,6 +122,17 @@
     <span class="brand-float-shell">
         <svg class="brand-mark brand-float-mark" aria-hidden="true"><use href="#i-runner"/></svg>
     </span>
+</a>
+
+<a class="support-pill support-float"
+   id="support-float"
+   href="tel:+{{ $supportPhone }}"
+   data-support-phone="{{ $supportPhone }}"
+   aria-label="Підтримка: на телефоні — подзвонити, на комп’ютері — форма заявки"
+   aria-hidden="true"
+   tabindex="-1">
+    <span class="support-label">ПІДТРИМКА</span>
+    <span class="support-phone">{{ $supportPhone }}</span>
 </a>
 
 <main>

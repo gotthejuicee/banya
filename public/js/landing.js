@@ -14,27 +14,106 @@
         }
     })();
 
-    /* ---------- Хедер fixed: висота спейсера = реальна висота шапки ---------- */
+    /* ---------- Хедер fixed: спейсер = повна висота (НІКОЛИ не стискати), floats — visual ---------- */
     (() => {
         const siteHeader = document.getElementById('site-header');
         const spacer = document.getElementById('site-header-spacer');
-        if (!siteHeader || !spacer) return;
+        if (!siteHeader) return;
 
-        const sync = () => {
-            const h = Math.ceil(siteHeader.getBoundingClientRect().height) || 90;
-            document.documentElement.style.setProperty('--header-offset', `${h}px`);
-            spacer.style.height = `${h}px`;
+        let fullHeaderH = 90;
+
+        const applyFullSpacer = () => {
+            fullHeaderH = Math.max(fullHeaderH, 90);
+            document.documentElement.style.setProperty('--header-full', `${fullHeaderH}px`);
+            if (spacer) {
+                spacer.style.setProperty('height', `${fullHeaderH}px`, 'important');
+                spacer.style.setProperty('min-height', `${fullHeaderH}px`, 'important');
+            }
         };
 
-        sync();
-        window.addEventListener('resize', sync, { passive: true });
-        if (document.fonts?.ready) document.fonts.ready.then(sync);
+        const measureFull = () => {
+            /* Повну висоту міряємо тільки коли шапка розгорнута + після transition */
+            if (!document.body.classList.contains('is-scrolled')) {
+                const h = Math.ceil(siteHeader.getBoundingClientRect().height) || 90;
+                /* Тільки збільшуємо — ніколи не зменшуємо (інакше mid-transition дає 40px) */
+                if (h > fullHeaderH) fullHeaderH = h;
+                fullHeaderH = Math.max(fullHeaderH, 90);
+                applyFullSpacer();
+            }
+            const visualH = document.body.classList.contains('is-scrolled')
+                ? Math.max(10, Math.ceil(siteHeader.getBoundingClientRect().height) || 12)
+                : fullHeaderH;
+            document.documentElement.style.setProperty('--header-offset', `${visualH}px`);
+        };
+
+        const pin = () => {
+            const cs = window.getComputedStyle(siteHeader);
+            if (cs.position !== 'fixed') {
+                siteHeader.style.setProperty('position', 'fixed', 'important');
+                siteHeader.style.setProperty('top', '0', 'important');
+                siteHeader.style.setProperty('left', '0', 'important');
+                siteHeader.style.setProperty('right', '0', 'important');
+                siteHeader.style.setProperty('z-index', '1000', 'important');
+            }
+            measureFull();
+        };
+
+        applyFullSpacer();
+        pin();
+
+        const remount = () => {
+            if (!document.body.classList.contains('is-scrolled')) {
+                fullHeaderH = 90;
+            }
+            pin();
+        };
+        window.addEventListener('resize', remount, { passive: true });
+        window.addEventListener('orientationchange', () => {
+            setTimeout(remount, 150);
+            setTimeout(remount, 400); /* iOS після повороту */
+        }, { passive: true });
+        /* iOS Safari: адресний рядок / safe-area */
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', () => {
+                requestAnimationFrame(measureFull);
+            }, { passive: true });
+        }
+        if (document.fonts?.ready) document.fonts.ready.then(remount);
+
+        /* Після анімації розгортання шапки — фінальний замір */
+        siteHeader.addEventListener('transitionend', (e) => {
+            if (e.target !== siteHeader && !e.target.classList?.contains('header-inner')) return;
+            if (!document.body.classList.contains('is-scrolled')) {
+                fullHeaderH = 90;
+                measureFull();
+            }
+        });
+
+        window.__headerPinCheck = () => {
+            const r = siteHeader.getBoundingClientRect();
+            const info = {
+                position: getComputedStyle(siteHeader).position,
+                top: r.top,
+                headerH: r.height,
+                spacerH: spacer ? spacer.getBoundingClientRect().height : null,
+                fullHeaderH,
+                scrollY: window.scrollY,
+                stuck: r.top === 0,
+                isScrolled: document.body.classList.contains('is-scrolled'),
+            };
+            console.log('[header-pin]', info);
+            return info;
+        };
+
+        window.__headerRemeasure = measureFull;
     })();
 
-    /* ---------- Круглий бігунок після скролу (незалежний від хедера) ---------- */
+    /* ---------- Floats після скролу: бігунок зліва + Підтримка справа ---------- */
     (() => {
         const brandFloat = document.getElementById('brand-float');
-        if (!brandFloat) return;
+        const supportFloat = document.getElementById('support-float');
+        const floats = [brandFloat, supportFloat].filter(Boolean);
+        if (!floats.length) return;
 
         const OPEN_AT = 64;
         const CLOSE_AT = 12;
@@ -45,9 +124,17 @@
             if (next === open) return;
             open = next;
             document.body.classList.toggle('is-scrolled', open);
-            brandFloat.classList.toggle('is-open', open);
-            brandFloat.setAttribute('aria-hidden', open ? 'false' : 'true');
-            brandFloat.tabIndex = open ? 0 : -1;
+            floats.forEach((el) => {
+                el.classList.toggle('is-open', open);
+                el.setAttribute('aria-hidden', open ? 'false' : 'true');
+                el.tabIndex = open ? 0 : -1;
+            });
+            /* Спейсер НЕ чіпаємо (інакше стрибок скролу); лише offset для floats */
+            requestAnimationFrame(() => {
+                if (typeof window.__headerRemeasure === 'function') {
+                    window.__headerRemeasure();
+                }
+            });
         };
 
         const onScroll = () => {
@@ -367,21 +454,19 @@
         btn.addEventListener('click', () => openModal(btn.dataset.productId, btn.dataset.productName));
     });
 
-    /* ПІДТРИМКА: mobile → tel:; desktop → форма заявки в Telegram */
-    const supportPill = document.getElementById('support-pill');
-    if (supportPill) {
-        const isMobileSupport = () => window.matchMedia('(max-width: 1024px)').matches;
-
-        supportPill.addEventListener('click', (e) => {
-            if (isMobileSupport()) {
-                // лишаємо href="tel:..." — нативний дзвінок
-                return;
-            }
-
-            e.preventDefault();
-            openModal('', 'Зв’язок з підтримкою');
-        });
-    }
+    /* ПІДТРИМКА (хедер + float): mobile → tel:; desktop → форма заявки */
+    const isMobileSupport = () => window.matchMedia('(max-width: 1024px)').matches;
+    const onSupportClick = (e) => {
+        if (isMobileSupport()) {
+            // href="tel:..." — нативний дзвінок
+            return;
+        }
+        e.preventDefault();
+        openModal('', 'Зв’язок з підтримкою');
+    };
+    ['support-pill', 'support-float'].forEach((id) => {
+        document.getElementById(id)?.addEventListener('click', onSupportClick);
+    });
 
     modal.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeModal));
 

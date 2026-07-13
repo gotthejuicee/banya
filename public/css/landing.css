@@ -192,6 +192,7 @@ button {
 .brand,
 .brand-float,
 .support-pill,
+.support-float,
 .social-link,
 .pcard-arrow,
 .pcard-cta,
@@ -258,13 +259,59 @@ button {
     z-index: 1000;
     background: var(--bg);
     padding-top: var(--safe-top);
+    /* Видима межа: одразу видно, що смуга «прибита» і контент їде під нею */
+    box-shadow: 0 1px 0 rgba(245, 242, 249, 0.08);
+    isolation: isolate;
 }
 
-/* Реальна висота хедера (JS підганяє). Fallback ≈ --header-h + safe. */
+/*
+ * Після скролу: оригінал у хедері ховається, смуга стискається в тонку
+ * fixed-планку; керують лише float-кнопки (бігунок + Підтримка).
+ */
+.site-header .brand,
+.site-header .support-pill {
+    transition:
+        opacity 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        visibility 0.32s;
+}
+
+.site-header .header-inner {
+    transition: min-height 0.32s ease, padding 0.32s ease;
+}
+
+body.is-scrolled .site-header .brand,
+body.is-scrolled .site-header .support-pill {
+    /* absolute — не тримають висоту смуги */
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.9);
+}
+
+body.is-scrolled .site-header {
+    box-shadow: 0 1px 0 rgba(245, 242, 249, 0.06);
+}
+
+body.is-scrolled .site-header .header-inner {
+    position: relative;
+    min-height: 0;
+    height: 10px;
+    padding-block: 0;
+    overflow: hidden;
+}
+
+/*
+ * Спейсер = ПОВНА висота хедера (завжди).
+ * --header-offset — лише для floats (тонка смуга після скролу).
+ * Ніколи не підставляти --header-offset у spacer — баннери заїдуть під шапку.
+ */
 .site-header-spacer {
     display: block;
     width: 100%;
-    height: var(--header-offset, calc(var(--header-h) + var(--safe-top)));
+    height: var(--header-full, calc(var(--header-h) + var(--safe-top)));
+    min-height: calc(var(--header-h) + var(--safe-top));
     flex: none;
     pointer-events: none;
     visibility: hidden;
@@ -403,6 +450,53 @@ button {
         --float-size: 66px;
         --float-mark-w: 42px;
         --float-mark-h: 36px;
+    }
+}
+
+/* ---------- Незалежна пігулка «Підтримка» (після скролу, справа) ---------- */
+.support-float {
+    position: fixed;
+    top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 14px);
+    right: max(12px, var(--safe-right));
+    left: auto;
+    z-index: 90;
+    /* розміри як у хедера; mobile override нижче через .support-pill rules */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(0.85) translateY(-10px);
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.08) inset;
+    transition:
+        opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+        transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.4s,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.support-float.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: scale(1) translateY(0);
+}
+
+.support-float:hover {
+    box-shadow:
+        0 10px 28px rgba(0, 0, 0, 0.45),
+        0 0 0 1px rgba(232, 242, 19, 0.12);
+}
+
+.support-float:active {
+    transform: scale(0.96);
+}
+
+@media (max-width: 1024px) {
+    .support-float {
+        top: calc(var(--header-offset, calc(var(--header-h) + var(--safe-top))) + 12px);
+        right: max(10px, var(--safe-right));
     }
 }
 
@@ -1512,6 +1606,9 @@ button {
     .brand-float,
     .brand-float-shell,
     .brand-float-mark,
+    .support-float,
+    .site-header .brand,
+    .site-header .support-pill,
     .pcard-arrow,
     .pcard-cta,
     .faq-answer,
@@ -2175,6 +2272,7 @@ button {
     .brand:hover .brand-mark,
     .brand-float:hover .brand-float-shell,
     .brand-float:hover .brand-float-mark,
+    .support-float:hover,
     .support-pill:hover,
     .pcard-arrow:hover,
     .pcard-cta:hover,
