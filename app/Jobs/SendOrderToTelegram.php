@@ -31,17 +31,14 @@ class SendOrderToTelegram implements ShouldQueue
         }
 
         $product = e($this->order->product?->name ?? 'Підтримка (без набору)');
-        $comment = filled($this->order->comment)
-            ? e($this->order->comment)
-            : '—';
 
+        // Коментар більше не збираємо на сайті — у Telegram не показуємо
         $text = implode("\n", [
             '🔥 <b>Нова заявка з IDI_V_BANYU__</b>',
             '',
             "🎁 Набір: <b>{$product}</b>",
             '👤 Ім’я: '.e($this->order->name),
             "📞 Телефон: <code>{$this->order->phone}</code>",
-            "💬 Коментар: {$comment}",
             '',
             '🕒 '.$this->order->created_at->timezone('Europe/Kyiv')->format('d.m.Y H:i'),
         ]);
