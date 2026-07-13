@@ -404,6 +404,7 @@
         productNameEl.textContent = productName;
         if (formView) formView.hidden = false;
         modal.hidden = false;
+        document.body.classList.add('is-modal-open');
         lockScroll();
         setTimeout(() => {
             const nameField = document.getElementById('field-name');
@@ -417,6 +418,7 @@
         successTimer = null;
         resetModalKeyboard();
         modal.hidden = true;
+        document.body.classList.remove('is-modal-open');
         unlockScroll();
         resetFormUi();
         lastFocused?.focus?.();

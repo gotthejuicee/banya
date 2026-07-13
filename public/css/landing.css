@@ -1274,7 +1274,8 @@ body.is-scrolled .site-header .header-inner {
 .modal {
     position: fixed;
     inset: 0;
-    z-index: 100;
+    /* Вище fixed-хедера (1000), щоб шапка не світилась поверх форми */
+    z-index: 2000;
     display: grid;
     place-items: center;
     padding:
@@ -1282,6 +1283,15 @@ body.is-scrolled .site-header .header-inner {
         max(20px, var(--safe-right))
         max(20px, var(--safe-bottom))
         max(20px, var(--safe-left));
+}
+
+/* Mobile: під час форми замовлення хедер і floats повністю ховаємо */
+@media (max-width: 1024px) {
+    body.is-modal-open #site-header,
+    body.is-modal-open #brand-float,
+    body.is-modal-open #support-float {
+        display: none !important;
+    }
 }
 
 .modal[hidden] {
