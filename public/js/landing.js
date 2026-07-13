@@ -345,7 +345,7 @@
     /* ПІДТРИМКА: mobile → tel:; desktop → форма заявки в Telegram */
     const supportPill = document.getElementById('support-pill');
     if (supportPill) {
-        const isMobileSupport = () => window.matchMedia('(max-width: 760px)').matches;
+        const isMobileSupport = () => window.matchMedia('(max-width: 1024px)').matches;
 
         supportPill.addEventListener('click', (e) => {
             if (isMobileSupport()) {
