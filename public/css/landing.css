@@ -1883,45 +1883,45 @@ body.is-scrolled .site-header .header-inner {
 }
 
 /* ---------- Tablet (761–1024): 2 бокси в ряд, як на ноуті/ПК ---------- */
-/* Планшети (портрет 761–1024): та сама вертикальна «айфонна» верстка —
-   банери й картки в стовпчик, — але все КРУПНІШЕ (щоб не було дрібно). */
 @media (min-width: 761px) and (max-width: 1024px) {
     .banners-grid {
-        grid-template-columns: 1fr;
-        gap: 12px;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(12px, 2vw, 24px);
     }
 
     .products-grid {
-        grid-template-columns: 1fr;
-        gap: clamp(56px, 8vw, 88px);
+        grid-template-columns: 1fr 1fr;
+        column-gap: clamp(12px, 2vw, 36px);
+        row-gap: clamp(28px, 3.5vw, 48px);
+        justify-items: center;
     }
 
-    /* Бокс значно крупніший за мобільний — одна колонка на всю ширину */
+    /* Стікер + стрілки мають вміститись у половину ширини */
     .pcard-media {
-        --pcard-frame: min(460px, 62vw);
-        gap: 14px;
-        margin-bottom: 22px;
+        --pcard-frame: min(240px, calc(50vw - 88px));
+        gap: 4px;
+        margin-bottom: 12px;
     }
 
     .pcard-arrow {
-        width: 60px;
-        height: 60px;
-        min-width: 60px;
-        min-height: 60px;
-        flex: 0 0 60px;
-        margin-top: calc((var(--pcard-frame) - 60px) / 2);
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        flex: 0 0 40px;
+        margin-top: calc((var(--pcard-frame) - 40px) / 2);
     }
 
     .pcard-arrow::before {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
     }
 
     .pcard-box {
         flex: 0 0 var(--pcard-frame);
         width: var(--pcard-frame);
         max-width: var(--pcard-frame);
-        height: calc(var(--pcard-frame) + 64px);
+        height: calc(var(--pcard-frame) + 52px);
     }
 
     .pcard-carousel {
@@ -1930,29 +1930,16 @@ body.is-scrolled .site-header .header-inner {
     }
 
     .pcard-ground {
-        width: min(540px, 118%);
-        height: 62px;
+        width: min(280px, 120%);
+        height: 56px;
     }
 
     .pcard-cta {
-        width: min(300px, 100%);
-        max-width: 300px;
-        height: clamp(60px, 7.5vw, 74px);
-        min-height: 60px;
-        font-size: clamp(1.5rem, 3.6vw, 2rem);
-    }
-
-    /* Заголовки/ціни крупніше на планшеті */
-    .section-title .t-display {
-        font-size: clamp(34px, 5vw, 46px);
-    }
-
-    .pcard-price {
-        font-size: clamp(38px, 5vw, 48px);
-    }
-
-    .pcard-subtitle {
-        font-size: clamp(20px, 2.6vw, 26px);
+        width: min(200px, 100%);
+        max-width: 200px;
+        height: clamp(48px, 7vw, 60px);
+        min-height: 48px;
+        font-size: clamp(1.15rem, 2.8vw, 1.6rem);
     }
 
     .product-card {
