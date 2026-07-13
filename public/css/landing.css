@@ -246,11 +246,25 @@ button {
  * Жодних height:0 / sticky / transform-трюків / чорної смуги.
  */
 
-/* Хедер у звичайному потоці (static): бігунок + IDI_V_BANYU__ + ПІДТРИМКА
-   просто їдуть зі сторінкою вгору/вниз. Без смуги, без фону. Немає fixed/sticky
-   — тому фізично неможливий iOS-баг із «плаванням». */
+/* Чорна смуга-хедер зафіксована вгорі (body::before, НЕ скролиться), а бігунок +
+   IDI_V_BANYU__ + ПІДТРИМКА лежать у потоці й ЇДУТЬ зі сторінкою під смугу.
+   Плаває тільки суцільно-чорна смуга (= фон), тож будь-який iOS-джитер невидимий;
+   самі елементи — у потоці, тому не «плавають». */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(var(--header-h) + var(--safe-top));
+    background: var(--bg);
+    z-index: 40;
+    pointer-events: none;
+}
+
 .site-header {
-    position: static;
+    position: relative;
+    z-index: 45;
     background: transparent;
     padding-top: var(--safe-top);
 }
