@@ -2132,6 +2132,15 @@ body.is-scrolled .site-header .header-inner {
         line-height: 20px;
     }
 
+    /* Після скролу хедер стискається в смугу 10px, а floats висіли на
+       top: safe-top + 12/16px — тобто впритул під нею (2–6px). Даємо їм
+       спільний top: 10px смуга + 10px повітря, як відступ у розгорнутій
+       шапці. Спільний — щоб бігунець і пігулка стояли на одній лінії. */
+    .brand-float,
+    .support-float {
+        --float-top: calc(var(--safe-top) + 20px);
+    }
+
     .brand-float {
         --float-size: 76px;
         --float-mark-w: 48px;
