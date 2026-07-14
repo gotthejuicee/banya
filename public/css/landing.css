@@ -370,8 +370,11 @@ body.is-scrolled .site-header .header-inner {
     --float-size: 78px;
     --float-mark-w: 50px;
     --float-mark-h: 42px;
-    /* тонка смуга = safe-top + 10px; gap 8–10px під нею */
-    --float-top: calc(var(--safe-top) + 18px);
+    /* Після скролу хедер стискається у смугу 10px (див. .is-scrolled
+       .header-inner). 10px смуга + 10px повітря = 20px, як відступ у
+       розгорнутій шапці. Однакове значення для бігунця й пігулки — щоб
+       вони стояли на одній лінії. Далі по брейкпоінтах НЕ перевизначаємо. */
+    --float-top: calc(var(--safe-top) + 20px);
     position: fixed;
     top: var(--float-top);
     left: max(12px, var(--safe-left));
@@ -444,7 +447,6 @@ body.is-scrolled .site-header .header-inner {
         --float-size: 72px;
         --float-mark-w: 46px;
         --float-mark-h: 39px;
-        --float-top: calc(var(--safe-top) + 16px);
         left: max(10px, var(--safe-left));
     }
 }
@@ -459,7 +461,7 @@ body.is-scrolled .site-header .header-inner {
 
 /* ---------- Незалежна пігулка «Підтримка» (після скролу, справа) ---------- */
 .support-float {
-    --float-top: calc(var(--safe-top) + 14px);
+    --float-top: calc(var(--safe-top) + 20px); /* спільний із .brand-float — див. коментар там */
     position: fixed;
     top: var(--float-top);
     right: max(12px, var(--safe-right));
@@ -500,7 +502,6 @@ body.is-scrolled .site-header .header-inner {
 
 @media (max-width: 1024px) {
     .support-float {
-        --float-top: calc(var(--safe-top) + 12px);
         right: max(10px, var(--safe-right));
     }
 }
@@ -2130,15 +2131,6 @@ body.is-scrolled .site-header .header-inner {
     .support-phone {
         font-size: 17px;
         line-height: 20px;
-    }
-
-    /* Після скролу хедер стискається в смугу 10px, а floats висіли на
-       top: safe-top + 12/16px — тобто впритул під нею (2–6px). Даємо їм
-       спільний top: 10px смуга + 10px повітря, як відступ у розгорнутій
-       шапці. Спільний — щоб бігунець і пігулка стояли на одній лінії. */
-    .brand-float,
-    .support-float {
-        --float-top: calc(var(--safe-top) + 20px);
     }
 
     .brand-float {
