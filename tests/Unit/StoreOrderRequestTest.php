@@ -3,11 +3,34 @@
 namespace Tests\Unit;
 
 use App\Http\Requests\StoreOrderRequest;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Routing\Redirector;
+use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class StoreOrderRequestTest extends TestCase
 {
+    /**
+     * Проганяємо номер тим самим шляхом, що й справжній запит:
+     * prepareForValidation() → rules(). Інакше тест перевіряв би regex у
+     * вакуумі й не помітив би, що нормалізація тихо щось обрізала.
+     */
+    private function phoneFails(string $phone): bool
+    {
+        $request = StoreOrderRequest::create('/', 'POST', ['name' => 'Марія', 'phone' => $phone]);
+        $request->setContainer($this->app);
+        // При провалі валідації FormRequest збирає redirect-відповідь — без
+        // редиректора впаде на getUrlGenerator() замість ValidationException
+        $request->setRedirector($this->app->make(Redirector::class));
+
+        try {
+            $request->validateResolved();
+        } catch (ValidationException) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * @param  array<string, mixed>  $data
      * @return array<string, mixed>
@@ -33,15 +56,57 @@ class StoreOrderRequestTest extends TestCase
 
     public function test_validator_accepts_common_ukrainian_phone_formats(): void
     {
-        $rules = (new StoreOrderRequest)->rules();
+        foreach (['0974772919', '+380974772919', '380974772919', '80974772919'] as $phone) {
+            $this->assertFalse($this->phoneFails($phone), "Номер {$phone} мав пройти");
+        }
+    }
 
-        foreach (['0974772919', '+380974772919', '380974772919'] as $phone) {
-            $validator = Validator::make(
-                ['phone' => preg_replace('/[\s\(\)\-]+/', '', $phone)],
-                ['phone' => $rules['phone']],
-            );
+    public function test_all_ukrainian_operator_codes_are_accepted(): void
+    {
+        $codes = [
+            '039', '067', '068', '077', '096', '097', '098', // Kyivstar
+            '050', '066', '075', '095', '099',               // Vodafone
+            '063', '073', '093',                             // lifecell
+            '091',                                           // 3Mob
+            '092',                                           // PEOPLEnet
+            '094',                                           // Intertelecom
+        ];
 
-            $this->assertFalse($validator->fails(), "Phone {$phone} should be valid");
+        foreach ($codes as $code) {
+            $this->assertFalse($this->phoneFails($code.'1234567'), "Код {$code} мав пройти");
+        }
+    }
+
+    /** Саме на цьому замовник упіймав форму: десять нулів проходили. */
+    public function test_ten_zeros_are_rejected(): void
+    {
+        $this->assertTrue($this->phoneFails('0000000000'));
+    }
+
+    public function test_numbers_with_unknown_operator_codes_are_rejected(): void
+    {
+        // 044 — міський Київ; 070/080/090 — не коди мобільних операторів
+        foreach (['0441234567', '0701234567', '0801234567', '0901234567'] as $phone) {
+            $this->assertTrue($this->phoneFails($phone), "Номер {$phone} мав бути відхилений");
+        }
+    }
+
+    public function test_wrong_length_is_rejected(): void
+    {
+        foreach ([
+            '097477291',       // на цифру менше
+            '09747729199',     // на цифру більше
+            '+38097477291',    // на цифру менше з кодом країни
+            '+3809747729199',  // на цифру більше з кодом країни
+        ] as $phone) {
+            $this->assertTrue($this->phoneFails($phone), "Номер {$phone} мав бути відхилений");
+        }
+    }
+
+    public function test_foreign_numbers_are_rejected(): void
+    {
+        foreach (['+79261234567', '+48123456789', '+12025550123'] as $phone) {
+            $this->assertTrue($this->phoneFails($phone), "Номер {$phone} мав бути відхилений");
         }
     }
 }
