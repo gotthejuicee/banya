@@ -1212,13 +1212,26 @@ body.is-scrolled .site-header .header-inner {
    інакше вони липнуть до країв, і футер здається порожнім посередині.
    Соцмережі штовхаємо вправо (padding-left), копірайт вліво (padding-right):
    він вирівняний по правому краю, тож зсуває його саме права відбивка. */
+/* Вузькі ноути (1025–1199): зсув помірний. Колонка тут вужча, а копірайт
+   довгий — сильніший відступ ламає його на два рядки. */
 @media (min-width: 1025px) {
     .footer-socials {
-        padding-left: clamp(40px, 6vw, 120px);
+        padding-left: clamp(40px, 6vw, 72px);
     }
 
     .copyright {
-        padding-right: clamp(40px, 6vw, 120px);
+        padding-right: clamp(40px, 6vw, 72px);
+    }
+}
+
+/* Від 1200 місця вистачає — тягнемо блоки ближче до риски */
+@media (min-width: 1200px) {
+    .footer-socials {
+        padding-left: clamp(96px, 10vw, 220px);
+    }
+
+    .copyright {
+        padding-right: clamp(96px, 10vw, 220px);
     }
 }
 
