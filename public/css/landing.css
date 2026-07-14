@@ -1867,12 +1867,26 @@ body.is-scrolled .site-header .header-inner {
        На планшеті/десктопі футер у дві колонки й ділить їх вертикальна
        ::after, тож там ця лінія не потрібна (знімаємо в планшетному блоці). */
     .footer-socials {
+        position: relative;
         width: 100%;
         align-items: flex-start;
         gap: 12px;
         padding-right: 0;
         padding-bottom: 14px;
-        border-bottom: 1px solid #12141a;
+    }
+
+    /* Лінія в край екрана, як верхня й нижня межі футера. Через border знизу
+       вона обрізалась по боках: .footer-socials лежить у .container з
+       боковими падінгами, а межі футера — на .site-footer (на всю ширину).
+       Тому тягнемо псевдоелемент на ті самі падінги в мінус. */
+    .footer-socials::after {
+        content: '';
+        position: absolute;
+        left: calc(-1 * max(var(--pad-x), var(--safe-left)));
+        right: calc(-1 * max(var(--pad-x), var(--safe-right)));
+        bottom: 0;
+        height: 1px;
+        background: #12141a;
     }
 
     /* Figma mobile footer Manrope 800 15/20 */
@@ -2312,9 +2326,12 @@ body.is-scrolled .site-header .header-inner {
         align-items: flex-start;
         gap: 14px;
         padding-right: 24px;
-        /* дві колонки — ділить вертикальна .site-footer::after, а не лінія */
         padding-bottom: 0;
-        border-bottom: 0;
+    }
+
+    /* дві колонки — ділить вертикальна .site-footer::after, а не лінія */
+    .footer-socials::after {
+        display: none;
     }
 
     .socials-label {
