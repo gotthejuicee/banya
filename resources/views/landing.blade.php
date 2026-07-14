@@ -99,7 +99,7 @@
             <svg class="brand-mark" aria-hidden="true"><use href="#i-runner"/></svg>
             <span class="brand-name t-display">IDI_V_BANYU__</span>
         </a>
-        {{-- Desktop (>1024): клік → модалка; phone/tablet: tel: дзвінок (див. landing.js) --}}
+        {{-- Телефон: tel: дзвінок. Планшет і десктоп: клік → модалка (див. landing.js) --}}
         <a class="support-pill"
            id="support-pill"
            href="tel:+{{ $supportPhone }}"

@@ -469,10 +469,15 @@
         btn.addEventListener('click', () => openModal(btn.dataset.productId, btn.dataset.productName));
     });
 
-    /* ПІДТРИМКА (хедер + float): mobile → tel:; desktop → форма заявки */
-    const isMobileSupport = () => window.matchMedia('(max-width: 1024px)').matches;
+    /* ПІДТРИМКА (хедер + float): телефон → tel:; планшет/десктоп → форма заявки.
+     * Планшет рахуємо як десктоп (той самий брейкпоінт, що в CSS): інакше
+     * iPad у портреті (820px) відкривав tel:, а після повороту (1180px) —
+     * модалку. Плюс на iPad tel: і так лише пропонує FaceTime, а не дзвінок. */
+    const TABLET_MQ = '(min-width: 700px) and (max-width: 1024px) and (min-height: 600px)';
+    const isPhoneSupport = () =>
+        window.matchMedia('(max-width: 1024px)').matches && !window.matchMedia(TABLET_MQ).matches;
     const onSupportClick = (e) => {
-        if (isMobileSupport()) {
+        if (isPhoneSupport()) {
             // href="tel:..." — нативний дзвінок
             return;
         }
