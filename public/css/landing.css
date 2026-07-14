@@ -636,13 +636,21 @@ body.is-scrolled .site-header .header-inner {
     min-width: 0;
 }
 
-/* Desktop+: фіксовані колонки під sticker ~350–420 */
+/* Desktop+: картки тягнуться на всю ширину контейнера — врівень із банерами.
+   Раніше колонки були фіксовані (min(450px, 38vw)) і сітка центрувалась, тож
+   картки виходили вужчі за банери й по боках зяяла чорнота. Розмір «кадру»
+   фото задається --pcard-frame у блоках нижче (420→500 зі зростанням екрана). */
 @media (min-width: 1025px) {
     .products-grid {
-        grid-template-columns: repeat(2, minmax(0, min(450px, 38vw)));
-        justify-content: center;
-        column-gap: clamp(64px, 8vw, 140px);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-items: center;
+        column-gap: clamp(40px, 5vw, 90px);
         row-gap: clamp(48px, 4vw, 64px);
+    }
+
+    /* Вужчий зазор стрілка↔бокс — віддаємо ширину фото, а не повітрю */
+    .pcard-media {
+        gap: 14px;
     }
 }
 
@@ -2344,32 +2352,32 @@ body.is-scrolled .site-header .header-inner {
     }
 }
 
-/* ---------- Ноут / стандартний desktop (1025–1399) — Figma 1200 ---------- */
+/* ---------- Ноут (1025–1399) ----------
+   Контейнер розширено з 1200 (Figma) до 1320: на 1366 чорні поля по краях
+   стискаються з 83px до ~25px. Бокс росте 350 → 420.
+   Формула кадру: у колонці має вміститись бокс + дві стрілки з зазорами,
+   тобто frame + 2×(50 + 14) = frame + 128 ≤ ширина колонки. Звідси
+   50vw − 210px із запасом; 420px — стеля, щоб не роздувати. */
 @media (min-width: 1025px) and (max-width: 1399px) {
-    :root {
-        --container: 1200px;
-        --pad-x: 40px;
-    }
-
-    .pcard-media {
-        --pcard-frame: min(350px, 28vw);
-    }
-}
-
-/* ---------- Великий монітор (1400–1679) ---------- */
-@media (min-width: 1400px) {
     :root {
         --container: 1320px;
         --pad-x: 40px;
     }
 
     .pcard-media {
-        --pcard-frame: 360px;
+        --pcard-frame: min(420px, calc(50vw - 210px));
+    }
+}
+
+/* ---------- Великий монітор / ноут 1440–1600 (1400–1679) ---------- */
+@media (min-width: 1400px) {
+    :root {
+        --container: min(1400px, 96vw);
+        --pad-x: 40px;
     }
 
-    .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 480px));
-        column-gap: 100px;
+    .pcard-media {
+        --pcard-frame: 440px;
     }
 }
 
@@ -2380,12 +2388,7 @@ body.is-scrolled .site-header .header-inner {
     }
 
     .pcard-media {
-        --pcard-frame: 380px;
-    }
-
-    .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 500px));
-        column-gap: 120px;
+        --pcard-frame: 460px;
     }
 
     .banners-grid {
@@ -2410,12 +2413,10 @@ body.is-scrolled .site-header .header-inner {
     }
 
     .pcard-media {
-        --pcard-frame: 400px;
+        --pcard-frame: 480px;
     }
 
     .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 520px));
-        column-gap: 140px;
         row-gap: 64px;
     }
 
@@ -2437,12 +2438,7 @@ body.is-scrolled .site-header .header-inner {
     }
 
     .pcard-media {
-        --pcard-frame: 420px;
-    }
-
-    .products-grid {
-        grid-template-columns: repeat(2, minmax(0, 540px));
-        column-gap: 160px;
+        --pcard-frame: 500px;
     }
 
     .brand-name {
