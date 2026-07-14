@@ -1839,12 +1839,17 @@ body.is-scrolled .site-header .header-inner {
         min-height: 0;
     }
 
+    /* Футер у стовпчик: лінія-роздільник між соцмережами й копірайтом —
+       та сама, що зверху над «Ми в соціальній мережі» (#12141a).
+       На планшеті/десктопі футер у дві колонки й ділить їх вертикальна
+       ::after, тож там ця лінія не потрібна (знімаємо в планшетному блоці). */
     .footer-socials {
+        width: 100%;
         align-items: flex-start;
         gap: 12px;
         padding-right: 0;
-        padding-bottom: 0;
-        border-bottom: none;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #12141a;
     }
 
     /* Figma mobile footer Manrope 800 15/20 */
@@ -2278,9 +2283,13 @@ body.is-scrolled .site-header .header-inner {
     }
 
     .footer-socials {
+        width: auto;
         align-items: flex-start;
         gap: 14px;
         padding-right: 24px;
+        /* дві колонки — ділить вертикальна .site-footer::after, а не лінія */
+        padding-bottom: 0;
+        border-bottom: 0;
     }
 
     .socials-label {
