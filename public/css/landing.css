@@ -2094,7 +2094,9 @@ body.is-scrolled .site-header .header-inner {
    ============================================================ */
 @media (min-width: 700px) and (max-width: 1024px) and (min-height: 600px) {
     :root {
-        --pad-x: clamp(20px, 3vw, 32px);
+        /* Поля вужчі за десктопні: кожен піксель іде в ширину боксу,
+           бо стрілки стоять збоку й теж просять місця */
+        --pad-x: 20px;
         /* Fluid-клампи розтягнуті від телефона до 1920, тож на ~800px
            дають майже мобільні кегли (FAQ 17px, футер 15px) — піднімаємо */
         --faq-q-size: clamp(18px, 2.2vw, 22px);
@@ -2152,9 +2154,10 @@ body.is-scrolled .site-header .header-inner {
         margin-bottom: 24px;
     }
 
+    /* Вузький gap між колонками — щоб віддати ширину боксам, а не порожнечі */
     .products-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        column-gap: 32px;
+        column-gap: 16px;
         row-gap: clamp(40px, 5vw, 56px);
         justify-items: center;
     }
@@ -2164,18 +2167,15 @@ body.is-scrolled .site-header .header-inner {
         max-width: 100%;
     }
 
-    /* Стрілки кладемо ПОВЕРХ фото, а не збоку. Інакше вони з'їдають
-       по ~60px з кожного боку колонки і бокс стискається до ~240px —
-       саме через це планшет виглядав дрібним. Тепер бокс = вся колонка.
-       .pcard-media звужуємо до кадру, щоб left/right:0 = краї фото. */
+    /* Стрілки СТОЯТЬ ЗБОКУ від боксу (не поверх фото — так замовник просив).
+       Тому бокс = ширина колонки мінус дві стрілки:
+         колонка = 50vw − pad-x(20) − gap/2(8) = 50vw − 28
+         бокс    = колонка − 2×(44 стрілка + 4 зазор) = 50vw − 124
+       Беремо −128px як запас: на body НЕ можна overflow-x: hidden,
+       тож вилізти за край не можна навіть на пів-пікселя. */
     .pcard-media {
-        position: relative;
-        /* -48px — запас на padding контейнера й gap, щоб колонка не
-           вилізла за край (на body НЕ можна overflow-x: hidden) */
-        --pcard-frame: min(400px, calc(50vw - 48px));
-        width: var(--pcard-frame);
-        margin-inline: auto;
-        gap: 0;
+        --pcard-frame: min(400px, calc(50vw - 128px));
+        gap: 4px;
         margin-bottom: 18px;
     }
 
@@ -2191,25 +2191,19 @@ body.is-scrolled .site-header .header-inner {
         height: var(--pcard-frame);
     }
 
+    /* 44px — мінімальний комфортний тап-таргет на тачскріні */
     .pcard-arrow {
-        position: absolute;
-        z-index: 2;
-        /* центр кнопки = центр кадру фото (без тіні) */
-        top: calc(var(--pcard-frame) / 2 - 25px);
-        margin-top: 0;
-        width: 50px;
-        height: 50px;
-        min-width: 50px;
-        min-height: 50px;
-        flex: none;
+        width: 44px;
+        height: 44px;
+        min-width: 44px;
+        min-height: 44px;
+        flex: 0 0 44px;
+        margin-top: calc((var(--pcard-frame) - 44px) / 2);
     }
 
-    .pcard-arrow--prev {
-        left: 0;
-    }
-
-    .pcard-arrow--next {
-        right: 0;
+    .pcard-arrow::before {
+        width: 44px;
+        height: 44px;
     }
 
     .pcard-ground {
