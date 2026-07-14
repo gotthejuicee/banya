@@ -1316,17 +1316,21 @@ body.is-scrolled .site-header .header-inner {
     animation: fade-in 0.25s ease;
 }
 
+/* Figma «заявка»: 390×384, #12141A, radius 50, padding 40, без рамки.
+   Висота 384 виходить сама: 40 + бігунець 76 + 24 + поле 52 + 24 + поле 52
+   + 24 + кнопка 52 + 40. Тому фіксовану висоту не ставимо — форма росте,
+   коли з'являються помилки полів. */
 .modal-panel {
     position: relative;
-    width: min(460px, 100%);
+    width: min(390px, 100%);
     max-height: calc(100vh - 40px - var(--safe-top) - var(--safe-bottom));
     max-height: calc(100dvh - 40px - var(--safe-top) - var(--safe-bottom));
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    background: #101116;
-    border: 1px solid rgba(244, 242, 250, 0.1);
-    border-radius: var(--radius-lg);
-    padding: 34px 30px 30px;
+    background: #12141a;
+    border: 0;
+    border-radius: 50px;
+    padding: 40px;
     box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
     animation: panel-in 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -1372,11 +1376,12 @@ body.is-scrolled .site-header .header-inner {
 }
 
 /* Логотип-бігунець у шапці форми (за макетом) */
+/* Figma Vector 2: 92×76, top 40 (= padding панелі), 24 до першого поля */
 .modal-logo {
     display: block;
     width: 92px;
-    height: 78px;
-    margin: 4px auto 22px;
+    height: 76px;
+    margin: 0 auto 24px;
     color: var(--text);
 }
 
@@ -1405,8 +1410,20 @@ body.is-scrolled .site-header .header-inner {
     width: 100%;
 }
 
+/* Обгортка полів — flex-елемент у колонковому #order-form з align-items:center,
+   тож без width:100% вона стискалась по вмісту. Через це min(310px, 100%)
+   у полів рахувався від стиснутої обгортки і давав ~214px замість 310
+   (плейсхолдер «Введіть номер телефону» через це обрізався). */
+#order-form-fields {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
 #order-form .form-group {
     width: min(310px, 100%);
+    margin-bottom: 24px; /* Figma: 24px між полями і до кнопки */
 }
 
 .form-group {
@@ -1444,8 +1461,13 @@ body.is-scrolled .site-header .header-inner {
     resize: vertical;
 }
 
-/* Поля модалки за Figma: Manrope 800 16px, placeholder #7A7D96, center */
+/* Поля модалки за Figma (Rectangle 39/40): 310×52, radius 10,
+   рамка 2px #292C38; текст Manrope 800 16px, placeholder #7A7D96, по центру */
 #order-form .form-group input {
+    height: 52px;
+    padding: 0 15px;
+    border: 2px solid #292c38;
+    border-radius: 10px;
     text-align: center;
     font-family: 'Manrope', var(--font-accent);
     font-weight: 800;
@@ -1499,7 +1521,8 @@ body.is-scrolled .site-header .header-inner {
     width: min(310px, 100%);
     height: 52px;
     min-height: 52px;
-    margin-top: 4px;
+    /* 24px до кнопки дає margin-bottom останнього .form-group */
+    margin-top: 0;
     padding: 0;
     border: 0;
     border-radius: 50px;
@@ -1891,8 +1914,10 @@ body.is-scrolled .site-header .header-inner {
         height: 18px;
     }
 
+    /* На екрані 390 обгортка .modal з'їдає по 20px, тож панель = 350.
+       Бокові 20px дають рівно 310px під поля — як у Figma. */
     .modal-panel {
-        padding: 28px 20px 24px;
+        padding: 40px 20px;
     }
 }
 
@@ -2354,11 +2379,6 @@ body.is-scrolled .site-header .header-inner {
         line-height: 20px;
     }
 
-    /* ---- Модалка замовлення ---- */
-    .modal-panel {
-        width: min(520px, 100%);
-        padding: 34px 30px 30px;
-    }
 }
 
 /* ---------- Ноут (1025–1399) ----------
